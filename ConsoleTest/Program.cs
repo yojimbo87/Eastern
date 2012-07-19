@@ -10,10 +10,10 @@ namespace ConsoleTest
     {
         static void Main(string[] args)
         {
-            EasternDriver eastern = new EasternDriver();
-            Console.WriteLine(eastern.Connect("127.0.0.1", 2424));
+            EasternClient client = new EasternClient("127.0.0.1", 2424);
+            //Console.WriteLine(eastern.Connect("127.0.0.1", 2424));
 
-            Database db = eastern.OpenDatabase("test1", DatabaseType.Document, "admin", "admin");
+            Database db = client.OpenDatabase("test1", DatabaseType.Document, "admin", "admin");
 
             Console.WriteLine(db.SessionID);
 
