@@ -6,6 +6,11 @@ namespace Eastern.Protocol.Operations
 {
     internal class OpenDatabase : BaseOperation, IOperation
     {
+        internal string DriverName { get { return "Eastern"; } }
+        internal string DriverVersion { get { return "0.0.1 pre-alpha"; } }
+        internal short ProtocolVersion { get; set; }
+        internal string ClientID { get { return "null"; } }
+
         internal string DatabaseName { get; set; }
         internal DatabaseType DatabaseType { get; set; }
         internal string UserName { get; set; }
@@ -39,7 +44,7 @@ namespace Eastern.Protocol.Operations
         public object Response(Response response)
         {
             int offset = 1;
-            Database database = new Database();
+            ODatabase database = new ODatabase();
 
             // standard response fields
             response.Status = (ResponseStatus)Parser.ToByte(response.Data.Take(1).ToArray());

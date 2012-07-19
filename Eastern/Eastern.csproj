@@ -47,6 +47,8 @@
     <Compile Include="EasternClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Protocol\BinaryParser.cs" />
+    <Compile Include="Protocol\Common\OConnection.cs" />
+    <Compile Include="Protocol\Operations\Connect.cs" />
     <Compile Include="Protocol\Operations\Operation.cs" />
     <Compile Include="Connection\ResponseStatus.cs" />
     <Compile Include="Protocol\Operations\BaseOperation.cs" />
@@ -54,7 +56,7 @@
     <Compile Include="Protocol\Operations\OpenDatabase.cs" />
     <Compile Include="Protocol\Common\Cluster.cs" />
     <Compile Include="Protocol\Common\ClusterType.cs" />
-    <Compile Include="Protocol\Common\Database.cs" />
+    <Compile Include="Protocol\Common\ODatabase.cs" />
     <Compile Include="Protocol\Common\DatabaseType.cs" />
     <Compile Include="Protocol\Operations\OperationType.cs" />
   </ItemGroup>

@@ -10,19 +10,32 @@ namespace ConsoleTest
     {
         static void Main(string[] args)
         {
+            TestConnect();
+            //TestOpenDatabase();
+
+            Console.ReadLine();
+        }
+
+        static void TestConnect()
+        {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            //Console.WriteLine(eastern.Connect("127.0.0.1", 2424));
+            OConnection connection = client.Connect("root", "FFB5AB5CF4F2DC287B83737FCD6F849BB316E2CC952406B5A5DAEC81275A264C");
 
-            Database db = client.OpenDatabase("test1", DatabaseType.Document, "admin", "admin");
+            Console.WriteLine("Session ID: " + connection.SessionID);
+        }
 
-            Console.WriteLine(db.SessionID);
+        static void TestOpenDatabase()
+        {
+            EasternClient client = new EasternClient("127.0.0.1", 2424);
+            ODatabase db = client.OpenDatabase("test1", DatabaseType.Document, "admin", "admin");
+
+            Console.WriteLine("Session ID: " + db.SessionID);
+            Console.WriteLine("Clusters:");
 
             foreach (Cluster cluster in db.Clusters)
             {
-                Console.WriteLine("{0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
             }
-
-            Console.ReadLine();
         }
     }
 }

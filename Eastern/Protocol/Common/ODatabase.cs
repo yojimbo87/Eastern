@@ -2,7 +2,7 @@
 
 namespace Eastern
 {
-    public class Database
+    public class ODatabase
     {
         public int SessionID { get; set; }
         public string Name { get; set; }
@@ -11,7 +11,7 @@ namespace Eastern
         public List<Cluster> Clusters { get; set; }
         public byte[] ClusterConfig { get; set; }
 
-        public Database()
+        public ODatabase()
         {
             Clusters = new List<Cluster>();
         }

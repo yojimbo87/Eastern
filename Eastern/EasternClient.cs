@@ -19,13 +19,17 @@ namespace Eastern
             Connection.Initialize(hostname, port);
         }
 
-        public short Connect(string hostname, int port)
+        public OConnection Connect(string userName, string userPassword)
         {
-            return Connection.Initialize(hostname, port);
+            Eastern.Protocol.Operations.Connect operation = new Eastern.Protocol.Operations.Connect();
+            operation.SessionID = Connection.SessionID;
+            operation.UserName = userName;
+            operation.UserPassword = userPassword;
+
+            return (OConnection)Connection.ExecuteOperation<Eastern.Protocol.Operations.Connect>(operation);
         }
 
-        // TODO: add necessary parameters and pass them along the way
-        public Database OpenDatabase(string databaseName, DatabaseType databaseType, string userName, string userPassword)
+        public ODatabase OpenDatabase(string databaseName, DatabaseType databaseType, string userName, string userPassword)
         {
             OpenDatabase operation = new OpenDatabase();
             operation.SessionID = Connection.SessionID;
@@ -35,7 +39,7 @@ namespace Eastern
             operation.UserName = userName;
             operation.UserPassword = userPassword;
 
-            return (Database)Connection.ExecuteOperation<OpenDatabase>(operation);
+            return (ODatabase)Connection.ExecuteOperation<OpenDatabase>(operation);
         }
     }
 }
