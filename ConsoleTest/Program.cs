@@ -4,25 +4,25 @@ using System.Linq;
 using System.Text;
 using Eastern;
 
-namespace Eastern.Console
+namespace ConsoleTest
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Eastern eastern = new Eastern();
-            System.Console.WriteLine(eastern.Connect("127.0.0.1", 2424));
+            EasternDriver eastern = new EasternDriver();
+            Console.WriteLine(eastern.Connect("127.0.0.1", 2424));
 
             Database db = eastern.OpenDatabase("test1", DatabaseType.Document, "admin", "admin");
 
-            System.Console.WriteLine(db.SessionID);
+            Console.WriteLine(db.SessionID);
 
             foreach (Cluster cluster in db.Clusters)
             {
-                System.Console.WriteLine("{0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                Console.WriteLine("{0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
             }
 
-            System.Console.ReadLine();
+            Console.ReadLine();
         }
     }
 }
