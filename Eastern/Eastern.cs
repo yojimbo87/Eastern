@@ -3,16 +3,16 @@ using Eastern.Protocol.Operations;
 
 namespace Eastern
 {
-    public class Eastern
+    public class EasternDriver
     {
         private WorkerClient Client { get; set; }
 
-        public Eastern()
+        public EasternDriver()
         {
             Client = new WorkerClient();
         }
 
-        public Eastern(string hostname, int port)
+        public EasternDriver(string hostname, int port)
         {
             Client = new WorkerClient();
 
