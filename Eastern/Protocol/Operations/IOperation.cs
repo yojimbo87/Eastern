@@ -6,7 +6,7 @@ namespace Eastern.Protocol.Operations
 {
     internal interface IOperation
     {
-        Request Request();
+        Request Request(int sessionID);
         object Response(Response response);
     }
 }

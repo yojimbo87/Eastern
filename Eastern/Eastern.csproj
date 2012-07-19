@@ -51,7 +51,6 @@
     <Compile Include="Protocol\Operations\Connect.cs" />
     <Compile Include="Protocol\Operations\Operation.cs" />
     <Compile Include="Connection\ResponseStatus.cs" />
-    <Compile Include="Protocol\Operations\BaseOperation.cs" />
     <Compile Include="Protocol\Operations\IOperation.cs" />
     <Compile Include="Protocol\Operations\OpenDatabase.cs" />
     <Compile Include="Protocol\Common\Cluster.cs" />

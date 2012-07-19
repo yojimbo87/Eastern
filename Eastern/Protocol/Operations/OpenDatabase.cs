@@ -4,35 +4,25 @@ using Eastern.Connection;
 
 namespace Eastern.Protocol.Operations
 {
-    internal class OpenDatabase : BaseOperation, IOperation
+    internal class OpenDatabase : IOperation
     {
-        internal string DriverName { get { return "Eastern"; } }
-        internal string DriverVersion { get { return "0.0.1 pre-alpha"; } }
-        internal short ProtocolVersion { get; set; }
-        internal string ClientID { get { return "null"; } }
-
         internal string DatabaseName { get; set; }
         internal DatabaseType DatabaseType { get; set; }
         internal string UserName { get; set; }
         internal string UserPassword { get; set; }
         internal string ClusterConfig { get { return "null"; } }
 
-        internal OpenDatabase()
-        {
-            OperationType = OperationType.DB_OPEN;
-        }
-
-        public Request Request()
+        public Request Request(int sessionID)
         {
             Request request = new Connection.Request();
             // standard request fields
-            request.DataItems.Add(new DataItem() { Type = "byte", Data = BinaryParser.ToArray((byte)OperationType) });
-            request.DataItems.Add(new DataItem() { Type = "int", Data = BinaryParser.ToArray(SessionID) });
+            request.DataItems.Add(new DataItem() { Type = "byte", Data = BinaryParser.ToArray((byte)OperationType.DB_OPEN) });
+            request.DataItems.Add(new DataItem() { Type = "int", Data = BinaryParser.ToArray(sessionID) });
             // operation specific fields
-            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(DriverName) });
-            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(DriverVersion) });
-            request.DataItems.Add(new DataItem() { Type = "short", Data = BinaryParser.ToArray(ProtocolVersion) });
-            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(ClientID) });
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(EasternClient.DriverName) });
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(EasternClient.DriverVersion) });
+            request.DataItems.Add(new DataItem() { Type = "short", Data = BinaryParser.ToArray(EasternClient.ProtocolVersion) });
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(EasternClient.ClientID) });
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(DatabaseName) });
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray((DatabaseType == DatabaseType.Document) ? "document" : "graph") });
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(UserName) });

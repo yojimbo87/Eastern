@@ -5,6 +5,11 @@ namespace Eastern
 {
     public class EasternClient
     {
+        internal static string DriverName { get { return "Eastern"; } }
+        internal static string DriverVersion { get { return "0.0.1 pre-alpha"; } }
+        internal static short ProtocolVersion { get { return 12; } }
+        internal static string ClientID { get { return "null"; } }
+
         private WorkerConnection Connection { get; set; }
 
         public EasternClient()
@@ -22,7 +27,6 @@ namespace Eastern
         public OConnection Connect(string userName, string userPassword)
         {
             Eastern.Protocol.Operations.Connect operation = new Eastern.Protocol.Operations.Connect();
-            operation.SessionID = Connection.SessionID;
             operation.UserName = userName;
             operation.UserPassword = userPassword;
 
@@ -32,8 +36,6 @@ namespace Eastern
         public ODatabase OpenDatabase(string databaseName, DatabaseType databaseType, string userName, string userPassword)
         {
             OpenDatabase operation = new OpenDatabase();
-            operation.SessionID = Connection.SessionID;
-            operation.ProtocolVersion = Connection.ProtocolVersion;
             operation.DatabaseName = databaseName;
             operation.DatabaseType = databaseType;
             operation.UserName = userName;

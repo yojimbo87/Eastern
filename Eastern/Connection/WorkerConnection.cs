@@ -44,7 +44,7 @@ namespace Eastern.Connection
 
         internal object ExecuteOperation<T>(T operation)
         {
-            Request request = ((IOperation)operation).Request();
+            Request request = ((IOperation)operation).Request(SessionID);
             byte[] buffer;
 
             foreach (DataItem item in request.DataItems)
