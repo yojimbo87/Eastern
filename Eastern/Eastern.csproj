@@ -58,6 +58,7 @@
     <Compile Include="Protocol\Common\ODatabase.cs" />
     <Compile Include="Protocol\Common\DatabaseType.cs" />
     <Compile Include="Protocol\Operations\OperationType.cs" />
+    <Compile Include="Protocol\Operations\Shutdown.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -10,7 +10,8 @@ Features
 
 - Initial connection with database server
 - Request/response handling
-- Operations:
+- Supported operations:
+  - Shutdown (SHUTDOWN)
   - Connect (CONNECT)
   - Open database (DB_OPEN)
 

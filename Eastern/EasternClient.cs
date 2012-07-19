@@ -24,13 +24,22 @@ namespace Eastern
             Connection.Initialize(hostname, port);
         }
 
-        public OConnection Connect(string userName, string userPassword)
+        public bool Shutdown(string userName, string userPassword)
         {
-            Eastern.Protocol.Operations.Connect operation = new Eastern.Protocol.Operations.Connect();
+            Shutdown operation = new Shutdown();
             operation.UserName = userName;
             operation.UserPassword = userPassword;
 
-            return (OConnection)Connection.ExecuteOperation<Eastern.Protocol.Operations.Connect>(operation);
+            return (bool)Connection.ExecuteOperation<Shutdown>(operation);
+        }
+
+        public OConnection Connect(string userName, string userPassword)
+        {
+            Connect operation = new Connect();
+            operation.UserName = userName;
+            operation.UserPassword = userPassword;
+
+            return (OConnection)Connection.ExecuteOperation<Connect>(operation);
         }
 
         public ODatabase OpenDatabase(string databaseName, DatabaseType databaseType, string userName, string userPassword)
