@@ -10,7 +10,9 @@ Features
 
 - Initial connection with database server
 - Request/response handling
-- Open database (DB_OPEN operation)
+- Operations:
+  - Connect (CONNECT)
+  - Open database (DB_OPEN)
 
 TODO
 ----
