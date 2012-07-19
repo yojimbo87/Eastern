@@ -11,7 +11,7 @@ namespace ConsoleTest
         static void Main(string[] args)
         {
             TestConnect();
-            //TestOpenDatabase();
+            TestOpenDatabase();
 
             Console.ReadLine();
         }
@@ -22,6 +22,8 @@ namespace ConsoleTest
             OConnection connection = client.Connect("root", "FFB5AB5CF4F2DC287B83737FCD6F849BB316E2CC952406B5A5DAEC81275A264C");
 
             Console.WriteLine("Session ID: " + connection.SessionID);
+
+            Console.WriteLine("======================================================");
         }
 
         static void TestOpenDatabase()
@@ -36,6 +38,8 @@ namespace ConsoleTest
             {
                 Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
             }
+
+            Console.WriteLine("======================================================");
         }
     }
 }

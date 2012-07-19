@@ -13,7 +13,6 @@ namespace Eastern.Connection
     {
         private TcpClient Socket { get; set; }
         private NetworkStream Stream { get; set; }
-        private BinaryParser Parser { get; set; }
         private byte[] ReadBuffer { get; set; }
 
         internal string Hostname { get; set; }
@@ -23,7 +22,6 @@ namespace Eastern.Connection
 
         internal WorkerConnection()
         {
-            Parser = new BinaryParser();
             ReadBuffer = new byte[1024];
             ProtocolVersion = 0;
             SessionID = -1;
@@ -39,7 +37,7 @@ namespace Eastern.Connection
 
             int bytesRead = Stream.Read(ReadBuffer, 0, 2);
 
-            ProtocolVersion = Parser.ToShort(ReadBuffer.Take(2).ToArray());
+            ProtocolVersion = BinaryParser.ToShort(ReadBuffer.Take(2).ToArray());
 
             return ProtocolVersion;
         }
@@ -60,7 +58,7 @@ namespace Eastern.Connection
                         break;
                     case "record":
                         buffer = new byte[2 + item.Data.Length];
-                        Buffer.BlockCopy(Parser.ToArray(item.Data.Length), 0, buffer, 0, 2);
+                        Buffer.BlockCopy(BinaryParser.ToArray(item.Data.Length), 0, buffer, 0, 2);
                         Buffer.BlockCopy(item.Data, 0, buffer, 2, item.Data.Length);
                         Send(buffer);
                         break;
@@ -68,7 +66,7 @@ namespace Eastern.Connection
                     case "string":
                     case "strings":
                         buffer = new byte[4 + item.Data.Length];
-                        Buffer.BlockCopy(Parser.ToArray(item.Data.Length), 0, buffer, 0, 4);
+                        Buffer.BlockCopy(BinaryParser.ToArray(item.Data.Length), 0, buffer, 0, 4);
                         Buffer.BlockCopy(item.Data, 0, buffer, 4, item.Data.Length);
                         Send(buffer);
                         break;

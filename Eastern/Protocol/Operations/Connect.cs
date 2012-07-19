@@ -24,15 +24,15 @@ namespace Eastern.Protocol.Operations
             Request request = new Connection.Request();
 
             // standard request fields
-            request.DataItems.Add(new DataItem() { Type = "byte", Data = Parser.ToArray((byte)OperationType) });
-            request.DataItems.Add(new DataItem() { Type = "int", Data = Parser.ToArray(SessionID) });
+            request.DataItems.Add(new DataItem() { Type = "byte", Data = BinaryParser.ToArray((byte)OperationType) });
+            request.DataItems.Add(new DataItem() { Type = "int", Data = BinaryParser.ToArray(SessionID) });
             // operation specific fields
-            request.DataItems.Add(new DataItem() { Type = "string", Data = Parser.ToArray(DriverName) });
-            request.DataItems.Add(new DataItem() { Type = "string", Data = Parser.ToArray(DriverVersion) });
-            request.DataItems.Add(new DataItem() { Type = "short", Data = Parser.ToArray(ProtocolVersion) });
-            request.DataItems.Add(new DataItem() { Type = "string", Data = Parser.ToArray(ClientID) });
-            request.DataItems.Add(new DataItem() { Type = "string", Data = Parser.ToArray(UserName) });
-            request.DataItems.Add(new DataItem() { Type = "string", Data = Parser.ToArray(UserPassword) });
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(DriverName) });
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(DriverVersion) });
+            request.DataItems.Add(new DataItem() { Type = "short", Data = BinaryParser.ToArray(ProtocolVersion) });
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(ClientID) });
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(UserName) });
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(UserPassword) });
 
             return request;
         }
@@ -43,11 +43,11 @@ namespace Eastern.Protocol.Operations
             OConnection connection = new OConnection();
 
             // standard response fields
-            response.Status = (ResponseStatus)Parser.ToByte(response.Data.Take(1).ToArray());
-            response.SessionID = Parser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
+            response.Status = (ResponseStatus)BinaryParser.ToByte(response.Data.Take(1).ToArray());
+            response.SessionID = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
             offset += 4;
             // operation specific fields
-            connection.SessionID = Parser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
+            connection.SessionID = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
             offset += 4;
 
             return connection;

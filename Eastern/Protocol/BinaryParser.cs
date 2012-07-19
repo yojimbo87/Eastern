@@ -3,14 +3,14 @@ using System.Text;
 
 namespace Eastern.Protocol
 {
-    internal class BinaryParser
+    internal static class BinaryParser
     {
-        internal byte ToByte(byte[] data)
+        internal static byte ToByte(byte[] data)
         {
             return data[0];
         }
 
-        internal short ToShort(byte[] data)
+        internal static short ToShort(byte[] data)
         {
             if (BitConverter.IsLittleEndian)
             {
@@ -20,7 +20,7 @@ namespace Eastern.Protocol
             return BitConverter.ToInt16(data, 0);
         }
 
-        internal int ToInt(byte[] data)
+        internal static int ToInt(byte[] data)
         {
             if (BitConverter.IsLittleEndian)
             {
@@ -30,22 +30,22 @@ namespace Eastern.Protocol
             return BitConverter.ToInt32(data, 0);
         }
 
-        internal string ToString(byte[] data)
+        internal static string ToString(byte[] data)
         {
             return Encoding.UTF8.GetString(data);
         }
 
-        internal byte[] ToArray(string data)
+        internal static byte[] ToArray(string data)
         {
             return Encoding.UTF8.GetBytes(data);
         }
 
-        internal byte[] ToArray(byte data)
+        internal static byte[] ToArray(byte data)
         {
             return new byte[1] { data };
         }
 
-        internal byte[] ToArray(int data)
+        internal static byte[] ToArray(int data)
         {
             byte[] binaryData = BitConverter.GetBytes(data);
 
@@ -57,7 +57,7 @@ namespace Eastern.Protocol
             return binaryData;
         }
 
-        internal byte[] ToArray(short data)
+        internal static byte[] ToArray(short data)
         {
             byte[] binaryData = BitConverter.GetBytes(data);
 
