@@ -12,9 +12,16 @@ namespace Eastern
             Client = new WorkerClient();
         }
 
+        public Eastern(string hostname, int port)
+        {
+            Client = new WorkerClient();
+
+            Client.Initialize(hostname, port);
+        }
+
         public short Connect(string hostname, int port)
         {
-            return Client.Connect(hostname, port);
+            return Client.Initialize(hostname, port);
         }
 
         // TODO: add necessary parameters and pass them along the way

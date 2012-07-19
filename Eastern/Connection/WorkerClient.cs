@@ -29,7 +29,7 @@ namespace Eastern.Connection
             SessionID = -1;
         }
 
-        internal short Connect(string hostname, int port)
+        internal short Initialize(string hostname, int port)
         {
             Hostname = hostname;
             HostPort = port;

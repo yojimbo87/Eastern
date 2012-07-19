@@ -11,7 +11,7 @@ namespace Eastern.Console
         static void Main(string[] args)
         {
             Eastern eastern = new Eastern();
-            System.Console.WriteLine(eastern.Connect("localhost", 2424));
+            System.Console.WriteLine(eastern.Connect("127.0.0.1", 2424));
 
             Database db = eastern.OpenDatabase("test1", DatabaseType.Document, "admin", "admin");
 
