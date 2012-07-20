@@ -9,7 +9,8 @@ Features
 --------
 
 - Initial connection with database server
-- Request/response handling
+- Request/response parsing
+- Request/response error handling
 - Supported operations:
   - Shutdown (SHUTDOWN)
   - Connect (CONNECT)
@@ -18,7 +19,7 @@ Features
 TODO
 ----
 
-- Error/exception handling
+- Connection error handling
 - Support entire set of [operations](http://code.google.com/p/orient/wiki/NetworkBinaryProtocol#Operations)
 - Test suite
 - Support automatic reconnection with retry timer
