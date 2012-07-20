@@ -24,7 +24,7 @@ namespace Eastern
             Connection.Initialize(hostname, port);
         }
 
-        // return value indicated if the server was shut down correctly
+        // return value indicates if the server was shut down successfuly
         public bool Shutdown(string userName, string userPassword)
         {
             Shutdown operation = new Shutdown();
@@ -40,7 +40,13 @@ namespace Eastern
             operation.UserName = userName;
             operation.UserPassword = userPassword;
 
-            return (OConnection)Connection.ExecuteOperation<Connect>(operation);
+            OConnection connection = (OConnection)Connection.ExecuteOperation<Connect>(operation);
+
+            Connection.SessionID = connection.SessionID;
+
+            connection.WorkerConnection = Connection;
+
+            return connection;
         }
 
         public ODatabase OpenDatabase(string databaseName, ODatabaseType databaseType, string userName, string userPassword)

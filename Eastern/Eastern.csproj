@@ -50,7 +50,9 @@
     <Compile Include="Protocol\Common\OConnection.cs" />
     <Compile Include="Protocol\Common\OException.cs" />
     <Compile Include="Protocol\Common\OExceptionType.cs" />
+    <Compile Include="Protocol\Common\OStorageType.cs" />
     <Compile Include="Protocol\Operations\Connect.cs" />
+    <Compile Include="Protocol\Operations\CreateDatabase.cs" />
     <Compile Include="Protocol\Operations\Operation.cs" />
     <Compile Include="Connection\ResponseStatus.cs" />
     <Compile Include="Protocol\Operations\IOperation.cs" />
