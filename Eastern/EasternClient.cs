@@ -57,7 +57,11 @@ namespace Eastern
             operation.UserName = userName;
             operation.UserPassword = userPassword;
 
-            return (ODatabase)Connection.ExecuteOperation<OpenDatabase>(operation);
+            ODatabase database = (ODatabase)Connection.ExecuteOperation<OpenDatabase>(operation);
+
+            Connection.SessionID = database.SessionID;
+
+            return database;
         }
     }
 }
