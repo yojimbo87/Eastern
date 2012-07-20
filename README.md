@@ -15,6 +15,7 @@ Features
   - Shutdown (SHUTDOWN)
   - Connect (CONNECT)
   - Open database (DB_OPEN)
+  - Create database (DB_CREATE)
 
 TODO
 ----
