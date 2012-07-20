@@ -88,6 +88,14 @@ namespace Eastern.Connection
             return ((IOperation)operation).Response(response);
         }
 
+        internal void Close()
+        {
+            SessionID = -1;
+
+            Stream.Close();
+            Socket.Close();
+        }
+
         private void Send(byte[] rawData)
         {
             if (Stream.CanWrite)

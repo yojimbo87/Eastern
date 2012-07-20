@@ -61,6 +61,8 @@ namespace Eastern
 
             Connection.SessionID = database.SessionID;
 
+            database.WorkerConnection = Connection;
+
             return database;
         }
     }

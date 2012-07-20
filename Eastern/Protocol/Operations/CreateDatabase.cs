@@ -25,21 +25,19 @@ namespace Eastern.Protocol.Operations
 
         public object Response(Response response)
         {
-            // offset not neaded since there are no operation specific response fields
-            //int offset = 5;
-            bool wasDatabaseCreated = false;
+            bool wasDatabaseClosed = false;
 
             if (response == null)
             {
-                return wasDatabaseCreated;
+                return wasDatabaseClosed;
             }
 
             if (response.Status == ResponseStatus.OK)
             {
-                wasDatabaseCreated = true;
+                wasDatabaseClosed = true;
             }
 
-            return wasDatabaseCreated;
+            return wasDatabaseClosed;
         }
     }
 }

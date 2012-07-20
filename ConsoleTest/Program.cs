@@ -15,8 +15,9 @@ namespace ConsoleTest
                 //TestShutdown();
                 //TestConnect();
                 //TestOpenDatabase();
-                TestCreateDatabase();
-
+                //TestCreateDatabase();
+                TestCloseConnection();
+                //TestCloseDatabase();
             }
             catch (OException ex)
             {
@@ -72,6 +73,40 @@ namespace ConsoleTest
             bool result = connection.CreateDatabase("testCreateDB", ODatabaseType.Document, OStorageType.Local);
 
             Console.WriteLine("Is database created: " + result);
+
+            Console.WriteLine("======================================================");
+        }
+
+        static void TestCloseConnection()
+        {
+            EasternClient client = new EasternClient("127.0.0.1", 2424);
+            OConnection connection = client.Connect("root", "FFB5AB5CF4F2DC287B83737FCD6F849BB316E2CC952406B5A5DAEC81275A264C");
+
+            Console.WriteLine("Session ID: " + connection.SessionID);
+
+            bool result = connection.Close();
+
+            Console.WriteLine("Is connection closed: " + result);
+
+            Console.WriteLine("======================================================");
+        }
+
+        static void TestCloseDatabase()
+        {
+            EasternClient client = new EasternClient("127.0.0.1", 2424);
+            ODatabase db = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
+
+            Console.WriteLine("Session ID: " + db.SessionID);
+            Console.WriteLine("Clusters:");
+
+            foreach (OCluster cluster in db.Clusters)
+            {
+                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+            }
+
+            bool result = db.Close();
+
+            Console.WriteLine("Is database closed: " + result);
 
             Console.WriteLine("======================================================");
         }
