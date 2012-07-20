@@ -1,7 +1,7 @@
 ﻿
 namespace Eastern
 {
-    public enum ClusterType
+    public enum OClusterType
     {
         Physical = 0,
         Memory = 1

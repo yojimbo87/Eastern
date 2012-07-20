@@ -7,7 +7,7 @@ namespace Eastern.Protocol.Operations
     internal class OpenDatabase : IOperation
     {
         internal string DatabaseName { get; set; }
-        internal DatabaseType DatabaseType { get; set; }
+        internal ODatabaseType DatabaseType { get; set; }
         internal string UserName { get; set; }
         internal string UserPassword { get; set; }
         internal string ClusterConfig { get { return "null"; } }
@@ -24,7 +24,7 @@ namespace Eastern.Protocol.Operations
             request.DataItems.Add(new DataItem() { Type = "short", Data = BinaryParser.ToArray(EasternClient.ProtocolVersion) });
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(EasternClient.ClientID) });
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(DatabaseName) });
-            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray((DatabaseType == DatabaseType.Document) ? "document" : "graph") });
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray((DatabaseType == ODatabaseType.Document) ? "document" : "graph") });
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(UserName) });
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(UserPassword) });
 
@@ -52,7 +52,7 @@ namespace Eastern.Protocol.Operations
             {
                 for (int i = 1; i <= database.ClustersCount; i++)
                 {
-                    Cluster cluster = new Cluster();
+                    OCluster cluster = new OCluster();
 
                     int clusterNameLength = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
                     offset += 4;

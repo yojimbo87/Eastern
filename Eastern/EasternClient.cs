@@ -43,7 +43,7 @@ namespace Eastern
             return (OConnection)Connection.ExecuteOperation<Connect>(operation);
         }
 
-        public ODatabase OpenDatabase(string databaseName, DatabaseType databaseType, string userName, string userPassword)
+        public ODatabase OpenDatabase(string databaseName, ODatabaseType databaseType, string userName, string userPassword)
         {
             OpenDatabase operation = new OpenDatabase();
             operation.DatabaseName = databaseName;

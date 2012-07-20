@@ -55,10 +55,10 @@
     <Compile Include="Connection\ResponseStatus.cs" />
     <Compile Include="Protocol\Operations\IOperation.cs" />
     <Compile Include="Protocol\Operations\OpenDatabase.cs" />
-    <Compile Include="Protocol\Common\Cluster.cs" />
-    <Compile Include="Protocol\Common\ClusterType.cs" />
+    <Compile Include="Protocol\Common\OCluster.cs" />
+    <Compile Include="Protocol\Common\OClusterType.cs" />
     <Compile Include="Protocol\Common\ODatabase.cs" />
-    <Compile Include="Protocol\Common\DatabaseType.cs" />
+    <Compile Include="Protocol\Common\ODatabaseType.cs" />
     <Compile Include="Protocol\Operations\OperationType.cs" />
     <Compile Include="Protocol\Operations\Shutdown.cs" />
   </ItemGroup>

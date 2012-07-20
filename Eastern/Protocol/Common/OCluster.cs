@@ -1,7 +1,7 @@
 ﻿
 namespace Eastern
 {
-    public class Cluster
+    public class OCluster
     {
         public short ID { get; set; }
         public string Name { get; set; }

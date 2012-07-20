@@ -1,7 +1,7 @@
 ﻿
 namespace Eastern
 {
-    public enum DatabaseType
+    public enum ODatabaseType
     {
         Document,
         Graph

@@ -47,12 +47,12 @@ namespace ConsoleTest
         static void TestOpenDatabase()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase db = client.OpenDatabase("test1", DatabaseType.Document, "admin", "admin");
+            ODatabase db = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
 
             Console.WriteLine("Session ID: " + db.SessionID);
             Console.WriteLine("Clusters:");
 
-            foreach (Cluster cluster in db.Clusters)
+            foreach (OCluster cluster in db.Clusters)
             {
                 Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
             }
