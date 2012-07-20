@@ -25,26 +25,21 @@ namespace Eastern.Protocol.Operations
 
         public object Response(Response response)
         {
-            int offset = 1;
-            OConnection connection = new OConnection();
+            // offset not neaded since there are no operation specific response fields
+            //int offset = 5;
+            bool wasShutdownSuccessful = false;
 
             if (response == null)
             {
-                return false;
+                return wasShutdownSuccessful;
             }
-
-            // standard response fields
-            response.Status = (ResponseStatus)BinaryParser.ToByte(response.Data.Take(1).ToArray());
-            response.SessionID = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
-            offset += 4;
-            // operation specific fields
 
             if (response.Status == ResponseStatus.OK)
             {
-                return true;
+                wasShutdownSuccessful = true;
             }
 
-            return false;
+            return wasShutdownSuccessful;
         }
     }
 }
