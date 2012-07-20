@@ -33,13 +33,15 @@ namespace Eastern.Protocol.Operations
 
         public object Response(Response response)
         {
-            int offset = 1;
+            // start from this position since standard fields (status, session ID) has been already parsed
+            int offset = 5;
             ODatabase database = new ODatabase();
 
-            // standard response fields
-            response.Status = (ResponseStatus)BinaryParser.ToByte(response.Data.Take(1).ToArray());
-            response.SessionID = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
-            offset += 4;
+            if (response == null)
+            {
+                return database;
+            }
+
             // operation specific fields
             database.SessionID = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
             offset += 4;

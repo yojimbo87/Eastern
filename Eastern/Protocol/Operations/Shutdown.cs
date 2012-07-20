@@ -28,6 +28,11 @@ namespace Eastern.Protocol.Operations
             int offset = 1;
             OConnection connection = new OConnection();
 
+            if (response == null)
+            {
+                return false;
+            }
+
             // standard response fields
             response.Status = (ResponseStatus)BinaryParser.ToByte(response.Data.Take(1).ToArray());
             response.SessionID = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());

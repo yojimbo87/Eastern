@@ -24,6 +24,7 @@ namespace Eastern
             Connection.Initialize(hostname, port);
         }
 
+        // return value indicated if the server was shut down correctly
         public bool Shutdown(string userName, string userPassword)
         {
             Shutdown operation = new Shutdown();

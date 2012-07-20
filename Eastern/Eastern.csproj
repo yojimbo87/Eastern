@@ -48,6 +48,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Protocol\BinaryParser.cs" />
     <Compile Include="Protocol\Common\OConnection.cs" />
+    <Compile Include="Protocol\Common\OException.cs" />
+    <Compile Include="Protocol\Common\OExceptionType.cs" />
     <Compile Include="Protocol\Operations\Connect.cs" />
     <Compile Include="Protocol\Operations\Operation.cs" />
     <Compile Include="Connection\ResponseStatus.cs" />

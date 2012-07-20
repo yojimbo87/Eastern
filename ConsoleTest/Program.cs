@@ -10,9 +10,16 @@ namespace ConsoleTest
     {
         static void Main(string[] args)
         {
-            TestShutdown();
-            //TestConnect();
-            //TestOpenDatabase();
+            try
+            {
+                TestConnect();
+                TestOpenDatabase();
+                //TestShutdown();
+            }
+            catch (OException ex)
+            {
+                Console.WriteLine("{0}: {1}", ex.Type, ex.Description);
+            }
 
             Console.ReadLine();
         }
