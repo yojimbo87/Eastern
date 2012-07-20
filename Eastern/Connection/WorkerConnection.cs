@@ -75,7 +75,17 @@ namespace Eastern.Connection
                 }
             }
 
-            return ((IOperation)operation).Response(Receive());
+            Response response = Receive();
+            // parse standard response fields
+            response.Status = (ResponseStatus)BinaryParser.ToByte(response.Data.Take(1).ToArray());
+            response.SessionID = BinaryParser.ToInt(response.Data.Skip(1).Take(4).ToArray());
+
+            if (response.Status == ResponseStatus.ERROR)
+            {
+                ProcessResponseError(response);
+            }
+
+            return ((IOperation)operation).Response(response);
         }
 
         private void Send(byte[] rawData)
@@ -97,7 +107,7 @@ namespace Eastern.Connection
                 {
                     int bytesRead = Stream.Read(ReadBuffer, 0, ReadBuffer.Length);
 
-                    buffer = buffer.Concat(ReadBuffer);
+                    buffer = buffer.Concat(ReadBuffer.Take(bytesRead));
                 }
                 while (Stream.DataAvailable);
 
@@ -105,6 +115,39 @@ namespace Eastern.Connection
             }
 
             return response;
+        }
+
+        private void ProcessResponseError(Response response)
+        {
+            int offset = 5;
+            string exceptionString = "";
+
+            byte followByte = BinaryParser.ToByte(response.Data.Skip(offset).Take(1).ToArray());
+            offset += 1;
+
+            while (followByte == 1)
+            {
+                int exceptionClassLength = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
+                offset += 4;
+
+                exceptionString += BinaryParser.ToString(response.Data.Skip(offset).Take(exceptionClassLength).ToArray()) + ": ";
+                offset += exceptionClassLength;
+
+                int exceptionMessageLength = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
+                offset += 4;
+
+                // don't read exception message string if it's null
+                if (exceptionMessageLength != -1)
+                {
+                    exceptionString += BinaryParser.ToString(response.Data.Skip(offset).Take(exceptionMessageLength).ToArray()) + "\n";
+                    offset += exceptionMessageLength;
+                }
+
+                followByte = BinaryParser.ToByte(response.Data.Skip(offset).Take(1).ToArray());
+                offset += 1;
+            }
+
+            throw new OException(OExceptionType.ResponseError, exceptionString);
         }
     }
 }
