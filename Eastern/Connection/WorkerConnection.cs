@@ -75,14 +75,19 @@ namespace Eastern.Connection
                 }
             }
 
-            Response response = Receive();
-            // parse standard response fields
-            response.Status = (ResponseStatus)BinaryParser.ToByte(response.Data.Take(1).ToArray());
-            response.SessionID = BinaryParser.ToInt(response.Data.Skip(1).Take(4).ToArray());
+            Response response = new Response();
 
-            if (response.Status == ResponseStatus.ERROR)
+            if (request.ExpectResponse)
             {
-                ProcessResponseError(response);
+                response.Data = Receive();
+                // parse standard response fields
+                response.Status = (ResponseStatus)BinaryParser.ToByte(response.Data.Take(1).ToArray());
+                response.SessionID = BinaryParser.ToInt(response.Data.Skip(1).Take(4).ToArray());
+
+                if (response.Status == ResponseStatus.ERROR)
+                {
+                    ProcessResponseError(response);
+                }
             }
 
             return ((IOperation)operation).Response(response);
@@ -104,9 +109,8 @@ namespace Eastern.Connection
             }
         }
 
-        private Response Receive()
+        private byte[] Receive()
         {
-            Response response = new Response();
             IEnumerable<byte> buffer = new List<byte>();
 
             if (Stream.CanRead)
@@ -118,11 +122,9 @@ namespace Eastern.Connection
                     buffer = buffer.Concat(ReadBuffer.Take(bytesRead));
                 }
                 while (Stream.DataAvailable);
-
-                response.Data = buffer.ToArray();
             }
 
-            return response;
+            return buffer.ToArray();
         }
 
         private void ProcessResponseError(Response response)
