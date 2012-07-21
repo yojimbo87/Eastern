@@ -21,6 +21,7 @@ Features
   - Reload database (DB_RELOAD)
   - Delete database (DB_DELETE)
   - Database size (DB_SIZE)
+  - Database records count (DB_COUNTRECORDS)
 
 TODO
 ----
