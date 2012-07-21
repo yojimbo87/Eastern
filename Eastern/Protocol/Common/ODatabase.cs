@@ -20,19 +20,13 @@ namespace Eastern
             Clusters = new List<OCluster>();
         }
 
-        // return value indicates if the database was created successfuly
-        public bool Close()
+        public void Close()
         {
             CloseDatabase operation = new CloseDatabase();
 
-            bool isDatabaseClosed = (bool)WorkerConnection.ExecuteOperation<CloseDatabase>(operation);
-
-            if (isDatabaseClosed)
-            {
-                WorkerConnection.Close();
-            }
-
-            return isDatabaseClosed;
+            WorkerConnection.ExecuteOperation<CloseDatabase>(operation);
+            WorkerConnection.Close();
+            SessionID = -1;
         }
     }
 }

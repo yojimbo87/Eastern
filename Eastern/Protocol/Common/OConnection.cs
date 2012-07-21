@@ -20,19 +20,13 @@ namespace Eastern
             return (bool)WorkerConnection.ExecuteOperation<CreateDatabase>(operation);
         }
 
-        // return value indicates if the database was created successfuly
-        public bool Close()
+        public void Close()
         {
             CloseDatabase operation = new CloseDatabase();
 
-            bool isConnectionClosed = (bool)WorkerConnection.ExecuteOperation<CloseDatabase>(operation);
-            
-            if (isConnectionClosed)
-            {
-                WorkerConnection.Close();
-            }
-
-            return isConnectionClosed;
+            WorkerConnection.ExecuteOperation<CloseDatabase>(operation);
+            WorkerConnection.Close();
+            SessionID = -1;
         }
     }
 }

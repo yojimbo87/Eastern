@@ -17,7 +17,7 @@ namespace ConsoleTest
                 //TestOpenDatabase();
                 //TestCreateDatabase();
                 TestCloseConnection();
-                //TestCloseDatabase();
+                TestCloseDatabase();
             }
             catch (OException ex)
             {
@@ -84,9 +84,9 @@ namespace ConsoleTest
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 
-            bool result = connection.Close();
+            connection.Close();
 
-            Console.WriteLine("Is connection closed: " + result);
+            Console.WriteLine("Connection closed. Current session ID: " + connection.SessionID);
 
             Console.WriteLine("======================================================");
         }
@@ -94,19 +94,19 @@ namespace ConsoleTest
         static void TestCloseDatabase()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase db = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
+            ODatabase database = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
 
-            Console.WriteLine("Session ID: " + db.SessionID);
+            Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters:");
 
-            foreach (OCluster cluster in db.Clusters)
+            foreach (OCluster cluster in database.Clusters)
             {
                 Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
             }
 
-            bool result = db.Close();
+            database.Close();
 
-            Console.WriteLine("Is database closed: " + result);
+            Console.WriteLine("Connection closed. Current session ID: " + database.SessionID);
 
             Console.WriteLine("======================================================");
         }

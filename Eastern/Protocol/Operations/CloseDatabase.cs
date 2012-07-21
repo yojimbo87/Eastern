@@ -9,31 +9,20 @@ namespace Eastern.Protocol.Operations
         public Request Request(int sessionID)
         {
             Request request = new Connection.Request();
+            request.ExpectResponse = false;
 
             // standard request fields
             request.DataItems.Add(new DataItem() { Type = "byte", Data = BinaryParser.ToArray((byte)OperationType.DB_CLOSE) });
             request.DataItems.Add(new DataItem() { Type = "int", Data = BinaryParser.ToArray(sessionID) });
-
-            request.DataItems.Add(new DataItem() { Type = "byte", Data = BinaryParser.ToArray(0) });
 
             return request;
         }
 
         public object Response(Response response)
         {
-            bool wasDatabaseCreated = false;
+            // there is no response for this operation
 
-            if (response == null)
-            {
-                return wasDatabaseCreated;
-            }
-
-            if (response.Status == ResponseStatus.OK)
-            {
-                wasDatabaseCreated = true;
-            }
-
-            return wasDatabaseCreated;
+            return null;
         }
     }
 }
