@@ -57,6 +57,7 @@
     <Compile Include="Protocol\Operations\DbDelete.cs" />
     <Compile Include="Protocol\Operations\DbExist.cs" />
     <Compile Include="Protocol\Operations\DbReload.cs" />
+    <Compile Include="Protocol\Operations\DbSize.cs" />
     <Compile Include="Protocol\Operations\Operation.cs" />
     <Compile Include="Connection\ResponseStatus.cs" />
     <Compile Include="Protocol\Operations\IOperation.cs" />

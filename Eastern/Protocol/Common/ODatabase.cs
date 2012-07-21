@@ -15,6 +15,16 @@ namespace Eastern
         public List<OCluster> Clusters { get; set; }
         public byte[] ClusterConfig { get; set; }
 
+        public long Size
+        {
+            get
+            {
+                DbSize operation = new DbSize();
+
+                return (long)WorkerConnection.ExecuteOperation<DbSize>(operation);
+            }
+        }
+
         public ODatabase()
         {
             Clusters = new List<OCluster>();
