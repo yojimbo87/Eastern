@@ -30,6 +30,16 @@ namespace Eastern.Protocol
             return BitConverter.ToInt32(data, 0);
         }
 
+        internal static long ToLong(byte[] data)
+        {
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(data);
+            }
+
+            return BitConverter.ToInt64(data, 0);
+        }
+
         internal static string ToString(byte[] data)
         {
             return Encoding.UTF8.GetString(data);
