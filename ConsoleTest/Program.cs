@@ -16,8 +16,9 @@ namespace ConsoleTest
                 //TestConnect();
                 //TestOpenDatabase();
                 //TestCreateDatabase();
-                TestCloseConnection();
-                TestCloseDatabase();
+                //TestCloseConnection();
+                //TestCloseDatabase();
+
             }
             catch (OException ex)
             {
