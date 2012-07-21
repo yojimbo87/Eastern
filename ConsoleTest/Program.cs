@@ -119,8 +119,8 @@ namespace ConsoleTest
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 
-            Console.WriteLine("This should exist: " + connection.Exists("test1"));
-            Console.WriteLine("This shouldn't exist: " + connection.Exists("whoawhatisthis"));
+            Console.WriteLine("This should exist: " + connection.DatabaseExist("test1"));
+            Console.WriteLine("This shouldn't exist: " + connection.DatabaseExist("whoawhatisthis"));
 
             Console.WriteLine("======================================================");
         }

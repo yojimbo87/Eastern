@@ -21,7 +21,7 @@ namespace Eastern
         }
 
         // return value indicates if the database exists
-        public bool Exists(string databaseName)
+        public bool DatabaseExist(string databaseName)
         {
             DbExist operation = new DbExist();
             operation.DatabaseName = databaseName;
