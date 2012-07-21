@@ -19,7 +19,8 @@ namespace ConsoleTest
                 //TestCloseConnection();
                 //TestCloseDatabase();
                 //TestDbExist();
-                TestDbReload();
+                //TestDbReload();
+                TestDbDelete();
             }
             catch (OException ex)
             {
@@ -149,6 +150,32 @@ namespace ConsoleTest
             {
                 Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
             }
+
+            Console.WriteLine("======================================================");
+        }
+
+        static void TestDbDelete()
+        {
+            const string databaseName = "testCreateTempDB1";
+
+            EasternClient client = new EasternClient("127.0.0.1", 2424);
+            OConnection connection = client.Connect("root", "FFB5AB5CF4F2DC287B83737FCD6F849BB316E2CC952406B5A5DAEC81275A264C");
+
+            Console.WriteLine("Session ID: " + connection.SessionID);
+
+            bool result = connection.CreateDatabase(databaseName, ODatabaseType.Document, OStorageType.Local);
+
+            Console.WriteLine("Is database created: " + result);
+
+            if (result)
+            {
+                Console.WriteLine("Calling database delete...");
+                connection.DeleteDatabase(databaseName);
+            }
+
+            bool exists = connection.DatabaseExist(databaseName);
+
+            Console.WriteLine("Database exists: " + exists);
 
             Console.WriteLine("======================================================");
         }

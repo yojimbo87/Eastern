@@ -29,6 +29,14 @@ namespace Eastern
             return (bool)WorkerConnection.ExecuteOperation<DbExist>(operation);
         }
 
+        public void DeleteDatabase(string databaseName)
+        {
+            DbDelete operation = new DbDelete();
+            operation.DatabaseName = databaseName;
+
+            WorkerConnection.ExecuteOperation<DbDelete>(operation);
+        }
+
         public void Close()
         {
             DbClose operation = new DbClose();

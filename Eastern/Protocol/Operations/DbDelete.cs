@@ -1,19 +1,20 @@
 ﻿using System.Linq;
-using Eastern;
 using Eastern.Connection;
 
 namespace Eastern.Protocol.Operations
 {
-    internal class DbClose : IOperation
+    internal class DbDelete : IOperation
     {
+        internal string DatabaseName { get; set; }
+
         public Request Request(int sessionID)
         {
             Request request = new Connection.Request();
-            request.ExpectResponse = false;
-
             // standard request fields
-            request.DataItems.Add(new DataItem() { Type = "byte", Data = BinaryParser.ToArray((byte)OperationType.DB_CLOSE) });
+            request.DataItems.Add(new DataItem() { Type = "byte", Data = BinaryParser.ToArray((byte)OperationType.DB_DELETE) });
             request.DataItems.Add(new DataItem() { Type = "int", Data = BinaryParser.ToArray(sessionID) });
+            // operation specific fields
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(DatabaseName) });
 
             return request;
         }
