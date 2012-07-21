@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Eastern;
 using Eastern.Connection;
 
 namespace Eastern.Protocol.Operations

@@ -20,6 +20,15 @@ namespace Eastern
             return (bool)WorkerConnection.ExecuteOperation<DbCreate>(operation);
         }
 
+        // return value indicates if the database exists
+        public bool Exists(string databaseName)
+        {
+            DbExist operation = new DbExist();
+            operation.DatabaseName = databaseName;
+
+            return (bool)WorkerConnection.ExecuteOperation<DbExist>(operation);
+        }
+
         public void Close()
         {
             DbClose operation = new DbClose();

@@ -13,12 +13,12 @@ namespace ConsoleTest
             try
             {
                 //TestShutdown();
-                TestConnect();
-                TestOpenDatabase();
-                //TestCreateDatabase();
-                TestCloseConnection();
-                TestCloseDatabase();
-
+                //TestConnect();
+                //TestDbOpen();
+                //TestDbCreate();
+                //TestCloseConnection();
+                //TestCloseDatabase();
+                TestDbExist();
             }
             catch (OException ex)
             {
@@ -48,7 +48,7 @@ namespace ConsoleTest
             Console.WriteLine("======================================================");
         }
 
-        static void TestOpenDatabase()
+        static void TestDbOpen()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
             ODatabase db = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
@@ -64,7 +64,7 @@ namespace ConsoleTest
             Console.WriteLine("======================================================");
         }
 
-        static void TestCreateDatabase()
+        static void TestDbCreate()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
             OConnection connection = client.Connect("root", "FFB5AB5CF4F2DC287B83737FCD6F849BB316E2CC952406B5A5DAEC81275A264C");
@@ -108,6 +108,19 @@ namespace ConsoleTest
             database.Close();
 
             Console.WriteLine("Connection closed. Current session ID: " + database.SessionID);
+
+            Console.WriteLine("======================================================");
+        }
+
+        static void TestDbExist()
+        {
+            EasternClient client = new EasternClient("127.0.0.1", 2424);
+            OConnection connection = client.Connect("root", "FFB5AB5CF4F2DC287B83737FCD6F849BB316E2CC952406B5A5DAEC81275A264C");
+
+            Console.WriteLine("Session ID: " + connection.SessionID);
+
+            Console.WriteLine("This should exist: " + connection.Exists("test1"));
+            Console.WriteLine("This shouldn't exist: " + connection.Exists("whoawhatisthis"));
 
             Console.WriteLine("======================================================");
         }
