@@ -16,6 +16,7 @@ Features
   - Connect (CONNECT)
   - Open database (DB_OPEN)
   - Create database (DB_CREATE)
+  - Close connection/database (DB_CLOSE)
 
 TODO
 ----
