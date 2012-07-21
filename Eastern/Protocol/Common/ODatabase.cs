@@ -20,6 +20,15 @@ namespace Eastern
             Clusters = new List<OCluster>();
         }
 
+        public void Reload()
+        {
+            DbReload operation = new DbReload();
+            ODatabase database = (ODatabase)WorkerConnection.ExecuteOperation<DbReload>(operation);
+
+            ClustersCount = database.ClustersCount;
+            Clusters = database.Clusters;
+        }
+
         public void Close()
         {
             DbClose operation = new DbClose();

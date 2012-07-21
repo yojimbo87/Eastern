@@ -18,7 +18,8 @@ namespace ConsoleTest
                 //TestDbCreate();
                 //TestCloseConnection();
                 //TestCloseDatabase();
-                TestDbExist();
+                //TestDbExist();
+                TestDbReload();
             }
             catch (OException ex)
             {
@@ -51,12 +52,12 @@ namespace ConsoleTest
         static void TestDbOpen()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase db = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
+            ODatabase database = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
 
-            Console.WriteLine("Session ID: " + db.SessionID);
+            Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters:");
 
-            foreach (OCluster cluster in db.Clusters)
+            foreach (OCluster cluster in database.Clusters)
             {
                 Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
             }
@@ -121,6 +122,33 @@ namespace ConsoleTest
 
             Console.WriteLine("This should exist: " + connection.DatabaseExist("test1"));
             Console.WriteLine("This shouldn't exist: " + connection.DatabaseExist("whoawhatisthis"));
+
+            Console.WriteLine("======================================================");
+        }
+
+        static void TestDbReload()
+        {
+            EasternClient client = new EasternClient("127.0.0.1", 2424);
+            ODatabase database = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
+
+            Console.WriteLine("Session ID: " + database.SessionID);
+            Console.WriteLine("Clusters ({0}):", database.ClustersCount);
+
+            foreach (OCluster cluster in database.Clusters)
+            {
+                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+            }
+
+            Console.WriteLine("Reloading database...");
+
+            database.Reload();
+
+            Console.WriteLine("Clusters ({0}):", database.ClustersCount);
+
+            foreach (OCluster cluster in database.Clusters)
+            {
+                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+            }
 
             Console.WriteLine("======================================================");
         }
