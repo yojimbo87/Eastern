@@ -53,6 +53,7 @@
     <Compile Include="Protocol\Common\OStorageType.cs" />
     <Compile Include="Protocol\Operations\DbClose.cs" />
     <Compile Include="Protocol\Operations\Connect.cs" />
+    <Compile Include="Protocol\Operations\DbCountRecords.cs" />
     <Compile Include="Protocol\Operations\DbCreate.cs" />
     <Compile Include="Protocol\Operations\DbDelete.cs" />
     <Compile Include="Protocol\Operations\DbExist.cs" />

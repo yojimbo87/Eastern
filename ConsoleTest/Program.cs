@@ -21,7 +21,8 @@ namespace ConsoleTest
                 //TestDbExist();
                 //TestDbReload();
                 //TestDbDelete();
-                TestDbSize();
+                //TestDbSize();
+                TestCountRecords();
             }
             catch (OException ex)
             {
@@ -195,6 +196,24 @@ namespace ConsoleTest
             }
 
             Console.WriteLine("Database size: {0}", database.Size);
+
+            Console.WriteLine("======================================================");
+        }
+
+        static void TestCountRecords()
+        {
+            EasternClient client = new EasternClient("127.0.0.1", 2424);
+            ODatabase database = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
+
+            Console.WriteLine("Session ID: " + database.SessionID);
+            Console.WriteLine("Clusters:");
+
+            foreach (OCluster cluster in database.Clusters)
+            {
+                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+            }
+
+            Console.WriteLine("Database records count: {0}", database.RecordsCount);
 
             Console.WriteLine("======================================================");
         }

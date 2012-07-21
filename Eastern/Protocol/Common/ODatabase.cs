@@ -25,6 +25,16 @@ namespace Eastern
             }
         }
 
+        public long RecordsCount
+        {
+            get
+            {
+                DbCountRecords operation = new DbCountRecords();
+
+                return (long)WorkerConnection.ExecuteOperation<DbCountRecords>(operation);
+            }
+        }
+
         public ODatabase()
         {
             Clusters = new List<OCluster>();
