@@ -17,6 +17,7 @@ Features
   - Open database (DB_OPEN)
   - Create database (DB_CREATE)
   - Close connection/database (DB_CLOSE)
+  - Database exist check (DB_EXIST)
 
 TODO
 ----
