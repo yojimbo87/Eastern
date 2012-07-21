@@ -24,8 +24,6 @@ namespace Eastern.Protocol.Operations
 
         public object Response(Response response)
         {
-            // offset not neaded since there are no operation specific response fields
-            //int offset = 5;
             bool wasShutdownSuccessful = false;
 
             if (response == null)
