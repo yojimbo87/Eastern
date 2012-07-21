@@ -13,11 +13,11 @@ namespace ConsoleTest
             try
             {
                 //TestShutdown();
-                //TestConnect();
-                //TestOpenDatabase();
+                TestConnect();
+                TestOpenDatabase();
                 //TestCreateDatabase();
-                //TestCloseConnection();
-                //TestCloseDatabase();
+                TestCloseConnection();
+                TestCloseDatabase();
 
             }
             catch (OException ex)

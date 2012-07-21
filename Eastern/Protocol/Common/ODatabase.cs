@@ -22,9 +22,9 @@ namespace Eastern
 
         public void Close()
         {
-            CloseDatabase operation = new CloseDatabase();
+            DbClose operation = new DbClose();
 
-            WorkerConnection.ExecuteOperation<CloseDatabase>(operation);
+            WorkerConnection.ExecuteOperation<DbClose>(operation);
             WorkerConnection.Close();
             SessionID = -1;
         }

@@ -4,7 +4,7 @@ using Eastern.Connection;
 
 namespace Eastern.Protocol.Operations
 {
-    internal class CloseDatabase : IOperation
+    internal class DbClose : IOperation
     {
         public Request Request(int sessionID)
         {

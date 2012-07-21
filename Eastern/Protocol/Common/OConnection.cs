@@ -12,19 +12,19 @@ namespace Eastern
         // return value indicates if the database was created successfuly
         public bool CreateDatabase(string databaseName, ODatabaseType databaseType, OStorageType storageType)
         {
-            CreateDatabase operation = new CreateDatabase();
+            DbCreate operation = new DbCreate();
             operation.DatabaseName = databaseName;
             operation.DatabaseType = databaseType;
             operation.StorageType = storageType;
 
-            return (bool)WorkerConnection.ExecuteOperation<CreateDatabase>(operation);
+            return (bool)WorkerConnection.ExecuteOperation<DbCreate>(operation);
         }
 
         public void Close()
         {
-            CloseDatabase operation = new CloseDatabase();
+            DbClose operation = new DbClose();
 
-            WorkerConnection.ExecuteOperation<CloseDatabase>(operation);
+            WorkerConnection.ExecuteOperation<DbClose>(operation);
             WorkerConnection.Close();
             SessionID = -1;
         }

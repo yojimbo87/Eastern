@@ -3,7 +3,7 @@ using Eastern.Connection;
 
 namespace Eastern.Protocol.Operations
 {
-    internal class CreateDatabase : IOperation
+    internal class DbCreate : IOperation
     {
         internal string DatabaseName { get; set; }
         internal ODatabaseType DatabaseType { get; set; }

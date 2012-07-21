@@ -51,13 +51,13 @@ namespace Eastern
 
         public ODatabase OpenDatabase(string databaseName, ODatabaseType databaseType, string userName, string userPassword)
         {
-            OpenDatabase operation = new OpenDatabase();
+            DbOpen operation = new DbOpen();
             operation.DatabaseName = databaseName;
             operation.DatabaseType = databaseType;
             operation.UserName = userName;
             operation.UserPassword = userPassword;
 
-            ODatabase database = (ODatabase)Connection.ExecuteOperation<OpenDatabase>(operation);
+            ODatabase database = (ODatabase)Connection.ExecuteOperation<DbOpen>(operation);
 
             Connection.SessionID = database.SessionID;
 

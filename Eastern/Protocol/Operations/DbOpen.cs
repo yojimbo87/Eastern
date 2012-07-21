@@ -4,7 +4,7 @@ using Eastern.Connection;
 
 namespace Eastern.Protocol.Operations
 {
-    internal class OpenDatabase : IOperation
+    internal class DbOpen : IOperation
     {
         internal string DatabaseName { get; set; }
         internal ODatabaseType DatabaseType { get; set; }

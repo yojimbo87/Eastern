@@ -51,13 +51,13 @@
     <Compile Include="Protocol\Common\OException.cs" />
     <Compile Include="Protocol\Common\OExceptionType.cs" />
     <Compile Include="Protocol\Common\OStorageType.cs" />
-    <Compile Include="Protocol\Operations\CloseDatabase.cs" />
+    <Compile Include="Protocol\Operations\DbClose.cs" />
     <Compile Include="Protocol\Operations\Connect.cs" />
-    <Compile Include="Protocol\Operations\CreateDatabase.cs" />
+    <Compile Include="Protocol\Operations\DbCreate.cs" />
     <Compile Include="Protocol\Operations\Operation.cs" />
     <Compile Include="Connection\ResponseStatus.cs" />
     <Compile Include="Protocol\Operations\IOperation.cs" />
-    <Compile Include="Protocol\Operations\OpenDatabase.cs" />
+    <Compile Include="Protocol\Operations\DbOpen.cs" />
     <Compile Include="Protocol\Common\OCluster.cs" />
     <Compile Include="Protocol\Common\OClusterType.cs" />
     <Compile Include="Protocol\Common\ODatabase.cs" />
