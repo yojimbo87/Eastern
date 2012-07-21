@@ -20,6 +20,7 @@ Features
   - Database exist check (DB_EXIST)
   - Reload database (DB_RELOAD)
   - Delete database (DB_DELETE)
+  - Database size (DB_SIZE)
 
 TODO
 ----
