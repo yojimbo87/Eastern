@@ -71,6 +71,8 @@ namespace Eastern
             cluster.Location = location;
             cluster.DataSegmentName = dataSegmentName;
 
+            Clusters.Add(cluster);
+
             return cluster;
         }
 
