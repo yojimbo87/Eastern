@@ -28,7 +28,7 @@ namespace Eastern.Protocol.Operations
             }
 
             // operation specific fields
-            databaseRecordsCount = BinaryParser.ToShort(response.Data.Skip(offset).Take(8).ToArray());
+            databaseRecordsCount = BinaryParser.ToLong(response.Data.Skip(offset).Take(8).ToArray());
             offset += 8;
 
             return databaseRecordsCount;
