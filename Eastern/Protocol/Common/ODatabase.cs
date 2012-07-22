@@ -74,6 +74,29 @@ namespace Eastern
             return cluster;
         }
 
+        // return value indicated if the cluster was successfuly removed
+        public bool RemoveCluster(short clusterID)
+        {
+            DataClusterRemove operation = new DataClusterRemove();
+            operation.ClusterID = clusterID;
+
+            byte deleteOnClientSide = (byte)WorkerConnection.ExecuteOperation<DataClusterRemove>(operation);
+
+            if (deleteOnClientSide == 1)
+            {
+                OCluster cluster = Clusters.Find(q => q.ID == clusterID);
+
+                if (cluster != null)
+                {
+                    Clusters.Remove(cluster);
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public void Close()
         {
             DbClose operation = new DbClose();

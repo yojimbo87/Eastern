@@ -23,7 +23,8 @@ namespace ConsoleTest
                 //TestDbDelete();
                 //TestDbSize();
                 //TestCountRecords();
-                TestDataClusterAdd();
+                //TestDataClusterAdd();
+                TestDataClusterRemove();
             }
             catch (OException ex)
             {
@@ -236,6 +237,53 @@ namespace ConsoleTest
             OCluster newCluster = database.AddCluster(OClusterType.Physical, "tempClusterTest1");
 
             Console.WriteLine("New cluster ID: {0}, Name: {1}", newCluster.ID, newCluster.Name);
+
+            Console.WriteLine("======================================================");
+        }
+
+        static void TestDataClusterRemove()
+        {
+            EasternClient client = new EasternClient("127.0.0.1", 2424);
+            ODatabase database = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
+
+            Console.WriteLine("Session ID: " + database.SessionID);
+            Console.WriteLine("Clusters:");
+            foreach (OCluster cluster in database.Clusters)
+            {
+                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+            }
+
+            Console.WriteLine("Adding new cluster...");
+            OCluster newCluster = database.AddCluster(OClusterType.Physical, "tempClusterTest1");
+            
+            Console.WriteLine("Clusters (before reload):");
+            foreach (OCluster cluster in database.Clusters)
+            {
+                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+            }
+
+            database.Reload();
+            Console.WriteLine("Clusters (after reload):");
+            foreach (OCluster cluster in database.Clusters)
+            {
+                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+            }
+
+            Console.WriteLine("Removing cluster... {0}", newCluster.ID);
+            database.RemoveCluster(newCluster.ID);
+
+            Console.WriteLine("Clusters (before reload):");
+            foreach (OCluster cluster in database.Clusters)
+            {
+                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+            }
+
+            database.Reload();
+            Console.WriteLine("Clusters (after reload):");
+            foreach (OCluster cluster in database.Clusters)
+            {
+                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+            }
 
             Console.WriteLine("======================================================");
         }
