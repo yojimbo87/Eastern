@@ -17,8 +17,8 @@ namespace Eastern.Protocol.Operations
             request.DataItems.Add(new DataItem() { Type = "int", Data = BinaryParser.ToArray(sessionID) });
             // operation specific fields
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(DatabaseName) });
-            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray((DatabaseType == ODatabaseType.Document) ? "document" : "graph") });
-            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray((StorageType == OStorageType.Local) ? "local" : "memory") });
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(DatabaseType.ToString().ToLower()) });
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(StorageType.ToString().ToLower()) });
 
             return request;
         }

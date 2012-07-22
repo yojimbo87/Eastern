@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Eastern.Connection;
 
@@ -51,7 +52,8 @@ namespace Eastern.Protocol.Operations
                     int clusterTypeLength = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
                     offset += 4;
 
-                    cluster.Type = BinaryParser.ToString(response.Data.Skip(offset).Take(clusterTypeLength).ToArray());
+                    string clusterName = BinaryParser.ToString(response.Data.Skip(offset).Take(clusterTypeLength).ToArray());
+                    cluster.Type = (OClusterType)Enum.Parse(typeof(OClusterType), clusterName, true);
                     offset += clusterTypeLength;
 
                     cluster.DataSegmentID = BinaryParser.ToShort(response.Data.Skip(offset).Take(2).ToArray());

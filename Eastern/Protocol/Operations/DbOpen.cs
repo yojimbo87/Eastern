@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Eastern.Connection;
 
@@ -24,7 +25,7 @@ namespace Eastern.Protocol.Operations
             request.DataItems.Add(new DataItem() { Type = "short", Data = BinaryParser.ToArray(EasternClient.ProtocolVersion) });
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(EasternClient.ClientID) });
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(DatabaseName) });
-            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray((DatabaseType == ODatabaseType.Document) ? "document" : "graph") });
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(DatabaseType.ToString().ToLower()) });
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(UserName) });
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(UserPassword) });
 
@@ -66,7 +67,8 @@ namespace Eastern.Protocol.Operations
                     int clusterTypeLength = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
                     offset += 4;
 
-                    cluster.Type = BinaryParser.ToString(response.Data.Skip(offset).Take(clusterTypeLength).ToArray());
+                    string clusterName = BinaryParser.ToString(response.Data.Skip(offset).Take(clusterTypeLength).ToArray());
+                    cluster.Type = (OClusterType)Enum.Parse(typeof(OClusterType), clusterName, true);
                     offset += clusterTypeLength;
 
                     cluster.DataSegmentID = BinaryParser.ToShort(response.Data.Skip(offset).Take(2).ToArray());
