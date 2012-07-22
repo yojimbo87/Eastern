@@ -49,6 +49,31 @@ namespace Eastern
             Clusters = database.Clusters;
         }
 
+        public OCluster AddCluster(OClusterType type, string name)
+        {
+            return AddCluster(type, name, "default", "default");
+        }
+
+        public OCluster AddCluster(OClusterType type, string name, string location, string dataSegmentName)
+        {
+            DataClusterAdd operation = new DataClusterAdd();
+            operation.Type = type;
+            operation.Name = name;
+            operation.Location = location;
+            operation.DataSegmentName = dataSegmentName;
+
+            short clusterID = (short)WorkerConnection.ExecuteOperation<DataClusterAdd>(operation);
+
+            OCluster cluster = new OCluster();
+            cluster.ID = clusterID;
+            cluster.Type = type;
+            cluster.Name = name;
+            cluster.Location = location;
+            cluster.DataSegmentName = dataSegmentName;
+
+            return cluster;
+        }
+
         public void Close()
         {
             DbClose operation = new DbClose();

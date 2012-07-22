@@ -22,7 +22,8 @@ namespace ConsoleTest
                 //TestDbReload();
                 //TestDbDelete();
                 //TestDbSize();
-                TestCountRecords();
+                //TestCountRecords();
+                TestDataClusterAdd();
             }
             catch (OException ex)
             {
@@ -214,6 +215,27 @@ namespace ConsoleTest
             }
 
             Console.WriteLine("Database records count: {0}", database.RecordsCount);
+
+            Console.WriteLine("======================================================");
+        }
+
+        static void TestDataClusterAdd()
+        {
+            EasternClient client = new EasternClient("127.0.0.1", 2424);
+            ODatabase database = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
+
+            Console.WriteLine("Session ID: " + database.SessionID);
+            Console.WriteLine("Clusters:");
+
+            foreach (OCluster cluster in database.Clusters)
+            {
+                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+            }
+
+            Console.WriteLine("Adding new cluster...");
+            OCluster newCluster = database.AddCluster(OClusterType.Physical, "tempClusterTest1");
+
+            Console.WriteLine("New cluster ID: {0}, Name: {1}", newCluster.ID, newCluster.Name);
 
             Console.WriteLine("======================================================");
         }
