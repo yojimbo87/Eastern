@@ -23,6 +23,7 @@ Features
   - Database size (DB_SIZE)
   - Database records count (DB_COUNTRECORDS)
   - Add cluster to database (DATACLUSTER_ADD)
+  - Remove cluster from database (DATACLUSTER_REMOVE)
 
 TODO
 ----
