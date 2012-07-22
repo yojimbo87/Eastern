@@ -22,6 +22,7 @@ Features
   - Delete database (DB_DELETE)
   - Database size (DB_SIZE)
   - Database records count (DB_COUNTRECORDS)
+  - Add cluster to database (DATACLUSTER_ADD)
 
 TODO
 ----
