@@ -23,11 +23,6 @@ namespace Eastern.Protocol.Operations
             int offset = 5;
             ODatabase database = new ODatabase();
 
-            if (response == null)
-            {
-                return database;
-            }
-
             // operation specific fields
             database.ClustersCount = BinaryParser.ToShort(response.Data.Skip(offset).Take(2).ToArray());
             offset += 2;

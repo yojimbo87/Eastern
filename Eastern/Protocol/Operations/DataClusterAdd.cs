@@ -32,11 +32,6 @@ namespace Eastern.Protocol.Operations
             int offset = 5;
             short clusterID = 0;
 
-            if (response == null)
-            {
-                return clusterID;
-            }
-
             // operation specific fields
             clusterID = BinaryParser.ToShort(response.Data.Skip(offset).Take(2).ToArray());
             offset += 2;

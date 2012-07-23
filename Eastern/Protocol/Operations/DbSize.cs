@@ -22,11 +22,6 @@ namespace Eastern.Protocol.Operations
             int offset = 5;
             long databaseSize = 0;
 
-            if (response == null)
-            {
-                return databaseSize;
-            }
-
             // operation specific fields
             databaseSize = BinaryParser.ToLong(response.Data.Skip(offset).Take(8).ToArray());
             offset += 8;

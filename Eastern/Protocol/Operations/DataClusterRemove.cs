@@ -25,11 +25,6 @@ namespace Eastern.Protocol.Operations
             int offset = 5;
             byte deleteOnClientSide = 0;
 
-            if (response == null)
-            {
-                return deleteOnClientSide;
-            }
-
             // operation specific fields
             deleteOnClientSide = BinaryParser.ToByte(response.Data.Skip(offset).Take(1).ToArray());
             offset += 1;

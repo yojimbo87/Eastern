@@ -26,11 +26,6 @@ namespace Eastern.Protocol.Operations
         {
             bool wasShutdownSuccessful = false;
 
-            if (response == null)
-            {
-                return wasShutdownSuccessful;
-            }
-
             if (response.Status == ResponseStatus.OK)
             {
                 wasShutdownSuccessful = true;
