@@ -45,6 +45,12 @@ namespace Eastern
             DbReload operation = new DbReload();
             ODatabase database = (ODatabase)WorkerConnection.ExecuteOperation<DbReload>(operation);
 
+            // add worker connection to each cluster
+            foreach (OCluster cluster in database.Clusters)
+            {
+                cluster.WorkerConnection = WorkerConnection;
+            }
+
             ClustersCount = database.ClustersCount;
             Clusters = database.Clusters;
         }
@@ -65,6 +71,7 @@ namespace Eastern
             short clusterID = (short)WorkerConnection.ExecuteOperation<DataClusterAdd>(operation);
 
             OCluster cluster = new OCluster();
+            cluster.WorkerConnection = WorkerConnection;
             cluster.ID = clusterID;
             cluster.Type = type;
             cluster.Name = name;

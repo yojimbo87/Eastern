@@ -63,6 +63,12 @@ namespace Eastern
 
             database.WorkerConnection = Connection;
 
+            // add worker connection to each cluster
+            foreach (OCluster cluster in database.Clusters)
+            {
+                cluster.WorkerConnection = Connection;
+            }
+
             return database;
         }
     }
