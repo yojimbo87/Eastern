@@ -86,7 +86,7 @@ namespace Eastern.Connection
 
                 if (response.Status == ResponseStatus.ERROR)
                 {
-                    ProcessResponseError(response);
+                    ParseResponseError(response);
                 }
             }
 
@@ -127,7 +127,7 @@ namespace Eastern.Connection
             return buffer.ToArray();
         }
 
-        private void ProcessResponseError(Response response)
+        private void ParseResponseError(Response response)
         {
             int offset = 5;
             string exceptionString = "";
