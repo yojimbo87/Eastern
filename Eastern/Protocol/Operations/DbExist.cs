@@ -26,6 +26,11 @@ namespace Eastern.Protocol.Operations
             int offset = 5;
             bool databaseExist = false;
 
+            if (response == null)
+            {
+                return databaseExist;
+            }
+
             // operation specific fields
             byte existByte = BinaryParser.ToByte(response.Data.Skip(offset).Take(1).ToArray());
             offset += 1;

@@ -33,6 +33,11 @@ namespace Eastern.Protocol.Operations
             int offset = 5;
             OConnection connection = new OConnection();
 
+            if (response == null)
+            {
+                return connection;
+            }
+
             // operation specific fields
             connection.SessionID = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
             offset += 4;

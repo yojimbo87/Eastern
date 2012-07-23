@@ -27,6 +27,11 @@ namespace Eastern.Protocol.Operations
         {
             bool wasDatabaseClosed = false;
 
+            if (response == null)
+            {
+                return wasDatabaseClosed;
+            }
+
             if (response.Status == ResponseStatus.OK)
             {
                 wasDatabaseClosed = true;

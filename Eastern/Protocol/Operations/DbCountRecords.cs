@@ -22,6 +22,11 @@ namespace Eastern.Protocol.Operations
             int offset = 5;
             long databaseRecordsCount = 0;
 
+            if (response == null)
+            {
+                return databaseRecordsCount;
+            }
+
             // operation specific fields
             databaseRecordsCount = BinaryParser.ToLong(response.Data.Skip(offset).Take(8).ToArray());
             offset += 8;

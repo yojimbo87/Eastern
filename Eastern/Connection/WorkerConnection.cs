@@ -87,8 +87,6 @@ namespace Eastern.Connection
                 if (response.Status == ResponseStatus.ERROR)
                 {
                     ParseResponseError(response);
-
-                    return null;
                 }
             }
 
