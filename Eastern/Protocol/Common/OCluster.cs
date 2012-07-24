@@ -6,7 +6,7 @@ namespace Eastern
 {
     public class OCluster
     {
-        internal WorkerConnection WorkerConnection { get; set; }
+        internal Worker WorkerConnection { get; set; }
 
         public short ID { get; set; }
         public string Name { get; set; }

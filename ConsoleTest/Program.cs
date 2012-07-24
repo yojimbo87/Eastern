@@ -38,7 +38,7 @@ namespace ConsoleTest
         static void TestShutdown()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            bool result = client.Shutdown("root", "FFB5AB5CF4F2DC287B83737FCD6F849BB316E2CC952406B5A5DAEC81275A264C");
+            bool result = client.Shutdown("root", "9F696830A58E8187F6CC36674C666AE73E202DE3B0216C5B8BF8403C276CEE52");
 
             Console.WriteLine("Is server down: " + result);
 
@@ -48,7 +48,7 @@ namespace ConsoleTest
         static void TestConnect()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            OConnection connection = client.Connect("root", "FFB5AB5CF4F2DC287B83737FCD6F849BB316E2CC952406B5A5DAEC81275A264C");
+            OConnection connection = client.Connect("root", "9F696830A58E8187F6CC36674C666AE73E202DE3B0216C5B8BF8403C276CEE52");
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 
@@ -74,7 +74,7 @@ namespace ConsoleTest
         static void TestDbCreate()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            OConnection connection = client.Connect("root", "FFB5AB5CF4F2DC287B83737FCD6F849BB316E2CC952406B5A5DAEC81275A264C");
+            OConnection connection = client.Connect("root", "9F696830A58E8187F6CC36674C666AE73E202DE3B0216C5B8BF8403C276CEE52");
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 
@@ -88,7 +88,7 @@ namespace ConsoleTest
         static void TestCloseConnection()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            OConnection connection = client.Connect("root", "FFB5AB5CF4F2DC287B83737FCD6F849BB316E2CC952406B5A5DAEC81275A264C");
+            OConnection connection = client.Connect("root", "9F696830A58E8187F6CC36674C666AE73E202DE3B0216C5B8BF8403C276CEE52");
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 
@@ -122,7 +122,7 @@ namespace ConsoleTest
         static void TestDbExist()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            OConnection connection = client.Connect("root", "FFB5AB5CF4F2DC287B83737FCD6F849BB316E2CC952406B5A5DAEC81275A264C");
+            OConnection connection = client.Connect("root", "9F696830A58E8187F6CC36674C666AE73E202DE3B0216C5B8BF8403C276CEE52");
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 
@@ -164,7 +164,7 @@ namespace ConsoleTest
             const string databaseName = "testCreateTempDB1";
 
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            OConnection connection = client.Connect("root", "FFB5AB5CF4F2DC287B83737FCD6F849BB316E2CC952406B5A5DAEC81275A264C");
+            OConnection connection = client.Connect("root", "9F696830A58E8187F6CC36674C666AE73E202DE3B0216C5B8BF8403C276CEE52");
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 

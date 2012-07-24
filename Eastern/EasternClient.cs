@@ -10,16 +10,16 @@ namespace Eastern
         internal static short ProtocolVersion { get { return 12; } }
         internal static string ClientID { get { return "null"; } }
 
-        private WorkerConnection Connection { get; set; }
+        private Worker Connection { get; set; }
 
         public EasternClient()
         {
-            Connection = new WorkerConnection();
+            Connection = new Worker();
         }
 
         public EasternClient(string hostname, int port)
         {
-            Connection = new WorkerConnection();
+            Connection = new Worker();
 
             Connection.Initialize(hostname, port);
         }

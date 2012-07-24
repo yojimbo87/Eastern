@@ -6,7 +6,7 @@ namespace Eastern
 {
     public class ODatabase
     {
-        internal WorkerConnection WorkerConnection { get; set; }
+        internal Worker WorkerConnection { get; set; }
 
         public int SessionID { get; set; }
         public string Name { get; set; }

@@ -9,7 +9,7 @@ using Eastern.Protocol.Operations;
 
 namespace Eastern.Connection
 {
-    internal class WorkerConnection
+    internal class Worker
     {
         private TcpClient Socket { get; set; }
         private NetworkStream Stream { get; set; }
@@ -20,7 +20,7 @@ namespace Eastern.Connection
         internal short ProtocolVersion { get; set; }
         internal int SessionID { get; set; }
 
-        internal WorkerConnection()
+        internal Worker()
         {
             ReadBuffer = new byte[1024];
             ProtocolVersion = 0;

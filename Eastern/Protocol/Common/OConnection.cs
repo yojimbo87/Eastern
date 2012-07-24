@@ -5,7 +5,7 @@ namespace Eastern
 {
     public class OConnection
     {
-        internal WorkerConnection WorkerConnection { get; set; }
+        internal Worker WorkerConnection { get; set; }
 
         public int SessionID { get; set; }
 
