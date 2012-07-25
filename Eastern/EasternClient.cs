@@ -10,18 +10,17 @@ namespace Eastern
         internal static short ProtocolVersion { get { return 12; } }
         internal static string ClientID { get { return "null"; } }
 
-        private Worker Connection { get; set; }
+        private Worker WorkerConnection { get; set; }
 
         public EasternClient()
         {
-            Connection = new Worker();
+            WorkerConnection = new Worker();
         }
 
         public EasternClient(string hostname, int port)
         {
-            Connection = new Worker();
-
-            Connection.Initialize(hostname, port);
+            WorkerConnection = new Worker();
+            WorkerConnection.Initialize(hostname, port);
         }
 
         // return value indicates if the server was shut down successfuly
@@ -31,7 +30,7 @@ namespace Eastern
             operation.UserName = userName;
             operation.UserPassword = userPassword;
 
-            return (bool)Connection.ExecuteOperation<Shutdown>(operation);
+            return (bool)WorkerConnection.ExecuteOperation<Shutdown>(operation);
         }
 
         public OConnection Connect(string userName, string userPassword)
@@ -40,11 +39,11 @@ namespace Eastern
             operation.UserName = userName;
             operation.UserPassword = userPassword;
 
-            OConnection connection = (OConnection)Connection.ExecuteOperation<Connect>(operation);
+            OConnection connection = (OConnection)WorkerConnection.ExecuteOperation<Connect>(operation);
 
-            Connection.SessionID = connection.SessionID;
+            WorkerConnection.SessionID = connection.SessionID;
 
-            connection.WorkerConnection = Connection;
+            connection.WorkerConnection = WorkerConnection;
 
             return connection;
         }
@@ -57,19 +56,24 @@ namespace Eastern
             operation.UserName = userName;
             operation.UserPassword = userPassword;
 
-            ODatabase database = (ODatabase)Connection.ExecuteOperation<DbOpen>(operation);
+            ODatabase database = (ODatabase)WorkerConnection.ExecuteOperation<DbOpen>(operation);
 
-            Connection.SessionID = database.SessionID;
+            WorkerConnection.SessionID = database.SessionID;
 
-            database.WorkerConnection = Connection;
+            database.WorkerConnection = WorkerConnection;
 
             // add worker connection to each cluster
             foreach (OCluster cluster in database.Clusters)
             {
-                cluster.WorkerConnection = Connection;
+                cluster.WorkerConnection = WorkerConnection;
             }
 
             return database;
         }
+
+        /*internal static object QueueOperation<T>(T operation)
+        {
+            return WorkerConnection.ExecuteOperation<T>(operation);
+        }*/
     }
 }
