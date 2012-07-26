@@ -25,5 +25,16 @@ namespace Eastern
                 return (long)WorkerConnection.ExecuteOperation<DataClusterCount>(operation);
             }
         }
+
+        public long[] DataRange
+        {
+            get
+            {
+                DataClusterDataRange operation = new DataClusterDataRange();
+                operation.ClusterID = ID;
+
+                return (long[])WorkerConnection.ExecuteOperation<DataClusterDataRange>(operation);
+            }
+        }
     }
 }

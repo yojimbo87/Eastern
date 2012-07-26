@@ -31,6 +31,7 @@ namespace ConsoleTest
                 //TestDataClusterAdd();
                 //TestDataClusterRemove();
                 TestDataClusterCount();
+                TestDataClusterDataRange();
             }
             catch (OException ex)
             {
@@ -304,6 +305,20 @@ namespace ConsoleTest
             foreach (OCluster cluster in database.Clusters)
             {
                 Console.WriteLine("    {0} - {1} - {2} - Records count: {3}", cluster.Name, cluster.Type, cluster.ID, cluster.RecordsCount);
+            }
+        }
+
+        static void TestDataClusterDataRange()
+        {
+            EasternClient client = new EasternClient("127.0.0.1", 2424);
+            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
+
+            Console.WriteLine("Session ID: " + database.SessionID);
+            Console.WriteLine("Clusters:");
+            foreach (OCluster cluster in database.Clusters)
+            {
+                long[] range = cluster.DataRange;
+                Console.WriteLine("    {0} - {1} - {2} - Data range: {3} - {4}", cluster.Name, cluster.Type, cluster.ID, range[0], range[1]);
             }
         }
     }
