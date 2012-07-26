@@ -19,10 +19,10 @@ namespace Eastern
         {
             get
             {
-                DataClusterCount operation = new DataClusterCount();
-                operation.Clusters.Add(ID);
+                Count operation = new Count();
+                operation.ClusterName = Name;
 
-                return (long)WorkerConnection.ExecuteOperation<DataClusterCount>(operation);
+                return (long)WorkerConnection.ExecuteOperation<Count>(operation);
             }
         }
 
