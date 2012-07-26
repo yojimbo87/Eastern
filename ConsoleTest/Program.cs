@@ -8,6 +8,11 @@ namespace ConsoleTest
 {
     class Program
     {
+        static string rootPassword = "9F696830A58E8187F6CC36674C666AE73E202DE3B0216C5B8BF8403C276CEE52";
+        static string databaseName = "test1";
+        static string username = "admin";
+        static string password = "admin";
+
         static void Main(string[] args)
         {
             try
@@ -38,7 +43,7 @@ namespace ConsoleTest
         static void TestShutdown()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            bool result = client.Shutdown("root", "9F696830A58E8187F6CC36674C666AE73E202DE3B0216C5B8BF8403C276CEE52");
+            bool result = client.Shutdown("root", rootPassword);
 
             Console.WriteLine("Is server down: " + result);
 
@@ -48,7 +53,7 @@ namespace ConsoleTest
         static void TestConnect()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            OConnection connection = client.Connect("root", "9F696830A58E8187F6CC36674C666AE73E202DE3B0216C5B8BF8403C276CEE52");
+            OConnection connection = client.Connect("root", rootPassword);
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 
@@ -74,7 +79,7 @@ namespace ConsoleTest
         static void TestDbCreate()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            OConnection connection = client.Connect("root", "9F696830A58E8187F6CC36674C666AE73E202DE3B0216C5B8BF8403C276CEE52");
+            OConnection connection = client.Connect("root", rootPassword);
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 
@@ -88,7 +93,7 @@ namespace ConsoleTest
         static void TestCloseConnection()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            OConnection connection = client.Connect("root", "9F696830A58E8187F6CC36674C666AE73E202DE3B0216C5B8BF8403C276CEE52");
+            OConnection connection = client.Connect("root", rootPassword);
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 
@@ -102,7 +107,7 @@ namespace ConsoleTest
         static void TestCloseDatabase()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
+            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
 
             Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters:");
@@ -122,7 +127,7 @@ namespace ConsoleTest
         static void TestDbExist()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            OConnection connection = client.Connect("root", "9F696830A58E8187F6CC36674C666AE73E202DE3B0216C5B8BF8403C276CEE52");
+            OConnection connection = client.Connect("root", rootPassword);
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 
@@ -135,7 +140,7 @@ namespace ConsoleTest
         static void TestDbReload()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
+            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
 
             Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters ({0}):", database.ClustersCount);
@@ -164,7 +169,7 @@ namespace ConsoleTest
             const string databaseName = "testCreateTempDB1";
 
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            OConnection connection = client.Connect("root", "9F696830A58E8187F6CC36674C666AE73E202DE3B0216C5B8BF8403C276CEE52");
+            OConnection connection = client.Connect("root", rootPassword);
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 
@@ -188,7 +193,7 @@ namespace ConsoleTest
         static void TestDbSize()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
+            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
 
             Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters:");
@@ -206,7 +211,7 @@ namespace ConsoleTest
         static void TestCountRecords()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
+            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
 
             Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters:");
@@ -224,7 +229,7 @@ namespace ConsoleTest
         static void TestDataClusterAdd()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
+            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
 
             Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters:");
@@ -245,7 +250,7 @@ namespace ConsoleTest
         static void TestDataClusterRemove()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
+            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
 
             Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters:");
@@ -292,7 +297,7 @@ namespace ConsoleTest
         static void TestDataClusterCount()
         {
             EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
+            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
 
             Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters:");
