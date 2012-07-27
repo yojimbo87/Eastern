@@ -106,6 +106,15 @@ namespace Eastern
             return false;
         }
 
+        public int AddSegment(string name, string location)
+        {
+            DataSegmentAdd operation = new DataSegmentAdd();
+            operation.SegmentName = name;
+            operation.SegmentLocation = location;
+
+            return (int)WorkerConnection.ExecuteOperation<DataSegmentAdd>(operation);
+        }
+
         public void Close()
         {
             DbClose operation = new DbClose();
