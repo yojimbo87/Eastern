@@ -28,6 +28,7 @@ Features
   - Data range of records in cluster (DATACLUSTER_DATARANGE)
   - Count of records in cluster (COUNT)
   - Add data segment (DATASEGMENT_ADD)
+  - Remove data segment (DATASEGMENT_REMOVE)
 
 TODO
 ----
