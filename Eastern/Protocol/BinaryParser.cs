@@ -5,6 +5,18 @@ namespace Eastern.Protocol
 {
     internal static class BinaryParser
     {
+        internal static bool ToBoolean(byte[] data)
+        {
+            if (data[0] == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         internal static byte ToByte(byte[] data)
         {
             return data[0];
