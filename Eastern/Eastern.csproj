@@ -58,6 +58,7 @@
     <Compile Include="Protocol\Operations\DataClusterDataRange.cs" />
     <Compile Include="Protocol\Operations\DataClusterRemove.cs" />
     <Compile Include="Protocol\Operations\DataSegmentAdd.cs" />
+    <Compile Include="Protocol\Operations\DataSegmentRemove.cs" />
     <Compile Include="Protocol\Operations\DbClose.cs" />
     <Compile Include="Protocol\Operations\Connect.cs" />
     <Compile Include="Protocol\Operations\DbCountRecords.cs" />

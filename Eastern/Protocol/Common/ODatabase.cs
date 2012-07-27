@@ -106,13 +106,21 @@ namespace Eastern
             return false;
         }
 
-        public int AddSegment(string name, string location)
+        public int AddDataSegment(string name, string location)
         {
             DataSegmentAdd operation = new DataSegmentAdd();
             operation.SegmentName = name;
             operation.SegmentLocation = location;
 
             return (int)WorkerConnection.ExecuteOperation<DataSegmentAdd>(operation);
+        }
+
+        public bool RemoveDataSegment(string name)
+        {
+            DataSegmentRemove operation = new DataSegmentRemove();
+            operation.SegmentName = name;
+
+            return (bool)WorkerConnection.ExecuteOperation<DataSegmentRemove>(operation);
         }
 
         public void Close()
