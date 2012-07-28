@@ -48,10 +48,10 @@
     <Compile Include="EasternClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Protocol\BinaryParser.cs" />
-    <Compile Include="Protocol\Common\OConnection.cs" />
-    <Compile Include="Protocol\Common\OException.cs" />
-    <Compile Include="Protocol\Common\OExceptionType.cs" />
-    <Compile Include="Protocol\Common\OStorageType.cs" />
+    <Compile Include="Common\OConnection.cs" />
+    <Compile Include="Common\OException.cs" />
+    <Compile Include="Common\OExceptionType.cs" />
+    <Compile Include="Common\OStorageType.cs" />
     <Compile Include="Protocol\Operations\Count.cs" />
     <Compile Include="Protocol\Operations\DataClusterAdd.cs" />
     <Compile Include="Protocol\Operations\DataClusterCount.cs" />
@@ -71,10 +71,10 @@
     <Compile Include="Connection\ResponseStatus.cs" />
     <Compile Include="Protocol\Operations\IOperation.cs" />
     <Compile Include="Protocol\Operations\DbOpen.cs" />
-    <Compile Include="Protocol\Common\OCluster.cs" />
-    <Compile Include="Protocol\Common\OClusterType.cs" />
-    <Compile Include="Protocol\Common\ODatabase.cs" />
-    <Compile Include="Protocol\Common\ODatabaseType.cs" />
+    <Compile Include="Common\OCluster.cs" />
+    <Compile Include="Common\OClusterType.cs" />
+    <Compile Include="Common\ODatabase.cs" />
+    <Compile Include="Common\ODatabaseType.cs" />
     <Compile Include="Protocol\Operations\OperationType.cs" />
     <Compile Include="Protocol\Operations\Shutdown.cs" />
   </ItemGroup>
