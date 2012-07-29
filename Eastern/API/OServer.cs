@@ -64,8 +64,8 @@ namespace Eastern
             DbClose operation = new DbClose();
 
             WorkerConnection.ExecuteOperation<DbClose>(operation);
+            WorkerConnection.SessionID = -1;
             WorkerConnection.Close();
-            SessionID = -1;
         }
     }
 }
