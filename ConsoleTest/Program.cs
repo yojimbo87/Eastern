@@ -27,10 +27,9 @@ namespace ConsoleTest
                 //TestDbCreateDbDelete();
                 //TestDbSize();
                 //TestCountRecords();
-                //TestDataClusterAdd();
-                //TestDataClusterRemove();
-                //TestDataClusterCount();
-                //TestDataClusterDataRange();
+                //TestClusterAddClusterRemove();
+                TestClusterCount();
+                TestClusterDataRange();
 
                 //TestShutdown();
             }
@@ -63,8 +62,7 @@ namespace ConsoleTest
 
         static void TestDbOpen()
         {
-            EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase("test1", ODatabaseType.Document, "admin", "admin");
+            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
 
             Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters:");
@@ -92,8 +90,7 @@ namespace ConsoleTest
 
         static void TestCloseDatabase()
         {
-            EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
+            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
 
             Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters:");
@@ -124,8 +121,7 @@ namespace ConsoleTest
 
         static void TestDbReload()
         {
-            EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
+            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
 
             Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters ({0}):", database.ClustersCount);
@@ -176,8 +172,7 @@ namespace ConsoleTest
 
         static void TestDbSize()
         {
-            EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
+            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
 
             Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters:");
@@ -194,8 +189,7 @@ namespace ConsoleTest
 
         static void TestCountRecords()
         {
-            EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
+            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
 
             Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters:");
@@ -210,31 +204,9 @@ namespace ConsoleTest
             Console.WriteLine("======================================================");
         }
 
-        static void TestDataClusterAdd()
+        static void TestClusterAddClusterRemove()
         {
-            EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
-
-            Console.WriteLine("Session ID: " + database.SessionID);
-            Console.WriteLine("Clusters:");
-
-            foreach (OCluster cluster in database.Clusters)
-            {
-                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
-            }
-
-            Console.WriteLine("Adding new cluster...");
-            OCluster newCluster = database.AddCluster(OClusterType.Physical, "tempClusterTest1");
-
-            Console.WriteLine("New cluster ID: {0}, Name: {1}", newCluster.ID, newCluster.Name);
-
-            Console.WriteLine("======================================================");
-        }
-
-        static void TestDataClusterRemove()
-        {
-            EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
+            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
 
             Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters:");
@@ -278,10 +250,9 @@ namespace ConsoleTest
             Console.WriteLine("======================================================");
         }
 
-        static void TestDataClusterCount()
+        static void TestClusterCount()
         {
-            EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
+            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
 
             Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters:");
@@ -289,12 +260,13 @@ namespace ConsoleTest
             {
                 Console.WriteLine("    {0} - {1} - {2} - Records count: {3}", cluster.Name, cluster.Type, cluster.ID, cluster.RecordsCount);
             }
+
+            Console.WriteLine("======================================================");
         }
 
-        static void TestDataClusterDataRange()
+        static void TestClusterDataRange()
         {
-            EasternClient client = new EasternClient("127.0.0.1", 2424);
-            ODatabase database = client.OpenDatabase(databaseName, ODatabaseType.Document, username, password);
+            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
 
             Console.WriteLine("Session ID: " + database.SessionID);
             Console.WriteLine("Clusters:");
@@ -303,6 +275,8 @@ namespace ConsoleTest
                 long[] range = cluster.DataRange;
                 Console.WriteLine("    {0} - {1} - {2} - Data range: {3} - {4}", cluster.Name, cluster.Type, cluster.ID, range[0], range[1]);
             }
+
+            Console.WriteLine("======================================================");
         }
     }
 }
