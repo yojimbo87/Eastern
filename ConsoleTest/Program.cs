@@ -20,18 +20,19 @@ namespace ConsoleTest
                 //TestShutdown();
                 //TestConnect();
                 //TestDbOpen();
-                //TestDbCreate();
                 //TestCloseConnection();
                 //TestCloseDatabase();
                 //TestDbExist();
                 //TestDbReload();
-                //TestDbDelete();
+                //TestDbCreateDbDelete();
                 //TestDbSize();
                 //TestCountRecords();
                 //TestDataClusterAdd();
                 //TestDataClusterRemove();
-                TestDataClusterCount();
-                TestDataClusterDataRange();
+                //TestDataClusterCount();
+                //TestDataClusterDataRange();
+
+                //TestShutdown();
             }
             catch (OException ex)
             {
@@ -53,8 +54,7 @@ namespace ConsoleTest
 
         static void TestConnect()
         {
-            EasternClient client = new EasternClient("127.0.0.1", 2424);
-            OConnection connection = client.Connect("root", rootPassword);
+            OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword);
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 
@@ -77,24 +77,9 @@ namespace ConsoleTest
             Console.WriteLine("======================================================");
         }
 
-        static void TestDbCreate()
-        {
-            EasternClient client = new EasternClient("127.0.0.1", 2424);
-            OConnection connection = client.Connect("root", rootPassword);
-
-            Console.WriteLine("Session ID: " + connection.SessionID);
-
-            bool result = connection.CreateDatabase("testCreateDB", ODatabaseType.Document, OStorageType.Local);
-
-            Console.WriteLine("Is database created: " + result);
-
-            Console.WriteLine("======================================================");
-        }
-
         static void TestCloseConnection()
         {
-            EasternClient client = new EasternClient("127.0.0.1", 2424);
-            OConnection connection = client.Connect("root", rootPassword);
+            OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword);
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 
@@ -127,8 +112,7 @@ namespace ConsoleTest
 
         static void TestDbExist()
         {
-            EasternClient client = new EasternClient("127.0.0.1", 2424);
-            OConnection connection = client.Connect("root", rootPassword);
+            OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword);
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 
@@ -165,12 +149,11 @@ namespace ConsoleTest
             Console.WriteLine("======================================================");
         }
 
-        static void TestDbDelete()
+        static void TestDbCreateDbDelete()
         {
             const string databaseName = "testCreateTempDB1";
 
-            EasternClient client = new EasternClient("127.0.0.1", 2424);
-            OConnection connection = client.Connect("root", rootPassword);
+            OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword);
 
             Console.WriteLine("Session ID: " + connection.SessionID);
 
