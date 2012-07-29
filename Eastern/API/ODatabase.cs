@@ -110,6 +110,7 @@ namespace Eastern
                 if (cluster != null)
                 {
                     Clusters.Remove(cluster);
+                    ClustersCount--;
 
                     return true;
                 }
