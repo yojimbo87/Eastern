@@ -31,18 +31,18 @@ namespace Eastern.Protocol.Operations
         {
             // start from this position since standard fields (status, session ID) has been already parsed
             int offset = 5;
-            OConnection connection = new OConnection();
+            int sessionID = -1;
 
             if (response == null)
             {
-                return connection;
+                return sessionID;
             }
 
             // operation specific fields
-            connection.SessionID = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
+            sessionID = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
             offset += 4;
 
-            return connection;
+            return sessionID;
         }
     }
 }
