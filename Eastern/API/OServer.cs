@@ -3,11 +3,33 @@ using Eastern.Protocol.Operations;
 
 namespace Eastern
 {
-    public class OConnection
+    public class OServer
     {
-        internal Worker WorkerConnection { get; set; }
+        private Worker WorkerConnection { get; set; }
 
-        public int SessionID { get; set; }
+        public int SessionID { get { return WorkerConnection.SessionID; } }
+
+        public OServer(string hostname, int port, string userName, string userPassword)
+        {
+            WorkerConnection = new Worker();
+            WorkerConnection.Initialize(hostname, port);
+
+            Connect operation = new Connect();
+            operation.UserName = userName;
+            operation.UserPassword = userPassword;
+
+            WorkerConnection.SessionID = (int)WorkerConnection.ExecuteOperation<Connect>(operation);
+        }
+
+        // return value indicates if the server was shut down successfuly
+        public bool Shutdown(string userName, string userPassword)
+        {
+            Shutdown operation = new Shutdown();
+            operation.UserName = userName;
+            operation.UserPassword = userPassword;
+
+            return (bool)WorkerConnection.ExecuteOperation<Shutdown>(operation);
+        }
 
         // return value indicates if the database was created successfuly
         public bool CreateDatabase(string databaseName, ODatabaseType databaseType, OStorageType storageType)

@@ -23,30 +23,7 @@ namespace Eastern
             WorkerConnection.Initialize(hostname, port);
         }
 
-        // return value indicates if the server was shut down successfuly
-        public bool Shutdown(string userName, string userPassword)
-        {
-            Shutdown operation = new Shutdown();
-            operation.UserName = userName;
-            operation.UserPassword = userPassword;
-
-            return (bool)WorkerConnection.ExecuteOperation<Shutdown>(operation);
-        }
-
-        public OConnection Connect(string userName, string userPassword)
-        {
-            Connect operation = new Connect();
-            operation.UserName = userName;
-            operation.UserPassword = userPassword;
-
-            OConnection connection = (OConnection)WorkerConnection.ExecuteOperation<Connect>(operation);
-
-            WorkerConnection.SessionID = connection.SessionID;
-
-            connection.WorkerConnection = WorkerConnection;
-
-            return connection;
-        }
+        
 
         public ODatabase OpenDatabase(string databaseName, ODatabaseType databaseType, string userName, string userPassword)
         {
