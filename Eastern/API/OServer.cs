@@ -6,6 +6,8 @@ namespace Eastern
     public class OServer
     {
         private Worker WorkerConnection { get; set; }
+        private string UserName { get; set; }
+        private string UserPassword { get; set; }
 
         public int SessionID { get { return WorkerConnection.SessionID; } }
 
@@ -13,20 +15,22 @@ namespace Eastern
         {
             WorkerConnection = new Worker();
             WorkerConnection.Initialize(hostname, port);
+            UserName = userName;
+            UserPassword = userPassword;
 
             Connect operation = new Connect();
-            operation.UserName = userName;
-            operation.UserPassword = userPassword;
+            operation.UserName = UserName;
+            operation.UserPassword = UserPassword;
 
             WorkerConnection.SessionID = (int)WorkerConnection.ExecuteOperation<Connect>(operation);
         }
 
         // return value indicates if the server was shut down successfuly
-        public bool Shutdown(string userName, string userPassword)
+        public bool Shutdown()
         {
             Shutdown operation = new Shutdown();
-            operation.UserName = userName;
-            operation.UserPassword = userPassword;
+            operation.UserName = UserName;
+            operation.UserPassword = UserPassword;
 
             return (bool)WorkerConnection.ExecuteOperation<Shutdown>(operation);
         }
@@ -66,6 +70,9 @@ namespace Eastern
             WorkerConnection.ExecuteOperation<DbClose>(operation);
             WorkerConnection.SessionID = -1;
             WorkerConnection.Close();
+
+            UserName = "";
+            UserPassword = "";
         }
     }
 }

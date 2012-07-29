@@ -43,8 +43,8 @@ namespace ConsoleTest
 
         static void TestShutdown()
         {
-            EasternClient client = new EasternClient("127.0.0.1", 2424);
-            bool result = client.Shutdown("root", rootPassword);
+            OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword);
+            bool result = connection.Shutdown();
 
             Console.WriteLine("Is server down: " + result);
 
