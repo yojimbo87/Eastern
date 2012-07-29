@@ -55,6 +55,12 @@ namespace Eastern
             ClustersCount = database.ClustersCount;
             Clusters = database.Clusters;
             ClusterConfig = database.ClusterConfig;
+
+            // assign worker connection to each cluster since each instance of cluster can perform some operations
+            foreach (OCluster cluster in Clusters)
+            {
+                cluster.WorkerConnection = WorkerConnection;
+            }
         }
 
         public void Reload()
@@ -64,6 +70,12 @@ namespace Eastern
 
             ClustersCount = database.ClustersCount;
             Clusters = database.Clusters;
+
+            // assign worker connection to each cluster since each instance of cluster can perform some operations
+            foreach (OCluster cluster in Clusters)
+            {
+                cluster.WorkerConnection = WorkerConnection;
+            }
         }
 
         public OCluster AddCluster(OClusterType type, string name)
