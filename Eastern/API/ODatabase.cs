@@ -106,7 +106,7 @@ namespace Eastern
             return false;
         }
 
-        public int AddDataSegment(string name, string location)
+        public int AddSegment(string name, string location)
         {
             DataSegmentAdd operation = new DataSegmentAdd();
             operation.SegmentName = name;
@@ -115,7 +115,7 @@ namespace Eastern
             return (int)WorkerConnection.ExecuteOperation<DataSegmentAdd>(operation);
         }
 
-        public bool RemoveDataSegment(string name)
+        public bool RemoveSegment(string name)
         {
             DataSegmentRemove operation = new DataSegmentRemove();
             operation.SegmentName = name;
