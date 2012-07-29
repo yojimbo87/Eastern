@@ -90,6 +90,7 @@ namespace Eastern
             cluster.DataSegmentName = dataSegmentName;
 
             Clusters.Add(cluster);
+            ClustersCount++;
 
             return cluster;
         }
