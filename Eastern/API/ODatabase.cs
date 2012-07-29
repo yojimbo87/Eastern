@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Eastern.Connection;
+using Eastern.Protocol;
 using Eastern.Protocol.Operations;
 
 namespace Eastern
@@ -8,7 +9,7 @@ namespace Eastern
     {
         internal Worker WorkerConnection { get; set; }
 
-        public int SessionID { get; set; }
+        public int SessionID { get { return WorkerConnection.SessionID; } }
         public string Name { get; set; }
         public ODatabaseType Type { get; set; }
         public short ClustersCount { get; set; }
@@ -35,21 +36,31 @@ namespace Eastern
             }
         }
 
-        public ODatabase()
+        public ODatabase(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
         {
-            Clusters = new List<OCluster>();
+            WorkerConnection = new Worker();
+            WorkerConnection.Initialize(hostname, port);
+
+            DbOpen operation = new DbOpen();
+            operation.DatabaseName = databaseName;
+            operation.DatabaseType = databaseType;
+            operation.UserName = userName;
+            operation.UserPassword = userPassword;
+
+            Database database = (Database)WorkerConnection.ExecuteOperation<DbOpen>(operation);
+
+            WorkerConnection.SessionID = database.SessionID;
+            Name = database.Name;
+            Type = database.Type;
+            ClustersCount = database.ClustersCount;
+            Clusters = database.Clusters;
+            ClusterConfig = database.ClusterConfig;
         }
 
         public void Reload()
         {
             DbReload operation = new DbReload();
-            ODatabase database = (ODatabase)WorkerConnection.ExecuteOperation<DbReload>(operation);
-
-            // add worker connection to each cluster
-            foreach (OCluster cluster in database.Clusters)
-            {
-                cluster.WorkerConnection = WorkerConnection;
-            }
+            Database database = (Database)WorkerConnection.ExecuteOperation<DbReload>(operation);
 
             ClustersCount = database.ClustersCount;
             Clusters = database.Clusters;
@@ -128,8 +139,8 @@ namespace Eastern
             DbClose operation = new DbClose();
 
             WorkerConnection.ExecuteOperation<DbClose>(operation);
+            WorkerConnection.SessionID = -1;
             WorkerConnection.Close();
-            SessionID = -1;
         }
     }
 }

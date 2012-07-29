@@ -36,7 +36,7 @@ namespace Eastern.Protocol.Operations
         {
             // start from this position since standard fields (status, session ID) has been already parsed
             int offset = 5;
-            ODatabase database = new ODatabase();
+            Database database = new Database();
 
             if (response == null)
             {

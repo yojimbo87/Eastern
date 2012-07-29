@@ -52,6 +52,7 @@
     <Compile Include="API\OException.cs" />
     <Compile Include="API\OExceptionType.cs" />
     <Compile Include="API\OStorageType.cs" />
+    <Compile Include="Protocol\Database.cs" />
     <Compile Include="Protocol\Operations\Count.cs" />
     <Compile Include="Protocol\Operations\DataClusterAdd.cs" />
     <Compile Include="Protocol\Operations\DataClusterCount.cs" />
