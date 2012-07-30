@@ -1,9 +1,10 @@
-﻿using Eastern.Connection;
+﻿using System;
+using Eastern.Connection;
 using Eastern.Protocol.Operations;
 
 namespace Eastern
 {
-    public class OServer
+    public class OServer : IDisposable
     {
         private Worker WorkerConnection { get; set; }
         private string UserName { get; set; }
@@ -70,9 +71,15 @@ namespace Eastern
             WorkerConnection.ExecuteOperation<DbClose>(operation);
             WorkerConnection.SessionID = -1;
             WorkerConnection.Close();
+            WorkerConnection = null;
 
             UserName = "";
             UserPassword = "";
+        }
+
+        public void Dispose()
+        {
+            Close();
         }
     }
 }
