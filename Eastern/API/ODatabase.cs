@@ -155,11 +155,6 @@ namespace Eastern
 
         public void Close()
         {
-            Dispose();
-        }
-
-        public void Dispose()
-        {
             if (ReturnToPool)
             {
                 EasternClient.ReturnDatabase(this);
@@ -172,6 +167,11 @@ namespace Eastern
                 WorkerConnection.SessionID = -1;
                 WorkerConnection.Close();
             }
+        }
+
+        public void Dispose()
+        {
+            Close();
         }
     }
 }
