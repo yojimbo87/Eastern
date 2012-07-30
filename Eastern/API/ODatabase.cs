@@ -166,6 +166,7 @@ namespace Eastern
                 WorkerConnection.ExecuteOperation<DbClose>(operation);
                 WorkerConnection.SessionID = -1;
                 WorkerConnection.Close();
+                WorkerConnection = null;
             }
         }
 
