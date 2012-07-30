@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Eastern.Connection;
 using Eastern.Protocol;
 using Eastern.Protocol.Operations;
 
 namespace Eastern
 {
-    public class ODatabase
+    public class ODatabase : IDisposable
     {
         internal Worker WorkerConnection { get; set; }
+        internal bool ReturnToPool { get; set; }
+        internal string Hash { get; set; }
 
         public int SessionID { get { return WorkerConnection.SessionID; } }
         public string Name { get; set; }
@@ -40,6 +43,8 @@ namespace Eastern
         {
             WorkerConnection = new Worker();
             WorkerConnection.Initialize(hostname, port);
+            ReturnToPool = false;
+            Hash = hostname + port + databaseName + databaseType.ToString() + userName;
 
             DbOpen operation = new DbOpen();
             operation.DatabaseName = databaseName;
@@ -150,11 +155,23 @@ namespace Eastern
 
         public void Close()
         {
-            DbClose operation = new DbClose();
+            Dispose();
+        }
 
-            WorkerConnection.ExecuteOperation<DbClose>(operation);
-            WorkerConnection.SessionID = -1;
-            WorkerConnection.Close();
+        public void Dispose()
+        {
+            if (ReturnToPool)
+            {
+                EasternClient.ReturnDatabase(this);
+            }
+            else
+            {
+                DbClose operation = new DbClose();
+
+                WorkerConnection.ExecuteOperation<DbClose>(operation);
+                WorkerConnection.SessionID = -1;
+                WorkerConnection.Close();
+            }
         }
     }
 }
