@@ -97,13 +97,19 @@ namespace Eastern.Connection
         {
             SessionID = -1;
 
-            Stream.Close();
-            Socket.Close();
+            if ((Stream != null) && (Socket != null))
+            {
+                Stream.Close();
+                Socket.Close();
+            }
+
+            Stream = null;
+            Socket = null;
         }
 
         private void Send(byte[] rawData)
         {
-            if (Stream.CanWrite)
+            if ((Stream != null) && Stream.CanWrite)
             {
                 Stream.Write(rawData, 0, rawData.Length);
             }
@@ -113,7 +119,7 @@ namespace Eastern.Connection
         {
             IEnumerable<byte> buffer = new List<byte>();
 
-            if (Stream.CanRead)
+            if ((Stream != null) && Stream.CanRead)
             {
                 do
                 {
