@@ -20,8 +20,8 @@ namespace ConsoleTest
                 //TestShutdown();
                 //TestConnect();
                 //TestDbOpen();
-                //TestCloseConnection();
-                //TestCloseDatabase();
+                //TestCloseServerConnection();
+                //TestCloseDatabaseConnection();
                 //TestDbExist();
                 //TestDbReload();
                 //TestDbCreateDbDelete();
@@ -43,103 +43,112 @@ namespace ConsoleTest
 
         static void TestShutdown()
         {
-            OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword);
-            bool result = connection.Shutdown();
+            using (OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword))
+            {
+                bool result = connection.Shutdown();
 
-            Console.WriteLine("Is server down: " + result);
+                Console.WriteLine("Is server down: " + result);
+            }
 
             Console.WriteLine("======================================================");
         }
 
         static void TestConnect()
         {
-            OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword);
-
-            Console.WriteLine("Session ID: " + connection.SessionID);
+            using (OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword))
+            {
+                Console.WriteLine("Session ID: " + connection.SessionID);
+            }
 
             Console.WriteLine("======================================================");
         }
 
         static void TestDbOpen()
         {
-            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
-
-            Console.WriteLine("Session ID: " + database.SessionID);
-            Console.WriteLine("Clusters:");
-
-            foreach (OCluster cluster in database.Clusters)
+            using (ODatabase database = new ODatabase("127.0.0.1", 2424, databaseName, ODatabaseType.Document, username, password))
             {
-                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+
+                Console.WriteLine("Session ID: " + database.SessionID);
+                Console.WriteLine("Clusters:");
+
+                foreach (OCluster cluster in database.Clusters)
+                {
+                    Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                }
             }
 
             Console.WriteLine("======================================================");
         }
 
-        static void TestCloseConnection()
+        static void TestCloseServerConnection()
         {
-            OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword);
+            using (OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword))
+            {
+                Console.WriteLine("Session ID: " + connection.SessionID);
 
-            Console.WriteLine("Session ID: " + connection.SessionID);
+                connection.Close();
 
-            connection.Close();
-
-            Console.WriteLine("Connection closed. Current session ID: " + connection.SessionID);
+                Console.WriteLine("Connection closed. Current session ID: " + connection.SessionID);
+            }
 
             Console.WriteLine("======================================================");
         }
 
-        static void TestCloseDatabase()
+        static void TestCloseDatabaseConnection()
         {
-            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
-
-            Console.WriteLine("Session ID: " + database.SessionID);
-            Console.WriteLine("Clusters:");
-
-            foreach (OCluster cluster in database.Clusters)
+            using (ODatabase database = new ODatabase("127.0.0.1", 2424, databaseName, ODatabaseType.Document, username, password))
             {
-                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                Console.WriteLine("Session ID: " + database.SessionID);
+                Console.WriteLine("Clusters:");
+
+                foreach (OCluster cluster in database.Clusters)
+                {
+                    Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                }
+
+                database.Close();
+
+                Console.WriteLine("Connection closed. Current session ID: " + database.SessionID);
             }
-
-            database.Close();
-
-            Console.WriteLine("Connection closed. Current session ID: " + database.SessionID);
 
             Console.WriteLine("======================================================");
         }
 
         static void TestDbExist()
         {
-            OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword);
+            using (OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword))
+            {
+                Console.WriteLine("Session ID: " + connection.SessionID);
 
-            Console.WriteLine("Session ID: " + connection.SessionID);
-
-            Console.WriteLine("This should exist: " + connection.DatabaseExist("test1"));
-            Console.WriteLine("This shouldn't exist: " + connection.DatabaseExist("whoawhatisthis"));
+                Console.WriteLine("This should exist: " + connection.DatabaseExist("test1"));
+                Console.WriteLine("This shouldn't exist: " + connection.DatabaseExist("whoawhatisthis"));
+            }
 
             Console.WriteLine("======================================================");
         }
 
         static void TestDbReload()
         {
-            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
-
-            Console.WriteLine("Session ID: " + database.SessionID);
-            Console.WriteLine("Clusters ({0}):", database.ClustersCount);
-
-            foreach (OCluster cluster in database.Clusters)
+            using (ODatabase database = new ODatabase("127.0.0.1", 2424, databaseName, ODatabaseType.Document, username, password))
             {
-                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
-            }
+                Console.WriteLine("Session ID: " + database.SessionID);
+                Console.WriteLine("Clusters ({0}):", database.ClustersCount);
 
-            Console.WriteLine("Reloading database...");
+                foreach (OCluster cluster in database.Clusters)
+                {
+                    Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                }
 
-            database.Reload();
+                Console.WriteLine("Reloading database...");
 
-            Console.WriteLine("Clusters ({0}):", database.ClustersCount);
+                database.Reload();
 
-            foreach (OCluster cluster in database.Clusters)
-            {
-                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                Console.WriteLine("Clusters ({0}):", database.ClustersCount);
+
+                foreach (OCluster cluster in database.Clusters)
+                {
+                    Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                }
             }
 
             Console.WriteLine("======================================================");
@@ -149,102 +158,106 @@ namespace ConsoleTest
         {
             const string databaseName = "testCreateTempDB1";
 
-            OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword);
-
-            Console.WriteLine("Session ID: " + connection.SessionID);
-
-            bool result = connection.CreateDatabase(databaseName, ODatabaseType.Document, OStorageType.Local);
-
-            Console.WriteLine("Is database created: " + result);
-
-            if (result)
+            using (OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword))
             {
-                Console.WriteLine("Calling database delete...");
-                connection.DeleteDatabase(databaseName);
+                Console.WriteLine("Session ID: " + connection.SessionID);
+
+                bool result = connection.CreateDatabase(databaseName, ODatabaseType.Document, OStorageType.Local);
+
+                Console.WriteLine("Is database created: " + result);
+
+                if (result)
+                {
+                    Console.WriteLine("Calling database delete...");
+                    connection.DeleteDatabase(databaseName);
+                }
+
+                bool exists = connection.DatabaseExist(databaseName);
+
+                Console.WriteLine("Database exists: " + exists);
             }
-
-            bool exists = connection.DatabaseExist(databaseName);
-
-            Console.WriteLine("Database exists: " + exists);
 
             Console.WriteLine("======================================================");
         }
 
         static void TestDbSize()
         {
-            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
-
-            Console.WriteLine("Session ID: " + database.SessionID);
-            Console.WriteLine("Clusters:");
-
-            foreach (OCluster cluster in database.Clusters)
+            using (ODatabase database = new ODatabase("127.0.0.1", 2424, databaseName, ODatabaseType.Document, username, password))
             {
-                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
-            }
+                Console.WriteLine("Session ID: " + database.SessionID);
+                Console.WriteLine("Clusters:");
 
-            Console.WriteLine("Database size: {0}", database.Size);
+                foreach (OCluster cluster in database.Clusters)
+                {
+                    Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                }
+
+                Console.WriteLine("Database size: {0}", database.Size);
+            }
 
             Console.WriteLine("======================================================");
         }
 
         static void TestCountRecords()
         {
-            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
-
-            Console.WriteLine("Session ID: " + database.SessionID);
-            Console.WriteLine("Clusters:");
-
-            foreach (OCluster cluster in database.Clusters)
+            using (ODatabase database = new ODatabase("127.0.0.1", 2424, databaseName, ODatabaseType.Document, username, password))
             {
-                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
-            }
+                Console.WriteLine("Session ID: " + database.SessionID);
+                Console.WriteLine("Clusters:");
 
-            Console.WriteLine("Database records count: {0}", database.RecordsCount);
+                foreach (OCluster cluster in database.Clusters)
+                {
+                    Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                }
+
+                Console.WriteLine("Database records count: {0}", database.RecordsCount);
+            }
 
             Console.WriteLine("======================================================");
         }
 
         static void TestClusterAddClusterRemove()
         {
-            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
-
-            Console.WriteLine("Session ID: " + database.SessionID);
-            Console.WriteLine("Clusters:");
-            foreach (OCluster cluster in database.Clusters)
+            using (ODatabase database = new ODatabase("127.0.0.1", 2424, databaseName, ODatabaseType.Document, username, password))
             {
-                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
-            }
+                Console.WriteLine("Session ID: " + database.SessionID);
+                Console.WriteLine("Clusters:");
+                foreach (OCluster cluster in database.Clusters)
+                {
+                    Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                }
 
-            Console.WriteLine("Adding new cluster...");
-            OCluster newCluster = database.AddCluster(OClusterType.Physical, "tempClusterTest1");
-            
-            Console.WriteLine("Clusters (before reload):");
-            foreach (OCluster cluster in database.Clusters)
-            {
-                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
-            }
+                Console.WriteLine("Adding new cluster...");
+                OCluster newCluster = database.AddCluster(OClusterType.Physical, "tempClusterTest1");
 
-            database.Reload();
-            Console.WriteLine("Clusters (after reload):");
-            foreach (OCluster cluster in database.Clusters)
-            {
-                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
-            }
+                Console.WriteLine("Clusters (before reload):");
+                foreach (OCluster cluster in database.Clusters)
+                {
+                    Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                }
 
-            Console.WriteLine("Removing cluster... {0}", newCluster.ID);
-            database.RemoveCluster(newCluster.ID);
+                database.Reload();
+                Console.WriteLine("Clusters (after reload):");
+                foreach (OCluster cluster in database.Clusters)
+                {
+                    Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                }
 
-            Console.WriteLine("Clusters (before reload):");
-            foreach (OCluster cluster in database.Clusters)
-            {
-                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
-            }
+                Console.WriteLine("Removing cluster... {0}", newCluster.ID);
+                database.RemoveCluster(newCluster.ID);
 
-            database.Reload();
-            Console.WriteLine("Clusters (after reload):");
-            foreach (OCluster cluster in database.Clusters)
-            {
-                Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                Console.WriteLine("Clusters (before reload):");
+                foreach (OCluster cluster in database.Clusters)
+                {
+                    Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                }
+
+                database.Reload();
+                Console.WriteLine("Clusters (after reload):");
+                foreach (OCluster cluster in database.Clusters)
+                {
+                    Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
+                }
             }
 
             Console.WriteLine("======================================================");
@@ -252,13 +265,14 @@ namespace ConsoleTest
 
         static void TestClusterCount()
         {
-            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
-
-            Console.WriteLine("Session ID: " + database.SessionID);
-            Console.WriteLine("Clusters:");
-            foreach (OCluster cluster in database.Clusters)
+            using (ODatabase database = new ODatabase("127.0.0.1", 2424, databaseName, ODatabaseType.Document, username, password))
             {
-                Console.WriteLine("    {0} - {1} - {2} - Records count: {3}", cluster.Name, cluster.Type, cluster.ID, cluster.RecordsCount);
+                Console.WriteLine("Session ID: " + database.SessionID);
+                Console.WriteLine("Clusters:");
+                foreach (OCluster cluster in database.Clusters)
+                {
+                    Console.WriteLine("    {0} - {1} - {2} - Records count: {3}", cluster.Name, cluster.Type, cluster.ID, cluster.RecordsCount);
+                }
             }
 
             Console.WriteLine("======================================================");
@@ -266,14 +280,15 @@ namespace ConsoleTest
 
         static void TestClusterDataRange()
         {
-            ODatabase database = new ODatabase("127.0.0.1", 2424, "test1", ODatabaseType.Document, "admin", "admin");
-
-            Console.WriteLine("Session ID: " + database.SessionID);
-            Console.WriteLine("Clusters:");
-            foreach (OCluster cluster in database.Clusters)
+            using (ODatabase database = new ODatabase("127.0.0.1", 2424, databaseName, ODatabaseType.Document, username, password))
             {
-                long[] range = cluster.DataRange;
-                Console.WriteLine("    {0} - {1} - {2} - Data range: {3} - {4}", cluster.Name, cluster.Type, cluster.ID, range[0], range[1]);
+                Console.WriteLine("Session ID: " + database.SessionID);
+                Console.WriteLine("Clusters:");
+                foreach (OCluster cluster in database.Clusters)
+                {
+                    long[] range = cluster.DataRange;
+                    Console.WriteLine("    {0} - {1} - {2} - Data range: {3} - {4}", cluster.Name, cluster.Type, cluster.ID, range[0], range[1]);
+                }
             }
 
             Console.WriteLine("======================================================");
