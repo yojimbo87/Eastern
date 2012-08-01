@@ -21,6 +21,8 @@ namespace Tests
         private const string _username = "admin";
         private const string _password = "admin";
 
+        private const string _newDatabaseName = "testTempNewDatabase001x";
+
         public OServerTests()
         {
             //
@@ -69,13 +71,66 @@ namespace Tests
         #endregion
 
         [TestMethod]
-        public void TestServerConnect()
+        public void TestConnect()
         {
             using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
             {
                 bool isGreaterThanZero = (connection.SessionID > 0) ? true : false;
 
                 Assert.IsTrue(isGreaterThanZero);
+            }
+        }
+
+        [TestMethod]
+        public void TestCloseConnection()
+        {
+            using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
+            {
+                connection.Close();
+
+                bool closeResult = (connection.SessionID == -1) ? true : false;
+
+                Assert.IsTrue(closeResult);
+            }
+        }
+
+        [TestMethod]
+        public void TestDatabaseExist()
+        {
+            using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
+            {
+                Assert.IsTrue(connection.DatabaseExist("test1"));
+            }
+        }
+
+        [TestMethod]
+        public void TestDatabaseNotExist()
+        {
+            using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
+            {
+                Assert.IsFalse(connection.DatabaseExist("thisShoulNotExist001x"));
+            }
+        }
+
+        [TestMethod]
+        public void TestDatabaseCreate()
+        {
+            using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
+            {
+                bool databaseCreateResult = connection.CreateDatabase(_newDatabaseName, ODatabaseType.Document, OStorageType.Local);
+
+                Assert.IsTrue(databaseCreateResult);
+            }
+        }
+
+        [TestMethod]
+        public void TestDatabaseDelete()
+        {
+            using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
+            {
+                connection.DeleteDatabase(_newDatabaseName);
+
+                Assert.IsFalse(connection.DatabaseExist(_newDatabaseName));
             }
         }
 

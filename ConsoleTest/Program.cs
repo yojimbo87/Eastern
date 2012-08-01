@@ -17,19 +17,14 @@ namespace ConsoleTest
         {
             try
             {
-                //TestShutdown();
-                //TestConnect();
                 //TestDbOpen();
-                //TestCloseServerConnection();
                 //TestCloseDatabaseConnection();
-                //TestDbExist();
                 //TestDbReload();
-                //TestDbCreateDbDelete();
                 //TestDbSize();
                 //TestCountRecords();
                 //TestClusterAddClusterRemove();
-                TestClusterCount();
-                TestClusterDataRange();
+                //TestClusterCount();
+                //TestClusterDataRange();
 
                 //TestShutdown();
             }
@@ -39,28 +34,6 @@ namespace ConsoleTest
             }
 
             Console.ReadLine();
-        }
-
-        static void TestShutdown()
-        {
-            using (OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword))
-            {
-                bool result = connection.Shutdown();
-
-                Console.WriteLine("Is server down: " + result);
-            }
-
-            Console.WriteLine("======================================================");
-        }
-
-        static void TestConnect()
-        {
-            using (OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword))
-            {
-                Console.WriteLine("Session ID: " + connection.SessionID);
-            }
-
-            Console.WriteLine("======================================================");
         }
 
         static void TestDbOpen()
@@ -75,20 +48,6 @@ namespace ConsoleTest
                 {
                     Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
                 }
-            }
-
-            Console.WriteLine("======================================================");
-        }
-
-        static void TestCloseServerConnection()
-        {
-            using (OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword))
-            {
-                Console.WriteLine("Session ID: " + connection.SessionID);
-
-                connection.Close();
-
-                Console.WriteLine("Connection closed. Current session ID: " + connection.SessionID);
             }
 
             Console.WriteLine("======================================================");
@@ -109,19 +68,6 @@ namespace ConsoleTest
                 database.Close();
 
                 Console.WriteLine("Connection closed. Current session ID: " + database.SessionID);
-            }
-
-            Console.WriteLine("======================================================");
-        }
-
-        static void TestDbExist()
-        {
-            using (OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword))
-            {
-                Console.WriteLine("Session ID: " + connection.SessionID);
-
-                Console.WriteLine("This should exist: " + connection.DatabaseExist("test1"));
-                Console.WriteLine("This shouldn't exist: " + connection.DatabaseExist("whoawhatisthis"));
             }
 
             Console.WriteLine("======================================================");
@@ -149,32 +95,6 @@ namespace ConsoleTest
                 {
                     Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
                 }
-            }
-
-            Console.WriteLine("======================================================");
-        }
-
-        static void TestDbCreateDbDelete()
-        {
-            const string databaseName = "testCreateTempDB1";
-
-            using (OServer connection = new OServer("127.0.0.1", 2424, "root", rootPassword))
-            {
-                Console.WriteLine("Session ID: " + connection.SessionID);
-
-                bool result = connection.CreateDatabase(databaseName, ODatabaseType.Document, OStorageType.Local);
-
-                Console.WriteLine("Is database created: " + result);
-
-                if (result)
-                {
-                    Console.WriteLine("Calling database delete...");
-                    connection.DeleteDatabase(databaseName);
-                }
-
-                bool exists = connection.DatabaseExist(databaseName);
-
-                Console.WriteLine("Database exists: " + exists);
             }
 
             Console.WriteLine("======================================================");
