@@ -17,8 +17,6 @@ namespace ConsoleTest
         {
             try
             {
-                //TestDbOpen();
-                //TestCloseDatabaseConnection();
                 //TestDbReload();
                 //TestDbSize();
                 //TestCountRecords();
@@ -34,43 +32,6 @@ namespace ConsoleTest
             }
 
             Console.ReadLine();
-        }
-
-        static void TestDbOpen()
-        {
-            using (ODatabase database = new ODatabase("127.0.0.1", 2424, databaseName, ODatabaseType.Document, username, password))
-            {
-
-                Console.WriteLine("Session ID: " + database.SessionID);
-                Console.WriteLine("Clusters:");
-
-                foreach (OCluster cluster in database.Clusters)
-                {
-                    Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
-                }
-            }
-
-            Console.WriteLine("======================================================");
-        }
-
-        static void TestCloseDatabaseConnection()
-        {
-            using (ODatabase database = new ODatabase("127.0.0.1", 2424, databaseName, ODatabaseType.Document, username, password))
-            {
-                Console.WriteLine("Session ID: " + database.SessionID);
-                Console.WriteLine("Clusters:");
-
-                foreach (OCluster cluster in database.Clusters)
-                {
-                    Console.WriteLine("    {0} - {1} - {2}", cluster.Name, cluster.Type, cluster.ID);
-                }
-
-                database.Close();
-
-                Console.WriteLine("Connection closed. Current session ID: " + database.SessionID);
-            }
-
-            Console.WriteLine("======================================================");
         }
 
         static void TestDbReload()

@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Eastern;
 
 namespace Tests
 {
@@ -16,9 +17,32 @@ namespace Tests
         private const string _password = "admin";
 
         [TestMethod]
-        public void TestMethod1()
+        public void TestDatabaseOpen()
         {
-            
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
+            {
+                Assert.IsTrue(database.SessionID > 0);
+                Assert.IsTrue(database.ClustersCount > 0);
+                Assert.IsTrue(database.Clusters.Count > 0);
+                
+                foreach (OCluster cluster in database.Clusters)
+                {
+                    Assert.IsNotNull(cluster.Name);
+                    Assert.IsNotNull(cluster.Type);
+                    Assert.IsTrue(cluster.ID >= 0);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void TestDatabaseCloseConnection()
+        {
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
+            {
+                database.Close();
+
+                Assert.IsTrue(database.SessionID == -1);
+            }
         }
     }
 }
