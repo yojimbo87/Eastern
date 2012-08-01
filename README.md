@@ -34,6 +34,7 @@ TODO
 ----
 
 - Test suite
+- Document public API
 - Support for client side connection pooling
   - Implementation similar to [SQL Server connection pooling](http://msdn.microsoft.com/en-us/library/8xx3tyca.aspx)
   - Examples [here](http://stackoverflow.com/questions/1148467/is-there-a-standard-way-of-implementing-a-proprietary-connection-pool-in-net) and [here](http://www.codeproject.com/Articles/35011/NET-TCP-Connection-Pooling)
