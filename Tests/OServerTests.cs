@@ -23,9 +23,7 @@ namespace Tests
         {
             using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
             {
-                bool isGreaterThanZero = (connection.SessionID > 0) ? true : false;
-
-                Assert.IsTrue(isGreaterThanZero);
+                Assert.IsTrue(connection.SessionID > 0);
             }
         }
 
@@ -36,9 +34,7 @@ namespace Tests
             {
                 connection.Close();
 
-                bool closeResult = (connection.SessionID == -1) ? true : false;
-
-                Assert.IsTrue(closeResult);
+                Assert.IsTrue(connection.SessionID == -1);
             }
         }
 
