@@ -19,7 +19,7 @@ namespace Tests
         private const string _newDatabaseName = "testTempNewDatabase001x";
 
         [TestMethod]
-        public void TestConnect()
+        public void TestServerConnect()
         {
             using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
             {
@@ -28,7 +28,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestCloseConnection()
+        public void TestServerCloseConnection()
         {
             using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
             {
@@ -39,7 +39,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestDatabaseExist()
+        public void TestServerDatabaseExist()
         {
             using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
             {
@@ -48,7 +48,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestDatabaseNotExist()
+        public void TestServerDatabaseNotExist()
         {
             using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
             {
@@ -57,21 +57,14 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestDatabaseCreate()
+        public void TestServerDatabaseCreateDelete()
         {
             using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
             {
                 bool databaseCreateResult = connection.CreateDatabase(_newDatabaseName, ODatabaseType.Document, OStorageType.Local);
 
                 Assert.IsTrue(databaseCreateResult);
-            }
-        }
 
-        [TestMethod]
-        public void TestDatabaseDelete()
-        {
-            using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
-            {
                 connection.DeleteDatabase(_newDatabaseName);
 
                 Assert.IsFalse(connection.DatabaseExist(_newDatabaseName));
