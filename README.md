@@ -33,7 +33,6 @@ Features
 TODO
 ----
 
-- Test suite
 - Document public API
 - Support for client side connection pooling
   - Implementation similar to [SQL Server connection pooling](http://msdn.microsoft.com/en-us/library/8xx3tyca.aspx)
