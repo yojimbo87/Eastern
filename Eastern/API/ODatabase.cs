@@ -12,13 +12,39 @@ namespace Eastern
         internal bool ReturnToPool { get; set; }
         internal string Hash { get; set; }
 
+        /// <summary>
+        /// Represents ID of current session between client and server instance.
+        /// </summary>
         public int SessionID { get { return WorkerConnection.SessionID; } }
+
+        /// <summary>
+        /// Represents name of the database.
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Represents type of the database.
+        /// </summary>
         public ODatabaseType Type { get; set; }
+
+        /// <summary>
+        /// Represents count of clusters within database.
+        /// </summary>
         public short ClustersCount { get; set; }
+
+        /// <summary>
+        /// List of clusters within database.
+        /// </summary>
         public List<OCluster> Clusters { get; set; }
+
+        /// <summary>
+        /// Represents cluster configuration in binary format.
+        /// </summary>
         public byte[] ClusterConfig { get; set; }
 
+        /// <summary>
+        /// Represents size of the database in bytes. Always retrieves most recent size when accessed.
+        /// </summary>
         public long Size
         {
             get
@@ -29,6 +55,9 @@ namespace Eastern
             }
         }
 
+        /// <summary>
+        /// Represents count of records within database. Always retrieves most recent count when accessed.
+        /// </summary>
         public long RecordsCount
         {
             get
@@ -39,6 +68,9 @@ namespace Eastern
             }
         }
 
+        /// <summary>
+        /// Initiates single dedicated connection with the server instance and retrieves specified database.
+        /// </summary>
         public ODatabase(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
         {
             WorkerConnection = new Worker();
@@ -68,6 +100,9 @@ namespace Eastern
             }
         }
 
+        /// <summary>
+        /// Reloads clusters and cluster count from server.
+        /// </summary>
         public void Reload()
         {
             DbReload operation = new DbReload();
@@ -83,11 +118,17 @@ namespace Eastern
             }
         }
 
+        /// <summary>
+        /// Adds new cluster to the database.
+        /// </summary>
         public OCluster AddCluster(OClusterType type, string name)
         {
             return AddCluster(type, name, "default", "default");
         }
 
+        /// <summary>
+        /// Adds new cluster to the database.
+        /// </summary>
         public OCluster AddCluster(OClusterType type, string name, string location, string dataSegmentName)
         {
             DataClusterAdd operation = new DataClusterAdd();
@@ -112,7 +153,12 @@ namespace Eastern
             return cluster;
         }
 
-        // return value indicated if the cluster was successfuly removed
+        /// <summary>
+        /// Adds new cluster to the database.
+        /// </summary>
+        /// <returns>
+        /// Boolean indicating if the specified cluster was successfuly removed.
+        /// </returns>
         public bool RemoveCluster(short clusterID)
         {
             DataClusterRemove operation = new DataClusterRemove();
@@ -136,6 +182,12 @@ namespace Eastern
             return false;
         }
 
+        /// <summary>
+        /// Adds new data segment to the database.
+        /// </summary>
+        /// <returns>
+        /// ID of newly added data segment.
+        /// </returns>
         public int AddSegment(string name, string location)
         {
             DataSegmentAdd operation = new DataSegmentAdd();
@@ -145,6 +197,12 @@ namespace Eastern
             return (int)WorkerConnection.ExecuteOperation<DataSegmentAdd>(operation);
         }
 
+        /// <summary>
+        /// Removes specified data segment from database.
+        /// </summary>
+        /// <returns>
+        /// Boolean indicating if the specified data segment was successfuly removed.
+        /// </returns>
         public bool RemoveSegment(string name)
         {
             DataSegmentRemove operation = new DataSegmentRemove();
@@ -153,6 +211,9 @@ namespace Eastern
             return (bool)WorkerConnection.ExecuteOperation<DataSegmentRemove>(operation);
         }
 
+        /// <summary>
+        /// Closes connection with server instance and resets session ID assigned to this object.
+        /// </summary>
         public void Close()
         {
             if (ReturnToPool)
@@ -169,6 +230,9 @@ namespace Eastern
             }
         }
 
+        /// <summary>
+        /// Closes connection with server instance and disposes this object.
+        /// </summary>
         public void Dispose()
         {
             Close();

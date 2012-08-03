@@ -89,7 +89,7 @@ namespace Eastern
         }
 
         /// <summary>
-        /// Closes connection with server instance and resets session ID, user name and user password for current object.
+        /// Closes connection with server instance and resets session ID, user name and user password assigned to this object.
         /// </summary>
         public void Close()
         {
@@ -104,7 +104,7 @@ namespace Eastern
         }
 
         /// <summary>
-        /// Closes connection with server instance and disposes current object.
+        /// Closes connection with server instance and disposes this object.
         /// </summary>
         public void Dispose()
         {
