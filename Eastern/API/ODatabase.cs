@@ -218,7 +218,7 @@ namespace Eastern
         {
             if (ReturnToPool)
             {
-                EasternClient.ReturnDatabase(this);
+                Eastern.ReturnDatabase(this);
             }
             else
             {
