@@ -17,10 +17,10 @@ namespace Eastern.Protocol.Operations
             request.DataItems.Add(new DataItem() { Type = "byte", Data = BinaryParser.ToArray((byte)OperationType.CONNECT) });
             request.DataItems.Add(new DataItem() { Type = "int", Data = BinaryParser.ToArray(sessionID) });
             // operation specific fields
-            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(Eastern.DriverName) });
-            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(Eastern.DriverVersion) });
-            request.DataItems.Add(new DataItem() { Type = "short", Data = BinaryParser.ToArray(Eastern.ProtocolVersion) });
-            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(Eastern.ClientID) });
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(EasternClient.DriverName) });
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(EasternClient.DriverVersion) });
+            request.DataItems.Add(new DataItem() { Type = "short", Data = BinaryParser.ToArray(EasternClient.ProtocolVersion) });
+            request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(EasternClient.ClientID) });
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(UserName) });
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(UserPassword) });
 

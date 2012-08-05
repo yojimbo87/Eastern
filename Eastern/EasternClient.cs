@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Eastern
 {
-    public static class Eastern
+    public static class EasternClient
     {
         private static object SyncRoot { get; set; }
         private static List<DatabasePool> DatabasePools { get; set; }
@@ -14,7 +14,7 @@ namespace Eastern
         internal static short ProtocolVersion { get { return 12; } }
         internal static string ClientID { get { return "null"; } }
 
-        static Eastern()
+        static EasternClient()
         {
             SyncRoot = new object();
             DatabasePools = new List<DatabasePool>();
