@@ -11,6 +11,21 @@ namespace Eastern
         private string UserName { get; set; }
         private string UserPassword { get; set; }
 
+
+        public int CurrentPoolSize
+        {
+            get 
+            {
+                return Databases.Count;
+            }
+        }
+
+        public int PoolSize
+        {
+            get;
+            private set;
+        }
+
         public string PoolHash
         {
             get
@@ -21,7 +36,7 @@ namespace Eastern
 
         public Queue<ODatabase> Databases { get; set; }
 
-        public ODatabasePool(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
+        public ODatabasePool(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword, int poolSize)
         {
             Hostname = hostname;
             Port = port;
@@ -29,9 +44,10 @@ namespace Eastern
             DatabaseType = databaseType;
             UserName = userName;
             UserPassword = userPassword;
+            PoolSize = poolSize;
             Databases = new Queue<ODatabase>();
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < poolSize; i++)
             {
                 ODatabase database = new ODatabase(Hostname, Port, DatabaseName, DatabaseType, UserName, UserPassword);
                 database.ReturnToPool = true;
