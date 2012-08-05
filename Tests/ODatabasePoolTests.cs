@@ -43,10 +43,12 @@ namespace Tests
             ODatabasePool pool = EasternClient.GetDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username);
 
             Assert.IsTrue(pool.CurrentPoolSize == (pool.PoolSize - 1));
+            Assert.IsFalse(pool.Databases.Contains(database));
 
             database.Close();
 
             Assert.IsTrue(pool.CurrentPoolSize == pool.PoolSize);
+            Assert.IsTrue(pool.Databases.Contains(database));
         }
     }
 }
