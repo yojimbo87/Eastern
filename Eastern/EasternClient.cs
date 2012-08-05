@@ -20,11 +20,11 @@ namespace Eastern
             DatabasePools = new List<ODatabasePool>();
         }
 
-        public static void CreateDatabasePool(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
+        public static void CreateDatabasePool(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword, int poolSize)
         {
             lock (SyncRoot)
             {
-                ODatabasePool pool = new ODatabasePool(hostname, port, databaseName, databaseType, userName, userPassword);
+                ODatabasePool pool = new ODatabasePool(hostname, port, databaseName, databaseType, userName, userPassword, poolSize);
 
                 DatabasePools.Add(pool);
             }
@@ -39,6 +39,17 @@ namespace Eastern
                 return DatabasePools.Find(q => q.PoolHash == poolHash);
             }
         }
+
+        /*public static int GetDatabasePoolSize(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName)
+        {
+            lock (SyncRoot)
+            {
+                string poolHash = hostname + port + databaseName + databaseType.ToString() + userName;
+                ODatabasePool pool = DatabasePools.Find(q => q.PoolHash == poolHash);
+
+                return (pool != null) ? pool.PoolSize : 0;
+            }
+        }*/
 
         public static ODatabase GetDatabase(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
         {
