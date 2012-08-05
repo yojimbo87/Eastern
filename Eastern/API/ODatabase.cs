@@ -18,6 +18,22 @@ namespace Eastern
         public int SessionID { get { return WorkerConnection.SessionID; } }
 
         /// <summary>
+        /// Indicates if underlying socket is connected to server instance.
+        /// </summary>
+        public bool IsConnected
+        {
+            get
+            {
+                if ((WorkerConnection != null) && WorkerConnection.IsConnected)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Represents name of the database.
         /// </summary>
         public string Name { get; set; }

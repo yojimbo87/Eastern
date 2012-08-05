@@ -16,6 +16,22 @@ namespace Eastern
         public int SessionID { get { return WorkerConnection.SessionID; } }
 
         /// <summary>
+        /// Indicates if underlying socket is connected to server instance.
+        /// </summary>
+        public bool IsConnected
+        {
+            get
+            {
+                if ((WorkerConnection != null) && WorkerConnection.IsConnected)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Initiates single dedicated connection with the server instance.
         /// </summary>
         public OServer(string hostname, int port, string userName, string userPassword)

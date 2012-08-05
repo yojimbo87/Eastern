@@ -19,6 +19,19 @@ namespace Eastern.Connection
         internal int HostPort { get; set; }
         internal short ProtocolVersion { get; set; }
         internal int SessionID { get; set; }
+        
+        internal bool IsConnected 
+        { 
+            get 
+            {
+                if ((Socket != null) && Socket.Connected)
+                {
+                    return true;
+                }
+
+                return false;
+            } 
+        }
 
         internal Worker()
         {
