@@ -2,7 +2,7 @@
 
 namespace Eastern
 {
-    internal class DatabasePool
+    public class ODatabasePool
     {
         private string Hostname { get; set; }
         private int Port { get; set; }
@@ -11,7 +11,7 @@ namespace Eastern
         private string UserName { get; set; }
         private string UserPassword { get; set; }
 
-        internal string PoolHash
+        public string PoolHash
         {
             get
             {
@@ -19,9 +19,9 @@ namespace Eastern
             }
         }
 
-        internal Queue<ODatabase> Databases { get; set; }
+        public Queue<ODatabase> Databases { get; set; }
 
-        internal DatabasePool(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
+        public ODatabasePool(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
         {
             Hostname = hostname;
             Port = port;
