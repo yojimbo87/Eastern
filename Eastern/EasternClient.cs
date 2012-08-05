@@ -30,7 +30,7 @@ namespace Eastern
             }
         }
 
-        public static ODatabasePool GetDatabasePool(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
+        public static ODatabasePool GetDatabasePool(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName)
         {
             lock (SyncRoot)
             {
