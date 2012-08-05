@@ -30,6 +30,16 @@ namespace Eastern
             }
         }
 
+        public static DatabasePool GetDatabasePool(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
+        {
+            lock (SyncRoot)
+            {
+                string poolHash = hostname + port + databaseName + databaseType.ToString() + userName;
+
+                return DatabasePools.Find(q => q.PoolHash == poolHash);
+            }
+        }
+
         public static ODatabase GetDatabase(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
         {
             lock (SyncRoot)
