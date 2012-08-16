@@ -42,9 +42,9 @@ OServer class
 
 **Properties**
 
-    public int SessionID
+    public int SessionID { get; }
 
-    public bool IsConnected
+    public bool IsConnected { get; }
     
 **Methods**
 
@@ -58,6 +58,49 @@ OServer class
 
     public void Close()
 
+ODatabase class
+---
+
+**Constructor**
+
+    public ODatabase(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
+
+**Properties**
+
+    public int SessionID { get; }
+
+    public bool IsConnected { get; }
+    
+    public string Name { get; set; }
+    
+    public ODatabaseType Type { get; set; }
+    
+    public short ClustersCount { get; set; }
+    
+    public List<OCluster> Clusters { get; set; }
+    
+    public byte[] ClusterConfig { get; set; }
+    
+    public long Size { get; }
+    
+    public long RecordsCount { get; }
+    
+**Methods**
+
+    public void Reload()
+
+    public OCluster AddCluster(OClusterType type, string name)
+
+    public OCluster AddCluster(OClusterType type, string name, string location, string dataSegmentName)
+
+    public bool RemoveCluster(short clusterID)
+
+    public int AddSegment(string name, string location)
+    
+    public bool RemoveSegment(string name)
+    
+    public void Close()
+    
 TODO
 ---
 
