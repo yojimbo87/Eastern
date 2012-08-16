@@ -100,6 +100,31 @@ ODatabase class
     public bool RemoveSegment(string name)
     
     public void Close()
+
+OCluster class
+---
+
+**Constructor**
+
+    public OCluster()
+
+**Properties**
+
+    public short ID { get; set; }
+    
+    public string Name { get; set; }
+    
+    public OClusterType Type { get; set; }
+    
+    public string Location { get; set; }
+    
+    public short DataSegmentID { get; set; }
+    
+    public string DataSegmentName { get; set; }
+
+    public long RecordsCount { get; }
+    
+    public long[] DataRange { get; }
     
 TODO
 ---
