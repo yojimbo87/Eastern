@@ -1,12 +1,12 @@
 Eastern is a C#/.NET driver for [OrientDB](http://code.google.com/p/orient/) which implements [network binary protocol](http://code.google.com/p/orient/wiki/NetworkBinaryProtocol) to offer the fastest way for communication between .NET based applications and OrientDB server instances.
 
 Status
-------
+---
 
 Currently in early stage of development.
 
 Features
---------
+---
 
 - Initial connection with database server
 - Request/response parsing
@@ -30,8 +30,36 @@ Features
   - Add data segment (DATASEGMENT_ADD)
   - Remove data segment (DATASEGMENT_REMOVE)
 
+Public API
+===
+
+OServer class
+---
+
+**Constructor**
+
+    public OServer(string hostname, int port, string userName, string userPassword)
+
+**Properties**
+
+    public int SessionID
+
+    public bool IsConnected
+    
+**Methods**
+
+    public bool Shutdown()
+
+    public bool CreateDatabase(string databaseName, ODatabaseType databaseType, OStorageType storageType)
+
+    public bool DatabaseExist(string databaseName)
+
+    public void DeleteDatabase(string databaseName)
+
+    public void Close()
+
 TODO
-----
+---
 
 - Wiki with API usage
 - Support for client side connection pooling
