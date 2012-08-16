@@ -3,7 +3,7 @@ Eastern is a C#/.NET driver for [OrientDB](http://code.google.com/p/orient/) whi
 Status
 ---
 
-Currently in early stage of development.
+Early aplha. Basic server and database operations are implemented. Now focusing on data operations.
 
 Features
 ---
