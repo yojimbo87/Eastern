@@ -16,7 +16,7 @@ namespace Tests
         private const string _rootPassword = "9F696830A58E8187F6CC36674C666AE73E202DE3B0216C5B8BF8403C276CEE52";
         private const string _username = "admin";
         private const string _password = "admin";
-        private const string _newDatabaseName = "testTempNewDatabase001x";
+        private const string _newDatabaseName = "tempEasternUniqueTestDatabase0001x";
 
         [TestMethod]
         public void TestServerConnect()
