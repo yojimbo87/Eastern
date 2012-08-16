@@ -43,7 +43,11 @@ namespace Tests
         {
             using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
             {
-                Assert.IsTrue(connection.DatabaseExist("demo"));
+                connection.CreateDatabase(_newDatabaseName, ODatabaseType.Document, OStorageType.Local);
+
+                Assert.IsTrue(connection.DatabaseExist(_newDatabaseName));
+
+                connection.DeleteDatabase(_newDatabaseName);
             }
         }
 
@@ -52,7 +56,7 @@ namespace Tests
         {
             using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
             {
-                Assert.IsFalse(connection.DatabaseExist("whateverThisShouldNotExit"));
+                Assert.IsFalse(connection.DatabaseExist("whateverThisShouldNotExit001x"));
             }
         }
 
