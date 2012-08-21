@@ -8,8 +8,10 @@ using Eastern;
 namespace Tests
 {
     [TestClass]
-    public class ODatabaseTests
+    public class ODatabaseTests : IDisposable
     {
+        private OServer _connection;
+
         private const string _hostname = "127.0.0.1";
         private const int _port = 2424;
         private const string _rootName = "root";
@@ -18,204 +20,140 @@ namespace Tests
         private const string _username = "admin";
         private const string _password = "admin";
 
+        public ODatabaseTests()
+        {
+            _connection = new OServer(_hostname, _port, _rootName, _rootPassword);
+
+            // create test database
+            _connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
+        }
+
         [TestMethod]
         public void TestDatabaseOpen()
         {
-            using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
-                // first create test database
-                connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
-
-                // do our main test
-                using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
-                {
-                    Assert.IsTrue(database.SessionID > 0);
-                    Assert.IsTrue(database.ClustersCount > 0);
-                    Assert.IsTrue(database.Clusters.Count > 0);
+                Assert.IsTrue(database.SessionID > 0);
+                Assert.IsTrue(database.ClustersCount > 0);
+                Assert.IsTrue(database.Clusters.Count > 0);
                 
-                    foreach (OCluster cluster in database.Clusters)
-                    {
-                        Assert.IsNotNull(cluster.Name);
-                        Assert.IsNotNull(cluster.Type);
-                        Assert.IsTrue(cluster.ID >= 0);
-                    }
+                foreach (OCluster cluster in database.Clusters)
+                {
+                    Assert.IsNotNull(cluster.Name);
+                    Assert.IsNotNull(cluster.Type);
+                    Assert.IsTrue(cluster.ID >= 0);
                 }
-
-                // delete test database
-                connection.DeleteDatabase(_databaseName);
             }
         }
 
         [TestMethod]
         public void TestDatabaseCloseConnection()
         {
-            using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
-                // first create test database
-                connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
+                database.Close();
 
-                // do our main test
-                using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
-                {
-                    database.Close();
-
-                    Assert.IsTrue(database.SessionID == -1);
-                }
-
-                // delete test database
-                connection.DeleteDatabase(_databaseName);
+                Assert.IsTrue(database.SessionID == -1);
             }
         }
 
         [TestMethod]
         public void TestDatabaseReload()
         {
-            using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
-                // first create test database
-                connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
+                Assert.IsTrue(database.ClustersCount > 0);
 
-                // do our main test
-                using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
-                {
-                    Assert.IsTrue(database.ClustersCount > 0);
+                database.Reload();
 
-                    database.Reload();
-
-                    Assert.IsTrue(database.ClustersCount > 0);
-                }
-
-                // delete test database
-                connection.DeleteDatabase(_databaseName);
+                Assert.IsTrue(database.ClustersCount > 0);
             }
         }
 
         [TestMethod]
         public void TestDatabaseSize()
         {
-            using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
-                // first create test database
-                connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
-
-                // do our main test
-                using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
-                {
-                    Assert.IsTrue(database.Size > 0);
-                }
-
-                // delete test database
-                connection.DeleteDatabase(_databaseName);
+                Assert.IsTrue(database.Size > 0);
             }
         }
 
         [TestMethod]
         public void TestDatabaseRecordsCount()
         {
-            using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
-                // first create test database
-                connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
-
-                // do our main test
-                using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
-                {
-                    Assert.IsTrue(database.RecordsCount > 0);
-                }
-
-                // delete test database
-                connection.DeleteDatabase(_databaseName);
+                Assert.IsTrue(database.RecordsCount > 0);
             }
         }
 
         [TestMethod]
         public void TestDatabaseClusterAddRemove()
         {
-            using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
-                // first create test database
-                connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
+                OCluster newCluster = database.AddCluster(OClusterType.Physical, "tempClusterTest001x");
 
-                // do our main test
-                using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
-                {
-                    OCluster newCluster = database.AddCluster(OClusterType.Physical, "tempClusterTest001x");
+                Assert.IsTrue(newCluster.ID >= 0);
+                Assert.IsTrue(!string.IsNullOrEmpty(newCluster.Name));
+                Assert.IsTrue(newCluster.RecordsCount == 0);
 
-                    Assert.IsTrue(newCluster.ID >= 0);
-                    Assert.IsTrue(!string.IsNullOrEmpty(newCluster.Name));
-                    Assert.IsTrue(newCluster.RecordsCount == 0);
+                database.Reload();
 
-                    database.Reload();
+                OCluster cluster = database.Clusters.Find(x => x.ID == newCluster.ID);
 
-                    OCluster cluster = database.Clusters.Find(x => x.ID == newCluster.ID);
+                Assert.IsTrue(cluster.ID >= newCluster.ID);
+                Assert.IsTrue(cluster.Name.Equals(newCluster.Name, StringComparison.CurrentCultureIgnoreCase));
+                Assert.IsTrue(cluster.RecordsCount == newCluster.RecordsCount);
 
-                    Assert.IsTrue(cluster.ID >= newCluster.ID);
-                    Assert.IsTrue(cluster.Name.Equals(newCluster.Name, StringComparison.CurrentCultureIgnoreCase));
-                    Assert.IsTrue(cluster.RecordsCount == newCluster.RecordsCount);
+                database.RemoveCluster(newCluster.ID);
 
-                    database.RemoveCluster(newCluster.ID);
+                OCluster cluster2 = database.Clusters.Find(x => x.ID == newCluster.ID);
 
-                    OCluster cluster2 = database.Clusters.Find(x => x.ID == newCluster.ID);
+                Assert.IsNull(cluster2);
 
-                    Assert.IsNull(cluster2);
+                database.Reload();
 
-                    database.Reload();
+                OCluster cluster3 = database.Clusters.Find(x => x.ID == newCluster.ID);
 
-                    OCluster cluster3 = database.Clusters.Find(x => x.ID == newCluster.ID);
-
-                    Assert.IsNull(cluster3);
-                }
-
-                // delete test database
-                connection.DeleteDatabase(_databaseName);
+                Assert.IsNull(cluster3);
             }
         }
 
         [TestMethod]
         public void TestDatabaseClusterRecordsCount()
         {
-            using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
-                // first create test database
-                connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
-
-                // do our main test
-                using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
+                foreach (OCluster cluster in database.Clusters)
                 {
-                    foreach (OCluster cluster in database.Clusters)
-                    {
-                        Assert.IsTrue(cluster.RecordsCount >= 0);
-                    }
+                    Assert.IsTrue(cluster.RecordsCount >= 0);
                 }
-
-                // delete test database
-                connection.DeleteDatabase(_databaseName);
             }
         }
 
         [TestMethod]
         public void TestDatabaseClusterDataRange()
         {
-            using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
-                // first create test database
-                connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
-
-                // do our main test
-                using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
+                foreach (OCluster cluster in database.Clusters)
                 {
-                    foreach (OCluster cluster in database.Clusters)
-                    {
-                        long[] range = cluster.DataRange;
+                    long[] range = cluster.DataRange;
 
-                        Assert.IsTrue(range[0] >= -1);
-                        Assert.IsTrue(range[1] >= -1);
-                    }
+                    Assert.IsTrue(range[0] >= -1);
+                    Assert.IsTrue(range[1] >= -1);
                 }
-
-                // delete test database
-                connection.DeleteDatabase(_databaseName);
             }
+        }
+
+        public void Dispose()
+        {
+            // delete test database
+            _connection.DeleteDatabase(_databaseName);
+
+            _connection.Close();
         }
     }
 }

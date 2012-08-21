@@ -9,8 +9,10 @@ using Eastern;
 namespace Tests
 {
     [TestClass]
-    public class ODatabasePoolTests
+    public class ODatabasePoolTests : IDisposable
     {
+        private OServer _connection;
+
         private const string _hostname = "127.0.0.1";
         private const int _port = 2424;
         private const string _rootName = "root";
@@ -20,57 +22,53 @@ namespace Tests
         private const string _password = "admin";
         private const int _poolSize = 5;
 
-        [TestMethod]
-        public void TestCreateDatabasePool()
+        public ODatabasePoolTests()
         {
-            using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
-            {
-                // first create test database
-                connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
+            _connection = new OServer(_hostname, _port, _rootName, _rootPassword);
 
-                // do our main test
-                EasternClient.CreateDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password, _poolSize);
-
-                ODatabasePool pool = EasternClient.GetDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username);
-                //int poolSize = EasternClient.GetDatabasePoolSize(_hostname, _port, _databaseName, ODatabaseType.Document, _username);
-
-                Assert.IsTrue(pool.PoolSize == _poolSize);
-
-                // delete test database
-                connection.DeleteDatabase(_databaseName);
-            }
+            // create test database
+            _connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
         }
 
         [TestMethod]
+        public void TestCreateDatabasePool()
+        {
+            EasternClient.CreateDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password, _poolSize);
+
+            ODatabasePool pool = EasternClient.GetDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username);
+            //int poolSize = EasternClient.GetDatabasePoolSize(_hostname, _port, _databaseName, ODatabaseType.Document, _username);
+
+            Assert.IsTrue(pool.PoolSize == _poolSize);
+        }
+
+        /*[TestMethod]
         public void TestGetDatabase()
         {
-            /*using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
-            {
-                // first create test database
-                connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
+            EasternClient.CreateDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password, _poolSize);
 
-                // do our main test
-                EasternClient.CreateDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password, _poolSize);
-
-                ODatabase database = EasternClient.GetDatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password);
-                int sessionID = database.SessionID;
+            ODatabase database = EasternClient.GetDatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password);
+            int sessionID = database.SessionID;
             
-                Assert.IsTrue(sessionID > 0);
-                Assert.IsTrue(database.Size > 0);
+            Assert.IsTrue(sessionID > 0);
+            Assert.IsTrue(database.Size > 0);
 
-                ODatabasePool pool = EasternClient.GetDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username);
+            ODatabasePool pool = EasternClient.GetDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username);
 
-                Assert.IsTrue(pool.CurrentPoolSize == (pool.PoolSize - 1));
-                Assert.IsFalse(pool.Databases.Contains(database));
+            Assert.IsTrue(pool.CurrentPoolSize == (pool.PoolSize - 1));
+            Assert.IsFalse(pool.Databases.Contains(database));
 
-                database.Close();
+            database.Close();
 
-                Assert.IsTrue(pool.CurrentPoolSize == pool.PoolSize);
-                Assert.IsTrue(pool.Databases.Contains(database));
+            Assert.IsTrue(pool.CurrentPoolSize == pool.PoolSize);
+            Assert.IsTrue(pool.Databases.Contains(database));
+        }*/
 
-                // delete test database
-                connection.DeleteDatabase(_databaseName);
-            }*/
+        public void Dispose()
+        {
+            // delete test database
+            _connection.DeleteDatabase(_databaseName);
+
+            _connection.Close();
         }
     }
 }
