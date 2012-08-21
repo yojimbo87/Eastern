@@ -127,6 +127,15 @@ OCluster class
     
     public long[] DataRange { get; }
     
+EasternClient class
+---
+
+**Methods**
+
+    public static void CreateDatabasePool(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword, int poolSize)
+    
+    public static ODatabase GetDatabase(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
+
 TODO
 ---
 
