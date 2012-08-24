@@ -3,8 +3,8 @@ namespace Eastern.Protocol
 {
     internal enum RecordType
     {
-        RawBytes = 0,
-        FlatData = 1,
-        Document = 2
+        RawBytes = 98, // 'b'
+        FlatData = 102, // 'f'
+        Document = 100 // 'd'
     }
 }
