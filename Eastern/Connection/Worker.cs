@@ -67,6 +67,7 @@ namespace Eastern.Connection
                     case "byte":
                     case "short":
                     case "int":
+                    case "long":
                         Send(item.Data);
                         break;
                     case "record":
