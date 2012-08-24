@@ -40,9 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\ORecord.cs" />
     <Compile Include="API\OServer.cs" />
     <Compile Include="Connection\DataItem.cs" />
-    <Compile Include="Connection\Manager.cs" />
     <Compile Include="Connection\Request.cs" />
     <Compile Include="Connection\Response.cs" />
     <Compile Include="Connection\Worker.cs" />
@@ -78,7 +78,11 @@
     <Compile Include="API\ODatabase.cs" />
     <Compile Include="API\ODatabaseType.cs" />
     <Compile Include="Protocol\Operations\OperationType.cs" />
+    <Compile Include="Protocol\Operations\RecordLoad.cs" />
     <Compile Include="Protocol\Operations\Shutdown.cs" />
+    <Compile Include="Protocol\PayloadStatus.cs" />
+    <Compile Include="Protocol\Record.cs" />
+    <Compile Include="Protocol\RecordType.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
