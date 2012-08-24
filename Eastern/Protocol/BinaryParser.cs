@@ -57,14 +57,21 @@ namespace Eastern.Protocol
             return Encoding.UTF8.GetString(data);
         }
 
-        internal static byte[] ToArray(string data)
-        {
-            return Encoding.UTF8.GetBytes(data);
-        }
-
         internal static byte[] ToArray(byte data)
         {
             return new byte[1] { data };
+        }
+
+        internal static byte[] ToArray(short data)
+        {
+            byte[] binaryData = BitConverter.GetBytes(data);
+
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(binaryData);
+            }
+
+            return binaryData;
         }
 
         internal static byte[] ToArray(int data)
@@ -79,7 +86,7 @@ namespace Eastern.Protocol
             return binaryData;
         }
 
-        internal static byte[] ToArray(short data)
+        internal static byte[] ToArray(long data)
         {
             byte[] binaryData = BitConverter.GetBytes(data);
 
@@ -89,6 +96,11 @@ namespace Eastern.Protocol
             }
 
             return binaryData;
+        }
+
+        internal static byte[] ToArray(string data)
+        {
+            return Encoding.UTF8.GetBytes(data);
         }
     }
 }
