@@ -14,5 +14,10 @@ namespace Eastern
             Version = record.Version;
             Content = record.Content;
         }
+
+        public string GetContent()
+        {
+            return BinaryParser.ToString(Content);
+        }
     }
 }

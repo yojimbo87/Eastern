@@ -36,7 +36,7 @@ namespace ConsoleTest
 
                     ORecord record = database.LoadRecord(4, 0, "*:0", false);
 
-                    Console.WriteLine(record.Version);
+                    Console.WriteLine(record.GetContent());
                 }
             }
             catch (OException ex)
