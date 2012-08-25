@@ -4,20 +4,34 @@ namespace Eastern
 {
     public class ORecord
     {
-        public string Type { get; set; }
+        public ORecordType Type { get; set; }
         public int Version { get; set; }
         public byte[] Content { get; set; }
 
+        public ORecord(ORecordType type, int version, byte[] content)
+        {
+            Type = type;
+            Version = version;
+            Content = content;
+        }
+
         internal ORecord(Record record)
         {
-            Type = record.Type.ToString();
+            Type = record.Type;
             Version = record.Version;
             Content = record.Content;
         }
 
-        public string GetContent()
+        public ODocument ToDocument()
         {
-            return BinaryParser.ToString(Content);
+            if (Type == ORecordType.Document)
+            {
+                return RecordParser.ToDocument(Version, BinaryParser.ToString(Content));
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
