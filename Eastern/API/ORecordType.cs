@@ -1,7 +1,7 @@
 ﻿
-namespace Eastern.Protocol
+namespace Eastern
 {
-    internal enum RecordType
+    public enum ORecordType
     {
         RawBytes = 98, // 'b'
         FlatData = 102, // 'f'
