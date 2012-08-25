@@ -35,8 +35,8 @@ namespace ConsoleTest
                     Console.WriteLine("Session ID: {0}", database.SessionID);
 
                     ORecord record = database.LoadRecord(4, 0, "*:0", false);
-
-                    Console.WriteLine(record.GetContent());
+                    ODocument document = record.ToDocument();
+                    Console.WriteLine("Version: {0}, Class name: {1}", document.Version, document.Class);
                 }
             }
             catch (OException ex)
