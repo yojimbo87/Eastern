@@ -20,6 +20,51 @@ namespace ConsoleTest
 
         static void Main(string[] args)
         {
+            /*ORecord record = new ORecord(
+                ORecordType.Document, 
+                0,
+                UTF8Encoding.UTF8.GetBytes("Profile@nick:\"ThePr,whoa:esident\",follows:[\"me\",\"you\"],followers:[#10:5,#10:6],name:\"Barack\",surname:\"Obama\",location:#3:2,invitedBy:,salary_cloned:,salary:120.3f")
+            );
+            ODocument document = record.ToDocument();
+
+            Console.WriteLine("Version: {0}, Class name: {1}", document.Version, document.Class);
+
+            foreach (KeyValuePair<string, object> kv in document.Fields)
+            {
+                Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
+            }
+
+            record = new ORecord(
+                ORecordType.Document, 
+                0,
+                UTF8Encoding.UTF8.GetBytes("nick:[(nick1:\"xxx\")],joe:[(joe_1_1:\"xxx\",joe_1_2:\"yyy\")],moe:[(moe_1_1:#3:23,moe_1_2:\",whoa:#1:3,\",moe_1_3:#3:43)]")
+            );
+            document = record.ToDocument();
+
+            foreach (KeyValuePair<string, object> kv in document.Fields)
+            {
+                Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
+            }*/
+
+
+            ORecord record = new ORecord(
+                ORecordType.Document,
+                0,
+                UTF8Encoding.UTF8.GetBytes("moe:[(moe_1_1:#3:23,moe_1_2:\",whoa:#1:3,\",moe_1_3:#3:43)]")
+            );
+            ODocument document = record.ToDocument();
+
+            Console.WriteLine("Version: {0}, Class name: {1}", document.Version, document.Class);
+
+            foreach (KeyValuePair<string, object> kv in document.Fields)
+            {
+                Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
+            }
+            Console.ReadLine();
+        }
+
+        static void Test()
+        {
             _connection = new OServer(_hostname, _port, _rootName, _rootPassword);
 
             if (!_connection.DatabaseExist(_databaseName))
@@ -49,8 +94,6 @@ namespace ConsoleTest
                 _connection.DeleteDatabase(_databaseName);
                 _connection.Close();
             }
-
-            Console.ReadLine();
         }
     }
 }

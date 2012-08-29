@@ -26,7 +26,10 @@ namespace Eastern
         {
             if (Type == ORecordType.Document)
             {
-                return RecordParser.ToDocument(Version, BinaryParser.ToString(Content));
+                ODocument document = RecordParser.ToDocument(BinaryParser.ToString(Content));
+                document.Version = Version;
+
+                return document;
             }
             else
             {
