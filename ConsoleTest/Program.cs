@@ -79,18 +79,43 @@ namespace ConsoleTest
             ORecord record = new ORecord(
                 ORecordType.Document,
                 0,
-                UTF8Encoding.UTF8.GetBytes("moe:#3:43,joe:\"whoa\",johny:\"waoh\",kyle:[\"wwww\",\"hhhh\"]")
+                UTF8Encoding.UTF8.GetBytes("moe:#3:43,joe:\"whoa\",johny:[\"waoh\"],kyle:[\"wwww\",\"\",\"hhhh\"],wise:[#3:13],kate:[#3:554,#55:23]")
             );
             ODocument document = record.ToDocument();
+            PrintDocument(document);
 
+            Console.ReadLine();
+        }
+
+        static void PrintDocument(ODocument document)
+        {
+            Console.WriteLine("=============================================");
             Console.WriteLine("Version: {0}, Class name: {1}", document.Version, document.Class);
 
             foreach (KeyValuePair<string, object> kv in document.Fields)
             {
-                Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
-            }
+                if (kv.Value.GetType() == typeof(List<String>))
+                {
+                    Console.Write("- {0}: ", kv.Key);
 
-            Console.ReadLine();
+                    for (int i = 0; i < ((List<String>)kv.Value).Count; i++)
+                    //foreach (string value in (List<String>)kv.Value)
+                    {
+                        Console.Write("{0}", ((List<String>)kv.Value)[i]);
+
+                        if ((i + 1) != ((List<String>)kv.Value).Count)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
+                }
+            }
         }
 
         static void Test()
