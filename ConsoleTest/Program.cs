@@ -24,7 +24,7 @@ namespace ConsoleTest
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 
-            raw = "nick:[(nick1:\"xxx\")],joe:[(joe_1_1:\"xxx\",joe_1_2:\"yyy\")],moe:[(moe_1_1:#3:23,moe_1_2:\",whoa:#1:3,\",moe_1_3:#3:43)]" ;
+            raw = "nick:[(nick1:\"xxx\")],joe:[(joe_1_1:\"xxx\",joe_1_2:\"yyy\")],moe:[(moe_1_1:#3:23,moe_1_2:\",whoa:#1:3,\",moe_1_3:#3:43,moe_1_4:[#124:34433],moe_1_5:[#124:344,#344:23])]";
             record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 
@@ -37,6 +37,10 @@ namespace ConsoleTest
             PrintDocument(raw, record.ToDocument());
 
             raw = "moe:#3:43,joe:\"whoa\",johny:[\"waoh\"],kyle:[\"wwww\",\"\",\"hhhh\"],wise:[#3:13],kate:[#3:554,#55:23]";
+            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            PrintDocument(raw, record.ToDocument());
+
+            raw = "moe:#3:43,joe:\"whoa\",johny:[12],kyle:[13b,45b,244f],huh:12365676t,wow:78910,wise:[5.34f],kate:[6.45f,12.9f]";
             record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 
@@ -54,7 +58,7 @@ namespace ConsoleTest
             {
                 if ((kv.Value != null) && (kv.Value.GetType() == typeof(List<String>)))
                 {
-                    Console.Write("- {0}: ", kv.Key);
+                    Console.Write("- {0} (FC): ", kv.Key);
 
                     for (int i = 0; i < ((List<String>)kv.Value).Count; i++)
                     //foreach (string value in (List<String>)kv.Value)

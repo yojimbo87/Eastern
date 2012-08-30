@@ -41,7 +41,8 @@ namespace Eastern.Protocol
                             lastParsedField = rawDocument.Substring(itemStartIndex, i - itemStartIndex);
                             document.Fields.Add(lastParsedField, null);
 
-                            parsedType = "";
+                            parsedType = "value";
+                            itemStartIndex = i + 1;
                         }
                         break;
                     case ',':
@@ -49,17 +50,23 @@ namespace Eastern.Protocol
                         switch (parsedType)
                         {
                             case "recordID":
+                            case "value":
                                 string value = rawDocument.Substring(itemStartIndex, i - itemStartIndex);
 
                                 if (isParsingFlatCollection)
                                 {
-                                    ((List<string>)document.Fields[lastParsedField]).Add(value);
+                                    ((List<string>)document.Fields[lastParsedField]).Add(rawDocument.Substring(itemStartIndex, i - itemStartIndex));
                                 }
                                 else 
                                 {
-                                    document.Fields[lastParsedField] = value;
+                                    document.Fields[lastParsedField] = rawDocument.Substring(itemStartIndex, i - itemStartIndex);
                                 }
-                                parsedType = "";
+                                itemStartIndex = i + 1;
+
+                                if (parsedType == "recordID")
+                                {
+                                    parsedType = "";
+                                }
                                 break;
                             default:
                                 break;
@@ -99,7 +106,7 @@ namespace Eastern.Protocol
                             if (parsedType != "recordID")
                             {
                                 parsedType = "recordID";
-                                itemStartIndex = i + 1;
+                                itemStartIndex = i;
                             }
                         }
                         break;
@@ -116,6 +123,7 @@ namespace Eastern.Protocol
                             switch (parsedType)
                             {
                                 case "recordID":
+                                case "value":
                                     string value = rawDocument.Substring(itemStartIndex, i - itemStartIndex);
 
                                     if (isParsingFlatCollection)
@@ -156,6 +164,7 @@ namespace Eastern.Protocol
                             switch (parsedType)
                             {
                                 case "recordID":
+                                case "value":
                                     string value = rawDocument.Substring(itemStartIndex, i - itemStartIndex);
                                     ((List<string>)document.Fields[lastParsedField]).Add(value);
                                     parsedType = "";
@@ -180,6 +189,7 @@ namespace Eastern.Protocol
                     switch (parsedType)
                     {
                         case "recordID":
+                        case "value":
                             string value = rawDocument.Substring(itemStartIndex, i - itemStartIndex);
 
                             if (isParsingFlatCollection)
