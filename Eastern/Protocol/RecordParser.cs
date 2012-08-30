@@ -59,7 +59,10 @@ namespace Eastern.Protocol
                                 }
                                 else 
                                 {
-                                    document.Fields[lastParsedField] = rawDocument.Substring(itemStartIndex, i - itemStartIndex);
+                                    if (value != "")
+                                    {
+                                        document.Fields[lastParsedField] = rawDocument.Substring(itemStartIndex, i - itemStartIndex);
+                                    }
                                 }
                                 itemStartIndex = i + 1;
 
@@ -132,7 +135,10 @@ namespace Eastern.Protocol
                                     }
                                     else
                                     {
-                                        document.Fields[lastParsedField] = value;
+                                        if (value != "")
+                                        {
+                                            document.Fields[lastParsedField] = value;
+                                        }
                                     }
                                     parsedType = "";
                                     break;
@@ -198,7 +204,10 @@ namespace Eastern.Protocol
                             }
                             else
                             {
-                                document.Fields[lastParsedField] = value;
+                                if (value != "")
+                                {
+                                    document.Fields[lastParsedField] = value;
+                                }
                             }
                             break;
                         default:

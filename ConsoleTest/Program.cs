@@ -56,7 +56,11 @@ namespace ConsoleTest
 
             foreach (KeyValuePair<string, object> kv in document.Fields)
             {
-                if ((kv.Value != null) && (kv.Value.GetType() == typeof(List<String>)))
+                if (kv.Value == null)
+                {
+                    Console.WriteLine("- {0}: null", kv.Key);
+                }
+                else if (kv.Value.GetType() == typeof(List<String>))
                 {
                     Console.Write("- {0} (FC): ", kv.Key);
 
