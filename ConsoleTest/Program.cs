@@ -34,6 +34,8 @@ namespace ConsoleTest
                 Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
             }
 
+            Console.WriteLine("=============================================");
+
             record = new ORecord(
                 ORecordType.Document, 
                 0,
@@ -44,13 +46,40 @@ namespace ConsoleTest
             foreach (KeyValuePair<string, object> kv in document.Fields)
             {
                 Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
-            }*/
+            }
 
+            Console.WriteLine("=============================================");
+
+            record = new ORecord(
+                ORecordType.Document,
+                0,
+                UTF8Encoding.UTF8.GetBytes("nick:")
+            );
+            document = record.ToDocument();
+
+            foreach (KeyValuePair<string, object> kv in document.Fields)
+            {
+                Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
+            }
+
+            Console.WriteLine("=============================================");
+
+            record = new ORecord(
+                ORecordType.Document,
+                0,
+                UTF8Encoding.UTF8.GetBytes("nick:,joe:")
+            );
+            document = record.ToDocument();
+
+            foreach (KeyValuePair<string, object> kv in document.Fields)
+            {
+                Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
+            }*/
 
             ORecord record = new ORecord(
                 ORecordType.Document,
                 0,
-                UTF8Encoding.UTF8.GetBytes("moe:[(moe_1_1:#3:23,moe_1_2:\",whoa:#1:3,\",moe_1_3:#3:43)]")
+                UTF8Encoding.UTF8.GetBytes("moe:#3:43,joe:\"whoa\",johny:\"waoh\",kyle:[\"wwww\",\"hhhh\"]")
             );
             ODocument document = record.ToDocument();
 
@@ -60,6 +89,7 @@ namespace ConsoleTest
             {
                 Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
             }
+
             Console.ReadLine();
         }
 
