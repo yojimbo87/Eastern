@@ -113,6 +113,25 @@ namespace Eastern.Protocol
                     case ')':
                         if (parsedType != "string")
                         {
+                            switch (parsedType)
+                            {
+                                case "recordID":
+                                    string value = rawDocument.Substring(itemStartIndex, i - itemStartIndex);
+
+                                    if (isParsingFlatCollection)
+                                    {
+                                        ((List<string>)document.Fields[lastParsedField]).Add(value);
+                                    }
+                                    else
+                                    {
+                                        document.Fields[lastParsedField] = value;
+                                    }
+                                    parsedType = "";
+                                    break;
+                                default:
+                                    break;
+                            }
+
                             parsedType = "";
                         }
                         break;
@@ -155,6 +174,7 @@ namespace Eastern.Protocol
 
                 i++;
 
+                // parsing of last value at the end of raw document string
                 if (i == rawDocument.Length)
                 {
                     switch (parsedType)

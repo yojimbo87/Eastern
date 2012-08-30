@@ -20,81 +20,39 @@ namespace ConsoleTest
 
         static void Main(string[] args)
         {
-            /*ORecord record = new ORecord(
-                ORecordType.Document, 
-                0,
-                UTF8Encoding.UTF8.GetBytes("Profile@nick:\"ThePr,whoa:esident\",follows:[\"me\",\"you\"],followers:[#10:5,#10:6],name:\"Barack\",surname:\"Obama\",location:#3:2,invitedBy:,salary_cloned:,salary:120.3f")
-            );
-            ODocument document = record.ToDocument();
+            string raw = "Profile@nick:\"ThePr,whoa:esident\",follows:[\"me\",\"you\"],followers:[#10:5,#10:6],name:\"Barack\",surname:\"Obama\",location:#3:2,invitedBy:,salary_cloned:,salary:120.3f";
+            ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            PrintDocument(raw, record.ToDocument());
 
-            Console.WriteLine("Version: {0}, Class name: {1}", document.Version, document.Class);
+            raw = "nick:[(nick1:\"xxx\")],joe:[(joe_1_1:\"xxx\",joe_1_2:\"yyy\")],moe:[(moe_1_1:#3:23,moe_1_2:\",whoa:#1:3,\",moe_1_3:#3:43)]" ;
+            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            PrintDocument(raw, record.ToDocument());
 
-            foreach (KeyValuePair<string, object> kv in document.Fields)
-            {
-                Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
-            }
+            raw = "nick:";
+            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            PrintDocument(raw, record.ToDocument());
 
-            Console.WriteLine("=============================================");
+            raw = "nick:,joe:";
+            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            PrintDocument(raw, record.ToDocument());
 
-            record = new ORecord(
-                ORecordType.Document, 
-                0,
-                UTF8Encoding.UTF8.GetBytes("nick:[(nick1:\"xxx\")],joe:[(joe_1_1:\"xxx\",joe_1_2:\"yyy\")],moe:[(moe_1_1:#3:23,moe_1_2:\",whoa:#1:3,\",moe_1_3:#3:43)]")
-            );
-            document = record.ToDocument();
-
-            foreach (KeyValuePair<string, object> kv in document.Fields)
-            {
-                Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
-            }
-
-            Console.WriteLine("=============================================");
-
-            record = new ORecord(
-                ORecordType.Document,
-                0,
-                UTF8Encoding.UTF8.GetBytes("nick:")
-            );
-            document = record.ToDocument();
-
-            foreach (KeyValuePair<string, object> kv in document.Fields)
-            {
-                Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
-            }
-
-            Console.WriteLine("=============================================");
-
-            record = new ORecord(
-                ORecordType.Document,
-                0,
-                UTF8Encoding.UTF8.GetBytes("nick:,joe:")
-            );
-            document = record.ToDocument();
-
-            foreach (KeyValuePair<string, object> kv in document.Fields)
-            {
-                Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
-            }*/
-
-            ORecord record = new ORecord(
-                ORecordType.Document,
-                0,
-                UTF8Encoding.UTF8.GetBytes("moe:#3:43,joe:\"whoa\",johny:[\"waoh\"],kyle:[\"wwww\",\"\",\"hhhh\"],wise:[#3:13],kate:[#3:554,#55:23]")
-            );
-            ODocument document = record.ToDocument();
-            PrintDocument(document);
+            raw = "moe:#3:43,joe:\"whoa\",johny:[\"waoh\"],kyle:[\"wwww\",\"\",\"hhhh\"],wise:[#3:13],kate:[#3:554,#55:23]";
+            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            PrintDocument(raw, record.ToDocument());
 
             Console.ReadLine();
         }
 
-        static void PrintDocument(ODocument document)
+        static void PrintDocument(string raw, ODocument document)
         {
             Console.WriteLine("=============================================");
+            Console.WriteLine("Raw string: {0}", raw);
+            Console.WriteLine("---------------------------------------------");
             Console.WriteLine("Version: {0}, Class name: {1}", document.Version, document.Class);
 
             foreach (KeyValuePair<string, object> kv in document.Fields)
             {
-                if (kv.Value.GetType() == typeof(List<String>))
+                if ((kv.Value != null) && (kv.Value.GetType() == typeof(List<String>)))
                 {
                     Console.Write("- {0}: ", kv.Key);
 
