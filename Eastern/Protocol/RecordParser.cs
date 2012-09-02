@@ -15,7 +15,7 @@ namespace Eastern.Protocol
             string parsedType = "fieldName";
             string lastParsedField = "";
             int itemStartIndex = 0;
-            bool isParsingFlatCollection = false;
+            RecordColletionType collectionType = RecordColletionType.None;
 
             // parse class name
             if ((atIndex != -1) && (atIndex < colonIndex))
@@ -53,7 +53,7 @@ namespace Eastern.Protocol
                             case "value":
                                 string value = rawDocument.Substring(itemStartIndex, i - itemStartIndex);
 
-                                if (isParsingFlatCollection)
+                                if (collectionType == RecordColletionType.Flat)
                                 {
                                     ((List<string>)document.Fields[lastParsedField]).Add(rawDocument.Substring(itemStartIndex, i - itemStartIndex));
                                 }
@@ -64,6 +64,7 @@ namespace Eastern.Protocol
                                         document.Fields[lastParsedField] = rawDocument.Substring(itemStartIndex, i - itemStartIndex);
                                     }
                                 }
+
                                 itemStartIndex = i + 1;
 
                                 if (parsedType == "recordID")
@@ -76,7 +77,7 @@ namespace Eastern.Protocol
                         }
 
                         // then examine if the fieldName parsing follows
-                        if ((parsedType != "string") && (parsedType != "recordID") && !isParsingFlatCollection)
+                        if ((parsedType != "string") && (parsedType != "recordID") && (collectionType == RecordColletionType.None))
                         {
                             parsedType = "fieldName";
                             itemStartIndex = i + 1;
@@ -92,7 +93,7 @@ namespace Eastern.Protocol
                         {
                             string value = rawDocument.Substring(itemStartIndex, i - itemStartIndex);
 
-                            if (isParsingFlatCollection)
+                            if (collectionType == RecordColletionType.Flat)
                             {
                                 ((List<string>)document.Fields[lastParsedField]).Add(value);
                             }
@@ -100,6 +101,7 @@ namespace Eastern.Protocol
                             {
                                 document.Fields[lastParsedField] = value;
                             }
+
                             parsedType = "";
                         }
                         break;
@@ -116,8 +118,14 @@ namespace Eastern.Protocol
                     case '(':
                         if (parsedType != "string")
                         {
+                            //collectionType = RecordColletionType.NestedDocuments;
                             parsedType = "fieldName";
                             itemStartIndex = i + 1;
+
+                            /*if (collectionType == RecordColletionType.NestedDocuments)
+                            {
+                                document.Fields[lastParsedField] = new Dictionary<string, object>();
+                            }*/
                         }
                         break;
                     case ')':
@@ -129,7 +137,7 @@ namespace Eastern.Protocol
                                 case "value":
                                     string value = rawDocument.Substring(itemStartIndex, i - itemStartIndex);
 
-                                    if (isParsingFlatCollection)
+                                    if (collectionType == RecordColletionType.Flat)
                                     {
                                         ((List<string>)document.Fields[lastParsedField]).Add(value);
                                     }
@@ -140,32 +148,36 @@ namespace Eastern.Protocol
                                             document.Fields[lastParsedField] = value;
                                         }
                                     }
+
                                     parsedType = "";
                                     break;
                                 default:
                                     break;
                             }
 
+                            
                             parsedType = "";
                         }
                         break;
                     case '[':
                         if (parsedType != "string")
                         {
-                            if (rawDocument[i + 1] != '(')
+                            // check if the collection is flat or consists of nested docuemnts
+                            if (rawDocument[i + 1] == '(')
                             {
-                                document.Fields[lastParsedField] = new List<string>();
-                                isParsingFlatCollection = true;
-                                itemStartIndex = i + 1;
+                                collectionType = RecordColletionType.NestedDocuments;
                             }
                             else
                             {
-
+                                document.Fields[lastParsedField] = new List<string>();
+                                collectionType = RecordColletionType.Flat;
                             }
+
+                            itemStartIndex = i + 1;
                         }
                         break;
                     case ']':
-                        if ((parsedType != "string") && isParsingFlatCollection)
+                        if ((parsedType != "string") && (collectionType != RecordColletionType.None))
                         {
                             switch (parsedType)
                             {
@@ -180,7 +192,7 @@ namespace Eastern.Protocol
                             }
 
                             parsedType = "";
-                            isParsingFlatCollection = false;
+                            collectionType = RecordColletionType.None;
                         }
                         break;
                     default:
@@ -198,7 +210,7 @@ namespace Eastern.Protocol
                         case "value":
                             string value = rawDocument.Substring(itemStartIndex, i - itemStartIndex);
 
-                            if (isParsingFlatCollection)
+                            if (collectionType == RecordColletionType.Flat)
                             {
                                 ((List<string>)document.Fields[lastParsedField]).Add(value);
                             }
@@ -218,5 +230,12 @@ namespace Eastern.Protocol
 
             return document;
         }
+    }
+
+    internal enum RecordColletionType
+    {
+        None = 0,
+        Flat = 1,
+        NestedDocuments = 2
     }
 }

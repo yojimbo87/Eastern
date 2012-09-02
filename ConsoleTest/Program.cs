@@ -24,7 +24,7 @@ namespace ConsoleTest
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 
-            raw = "nick:[(nick1:\"xxx\")],joe:[(joe_1_1:\"xxx\",joe_1_2:\"yyy\")],moe:[(moe_1_1:#3:23,moe_1_2:\",whoa:#1:3,\",moe_1_3:#3:43,moe_1_4:[#124:34433],moe_1_5:[#124:344,#344:23])]";
+            raw = "nick:[(nick1:\"xxx\"),(nick2:\"yyy\")],joe:[(joe_1_1:\"xxx\",joe_1_2:\"yyy\")],moe:[(moe_1_1:#3:23,moe_1_2:\",whoa:#1:3,\",moe_1_3:#3:43,moe_1_4:[#124:34433],moe_1_5:[#124:344,#344:23])]";
             record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 
@@ -49,7 +49,6 @@ namespace ConsoleTest
 
         static void PrintDocument(string raw, ODocument document)
         {
-            Console.WriteLine("=============================================");
             Console.WriteLine("Raw string: {0}", raw);
             Console.WriteLine("---------------------------------------------");
             Console.WriteLine("Version: {0}, Class name: {1}", document.Version, document.Class);
@@ -82,6 +81,8 @@ namespace ConsoleTest
                     Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
                 }
             }
+
+            Console.WriteLine("=============================================");
         }
 
         static void Test()
