@@ -52,6 +52,7 @@ namespace Eastern
                 Document.Class = "";
             }
 
+            // start document parsing with first field name
             do
             {
                 index = ParseFieldName(index, null);
@@ -65,14 +66,18 @@ namespace Eastern
         {
             int startIndex = i;
 
+            // iterate until colon is found since it's the character which ends the field name
             while (RawDocument[i] != ':')
             {
                 i++;
             }
 
-            Dictionary<string, object> currentDocument;
+            // parse field name string from raw document
             string fieldName = RawDocument.Substring(startIndex, i - startIndex);
+            Dictionary<string, object> currentDocument;
 
+            // if fields were not passed - current document is the root one
+            // otherwise - it's embedded document passed as fields parameter
             if (fields == null)
             {
                 currentDocument = Document.Fields;
@@ -82,6 +87,7 @@ namespace Eastern
                 currentDocument = fields;
             }
 
+            // add parsed field name to current document
             currentDocument.Add(fieldName, null);
 
             // move to position after colon (:)
@@ -93,6 +99,7 @@ namespace Eastern
                 return i;
             }
 
+            // check what follow after parsed field name and start parsing underlying type
             switch (RawDocument[i])
             {
                 case '"':
@@ -127,12 +134,15 @@ namespace Eastern
 
             int startIndex = i;
 
+            // search for end of the parsed string value
             while (RawDocument[i] != '"')
             {
                 i++;
             }
 
+            // assign field value
             fields[fieldName] = RawDocument.Substring(startIndex, i - startIndex);
+            // move past the closing quote character
             i++;
 
             return i;
@@ -142,11 +152,13 @@ namespace Eastern
         {
             int startIndex = i;
 
+            // search for end of parsed record ID value
             while ((RawDocument[i] != ',') && (RawDocument[i] != ')') && (i < RawDocument.Length))
             {
                 i++;
             }
 
+            //assign field value
             fields[fieldName] = RawDocument.Substring(startIndex, i - startIndex);
 
             return i;
@@ -154,14 +166,16 @@ namespace Eastern
 
         private int ParseEmbeddedDocument(int i, Dictionary<string, object> fields, string fieldName)
         {
-            // move to the inside of embedded document
+            // move to the inside of embedded document (go past starting bracket character)
             i++;
 
             int startIndex = i;
 
+            // create new dictionary which would hold K/V pairs of embedded document
             Dictionary<string, object> embeddedDocument = new Dictionary<string, object>();
             fields[fieldName] = embeddedDocument;
 
+            // start parsing field names until the closing bracket of embedded document is reached
             while (RawDocument[i] != ')')
             {
                 i = ParseFieldName(i, embeddedDocument);
