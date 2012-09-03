@@ -3,7 +3,7 @@ Eastern is a C#/.NET driver for [OrientDB](http://code.google.com/p/orient/) whi
 Status
 ---
 
-Early aplha. Basic server and database operations are implemented. Now focusing on data operations.
+Early alpha. Basic server and database operations are implemented. Now focusing on document parsing and data operations.
 
 Features
 ---
@@ -139,6 +139,7 @@ EasternClient class
 TODO
 ---
 
+- Parse raw records to documents and vice versa
 - Support entire set of [operations](http://code.google.com/p/orient/wiki/NetworkBinaryProtocol#Operations)
 - Wiki with API usage
 - Automatic reconnection of pooled connection with retry timer
