@@ -83,7 +83,6 @@
     <Compile Include="Protocol\Operations\Shutdown.cs" />
     <Compile Include="Protocol\PayloadStatus.cs" />
     <Compile Include="Protocol\Record.cs" />
-    <Compile Include="Protocol\RecordParser.cs" />
     <Compile Include="API\ORecordType.cs" />
   </ItemGroup>
   <ItemGroup />
