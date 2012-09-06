@@ -99,23 +99,36 @@ namespace Eastern
                 return i;
             }
 
-            // check what follow after parsed field name and start parsing underlying type
+            // check what follows after parsed field name and start parsing underlying type
             switch (RawDocument[i])
             {
                 case '"':
                     i = ParseString(i, currentDocument, fieldName);
                     break;
                 case '#':
-                    i = ParseRecordID(i++, currentDocument, fieldName);
+                    i = ParseRecordID(i, currentDocument, fieldName);
                     break;
                 case '(':
                     i = ParseEmbeddedDocument(i, currentDocument, fieldName);
                     break;
-                /*case '[':
-                    i = ParseCollection(i);
-                    break;*/
+                case '[':
+                    if (RawDocument[i + 1] == '(')
+                    {
+                        i = ParseCollection(i, currentDocument, fieldName);
+                    }
+                    else
+                    {
+                        i = ParseCollection(i, currentDocument, fieldName);
+                    }
+                    break;
                 default:
                     break;
+            }
+
+            // check if it's not the end of document which means that current field has null value
+            if (i == RawDocument.Length)
+            {
+                return i;
             }
 
             // single string value was parsed and we need to push the index if next character is comma
@@ -127,7 +140,7 @@ namespace Eastern
             return i;
         }
 
-        private int ParseString(int i, Dictionary<string, object> fields, string fieldName)
+        private int ParseString(int i, Dictionary<string, object> document, string fieldName)
         {
             // move to the inside of string
             i++;
@@ -141,15 +154,26 @@ namespace Eastern
             }
 
             // assign field value
-            fields[fieldName] = RawDocument.Substring(startIndex, i - startIndex);
+            if (document[fieldName] == null)
+            {
+                document[fieldName] = RawDocument.Substring(startIndex, i - startIndex);
+            }
+            else
+            {
+                ((List<object>)document[fieldName]).Add(RawDocument.Substring(startIndex, i - startIndex));
+            }
+
             // move past the closing quote character
             i++;
 
             return i;
         }
 
-        private int ParseRecordID(int i, Dictionary<string, object> fields, string fieldName)
+        private int ParseRecordID(int i, Dictionary<string, object> document, string fieldName)
         {
+            // move to the inside of record id
+            i++;
+
             int startIndex = i;
 
             // search for end of parsed record ID value
@@ -159,21 +183,36 @@ namespace Eastern
             }
 
             //assign field value
-            fields[fieldName] = RawDocument.Substring(startIndex, i - startIndex);
+            if (document[fieldName] == null)
+            {
+                document[fieldName] = RawDocument.Substring(startIndex, i - startIndex);
+            }
+            else
+            {
+                ((List<object>)document[fieldName]).Add(RawDocument.Substring(startIndex, i - startIndex));
+            }
 
             return i;
         }
 
-        private int ParseEmbeddedDocument(int i, Dictionary<string, object> fields, string fieldName)
+        private int ParseEmbeddedDocument(int i, Dictionary<string, object> document, string fieldName)
         {
             // move to the inside of embedded document (go past starting bracket character)
             i++;
 
-            int startIndex = i;
+            //int startIndex = i;
 
             // create new dictionary which would hold K/V pairs of embedded document
             Dictionary<string, object> embeddedDocument = new Dictionary<string, object>();
-            fields[fieldName] = embeddedDocument;
+
+            if (document[fieldName] == null)
+            {
+                document[fieldName] = embeddedDocument;
+            }
+            else
+            {
+                ((List<object>)document[fieldName]).Add(embeddedDocument);
+            }
 
             // start parsing field names until the closing bracket of embedded document is reached
             while (RawDocument[i] != ')')
@@ -182,6 +221,41 @@ namespace Eastern
             }
 
             // move past close bracket of embedded document
+            i++;
+
+            return i;
+        }
+
+        private int ParseCollection(int i, Dictionary<string, object> document, string fieldName)
+        {
+            // move to the first element of this collection
+            i++;
+
+            document[fieldName] = new List<object>();
+
+            while (RawDocument[i] != ']')
+            {
+                // check what follows after parsed field name and start parsing underlying type
+                switch (RawDocument[i])
+                {
+                    case '"':
+                        i = ParseString(i, document, fieldName);
+                        break;
+                    case '#':
+                        i = ParseRecordID(i, document, fieldName);
+                        break;
+                    case '(':
+                        i = ParseEmbeddedDocument(i, document, fieldName);
+                        break;
+                    case ',':
+                        i++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            // move past close bracket of collection
             i++;
 
             return i;
