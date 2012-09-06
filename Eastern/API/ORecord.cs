@@ -177,7 +177,7 @@ namespace Eastern
             int startIndex = i;
 
             // search for end of parsed record ID value
-            while ((RawDocument[i] != ',') && (RawDocument[i] != ')') && (i < RawDocument.Length))
+            while ((i < RawDocument.Length) && (RawDocument[i] != ',') && (RawDocument[i] != ')') && (RawDocument[i] != ']'))
             {
                 i++;
             }
