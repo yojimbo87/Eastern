@@ -32,6 +32,14 @@ namespace ConsoleTest
             record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 
+            raw = "nick:[\"s1\",\"s2\",\"s3\"]";
+            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            PrintDocument(raw, record.ToDocument());
+
+            raw = "nick:[(joe1:\"js1\"),(joe2:\"js2\"),(joe3:\"s3\")]";
+            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            PrintDocument(raw, record.ToDocument());
+
             /*raw = "nick:[(nick1:\"xxx\"),(nick2:\"yyy\")],joe:[(joe_1_1:\"xxx\",joe_1_2:\"yyy\")],moe:[(moe_1_1:#3:23,moe_1_2:\",whoa:#1:3,\",moe_1_3:#3:43,moe_1_4:[#124:34433],moe_1_5:[#124:344,#344:23])]";
             record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
@@ -64,16 +72,16 @@ namespace ConsoleTest
                 {
                     Console.WriteLine("- {0}: null", kv.Key);
                 }
-                else if (kv.Value.GetType() == typeof(List<String>))
+                else if (kv.Value.GetType() == typeof(List<object>))
                 {
                     Console.Write("- {0} (FC): ", kv.Key);
 
-                    for (int i = 0; i < ((List<String>)kv.Value).Count; i++)
+                    for (int i = 0; i < ((List<object>)kv.Value).Count; i++)
                     //foreach (string value in (List<String>)kv.Value)
                     {
-                        Console.Write("{0}", ((List<String>)kv.Value)[i]);
+                        Console.Write("{0}", ((List<object>)kv.Value)[i]);
 
-                        if ((i + 1) != ((List<String>)kv.Value).Count)
+                        if ((i + 1) != ((List<object>)kv.Value).Count)
                         {
                             Console.Write(", ");
                         }
