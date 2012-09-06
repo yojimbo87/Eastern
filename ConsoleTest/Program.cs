@@ -40,15 +40,15 @@ namespace ConsoleTest
             record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 
-            /*raw = "nick:[(nick1:\"xxx\"),(nick2:\"yyy\")],joe:[(joe_1_1:\"xxx\",joe_1_2:\"yyy\")],moe:[(moe_1_1:#3:23,moe_1_2:\",whoa:#1:3,\",moe_1_3:#3:43,moe_1_4:[#124:34433],moe_1_5:[#124:344,#344:23])]";
-            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintDocument(raw, record.ToDocument());
-
             raw = "moe:#3:43,joe:\"whoa\",johny:[\"waoh\"],kyle:[\"wwww\",\"\",\"hhhh\"],wise:[#3:13],kate:[#3:554,#55:23]";
             record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 
-            raw = "moe:#3:43,joe:\"whoa\",johny:[12],kyle:[13b,45b,244f],huh:12365676t,wow:78910,wise:[5.34f],kate:[6.45f,12.9f]";
+            raw = "nick:[(nick1:\"xxx\"),(nick2:\"yyy\")],joe:[(joe_1_1:\"xxx\",joe_1_2:\"yyy\")],moe:[(moe_1_1:#3:23,moe_1_2:\",whoa:#1:3,\",moe_1_3:#3:43,moe_1_4:[#124:34433],moe_1_5:[#124:344,#344:23])]";
+            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            PrintDocument(raw, record.ToDocument());
+
+            /*raw = "moe:#3:43,joe:\"whoa\",johny:[12],kyle:[13b,45b,244f],huh:12365676t,wow:78910,wise:[5.34f],kate:[6.45f,12.9f]";
             record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 
@@ -66,47 +66,78 @@ namespace ConsoleTest
             Console.WriteLine("Version: {0}, Class name: {1}", document.Version, document.Class);
             Console.WriteLine("---------------------------------------------");
 
-            foreach (KeyValuePair<string, object> kv in document.Fields)
+            PrintTree(0, document.Fields);
+
+            Console.WriteLine("=============================================");
+        }
+
+        static void PrintTree(int level, Dictionary<string, object> properties)
+        {
+            foreach (KeyValuePair<string, object> kve in properties)
             {
-                if (kv.Value == null)
+                if (kve.Value == null)
                 {
-                    Console.WriteLine("- {0}: null", kv.Key);
-                }
-                else if (kv.Value.GetType() == typeof(List<object>))
-                {
-                    Console.Write("- {0} (FC): ", kv.Key);
-
-                    for (int i = 0; i < ((List<object>)kv.Value).Count; i++)
-                    //foreach (string value in (List<String>)kv.Value)
+                    for (int i = 0; i < level; i++)
                     {
-                        Console.Write("{0}", ((List<object>)kv.Value)[i]);
+                        Console.Write(" ");
+                    }
+                    Console.WriteLine("- {0}: null", kve.Key);
+                }
+                else if (kve.Value.GetType() == typeof(List<object>))
+                {
+                    for (int i = 0; i < level; i++)
+                    {
+                        Console.Write(" ");
+                    }
+                    Console.Write("- {0} (COL): ", kve.Key);
+                    bool isNewLined = false;
+                    int index = 1;
 
-                        if ((i + 1) != ((List<object>)kv.Value).Count)
+                    foreach(object item in (List<object>)kve.Value)
+                    {
+                        if (item.GetType() == typeof(Dictionary<string, object>))
                         {
-                            Console.Write(", ");
+                            isNewLined = true;
+                            Console.WriteLine();
+                            PrintTree(level + 2, (Dictionary<string, object>)item);
+                        }
+                        else
+                        {
+                            Console.Write("{0}", item);
+
+                            if (index != ((List<object>)kve.Value).Count)
+                            {
+                                Console.Write(", ");
+                            }
+
+                            index++;
                         }
                     }
 
-                    Console.WriteLine();
-                }
-                else if (kv.Value.GetType() == typeof(Dictionary<string, object>))
-                {
-                    Console.WriteLine("- {0} (ED): ", kv.Key);
-
-                    foreach (KeyValuePair<string, object> kve in (Dictionary<string, object>)kv.Value)
-                    //for (int i = 0; i < ((Dictionary<string, object>)kv.Value).Count; i++)
-                    //foreach (string value in (List<String>)kv.Value)
+                    if (!isNewLined)
                     {
-                        Console.WriteLine("  - {0}: {1}", kve.Key, kve.Value);
+                        Console.WriteLine();
                     }
+                }
+                else if (kve.Value.GetType() == typeof(Dictionary<string, object>))
+                {
+                    for (int i = 0; i < level; i++)
+                    {
+                        Console.Write(" ");
+                    }
+                    Console.Write("- {0} (EMB): ", kve.Key);
+                    Console.WriteLine();
+                    PrintTree(level + 2, (Dictionary<string, object>)kve.Value);
                 }
                 else
                 {
-                    Console.WriteLine("- {0}: {1}", kv.Key, kv.Value);
+                    for (int i = 0; i < level; i++)
+                    {
+                        Console.Write(" ");
+                    }
+                    Console.WriteLine("- {0}: {1}", kve.Key, kve.Value);
                 }
             }
-
-            Console.WriteLine("=============================================");
         }
 
         static void Test()
