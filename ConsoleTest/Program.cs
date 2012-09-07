@@ -20,7 +20,11 @@ namespace ConsoleTest
 
         static void Main(string[] args)
         {
-            string raw = "Profile@nick:\"ThePr,whoa:esident\",follows:(moe:#1:1,joe:#1:3),followers:(moe:\"whoa:,\"),name:\"Barack\",surname:\"Obama\",location:#3:2,invitedBy:,salary_cloned:";
+            string raw = "nick:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_";
+            ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            PrintDocument(raw, record.ToDocument());
+
+            /*string raw = "Profile@nick:\"ThePr,whoa:esident\",follows:(moe:#1:1,joe:#1:3),followers:(moe:\"whoa:,\"),name:\"Barack\",surname:\"Obama\",location:#3:2,invitedBy:,salary_cloned:";
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 
@@ -63,6 +67,10 @@ namespace ConsoleTest
             raw = "kyle:[(kyle1:13b),(kyle2:45b),(kyle3:244f)],joe:[(joe1_1:[1,2,4],joe1_2:12b),(joe2_1:3443.334,joe2_2:[\"asd\",\"fds\"])],hoe:(goe:(shmoe:4))";
             record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
+
+            raw = "nick:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_";
+            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            PrintDocument(raw, record.ToDocument());*/
 
             Console.ReadLine();
         }

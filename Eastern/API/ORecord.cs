@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Eastern.Protocol;
 
 namespace Eastern
@@ -203,14 +204,35 @@ namespace Eastern
                 i++;
             }
 
+            // determine the type of field value
+
+            string stringValue = RawDocument.Substring(startIndex, i - startIndex);
+            object value = new object();
+
+            // binary content
+            if ((stringValue.Length > 2) && (stringValue[0] == '_') && (stringValue[stringValue.Length - 1] == '_'))
+            {
+                stringValue = stringValue.Substring(1, stringValue.Length - 2);
+
+                // need to be able for base64 encoding which requires content to be devidable by 4
+                int mod4 = stringValue.Length % 4;
+
+                if (mod4 > 0)
+                {
+                    stringValue += new string('=', 4 - mod4);
+                }
+
+                value = Convert.FromBase64String(stringValue);
+            }
+
             //assign field value
             if (document[fieldName] == null)
             {
-                document[fieldName] = RawDocument.Substring(startIndex, i - startIndex);
+                document[fieldName] = value;
             }
             else
             {
-                ((List<object>)document[fieldName]).Add(RawDocument.Substring(startIndex, i - startIndex));
+                ((List<object>)document[fieldName]).Add(value);
             }
 
             return i;
