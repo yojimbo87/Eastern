@@ -226,12 +226,14 @@ namespace Eastern
 
                     value = Convert.FromBase64String(stringValue);
                 }
+                // datetime or date
                 else if ((stringValue[stringValue.Length - 1] == 't') || (stringValue[stringValue.Length - 1] == 'a'))
                 {
                     // Unix timestamp is seconds past epoch
-                    DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+                    DateTimeOffset epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
                     string foo = stringValue.Substring(0, stringValue.Length - 1);
-                    value = dateTime.AddSeconds(double.Parse(foo)).ToLocalTime();
+                    double d = double.Parse(foo);
+                    value = epoch.AddMilliseconds(d).ToUniversalTime();
                 }
             }
 
