@@ -20,7 +20,7 @@ namespace ConsoleTest
 
         static void Main(string[] args)
         {
-            string raw = "nick:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_";
+            string raw = "nick:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,datetime:1296279468t,date:1306274400a";
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 

@@ -209,20 +209,30 @@ namespace Eastern
             string stringValue = RawDocument.Substring(startIndex, i - startIndex);
             object value = new object();
 
-            // binary content
-            if ((stringValue.Length > 2) && (stringValue[0] == '_') && (stringValue[stringValue.Length - 1] == '_'))
+            if (stringValue.Length > 2)
             {
-                stringValue = stringValue.Substring(1, stringValue.Length - 2);
-
-                // need to be able for base64 encoding which requires content to be devidable by 4
-                int mod4 = stringValue.Length % 4;
-
-                if (mod4 > 0)
+                // binary content
+                if ((stringValue[0] == '_') && (stringValue[stringValue.Length - 1] == '_'))
                 {
-                    stringValue += new string('=', 4 - mod4);
-                }
+                    stringValue = stringValue.Substring(1, stringValue.Length - 2);
 
-                value = Convert.FromBase64String(stringValue);
+                    // need to be able for base64 encoding which requires content to be devidable by 4
+                    int mod4 = stringValue.Length % 4;
+
+                    if (mod4 > 0)
+                    {
+                        stringValue += new string('=', 4 - mod4);
+                    }
+
+                    value = Convert.FromBase64String(stringValue);
+                }
+                else if ((stringValue[stringValue.Length - 1] == 't') || (stringValue[stringValue.Length - 1] == 'a'))
+                {
+                    // Unix timestamp is seconds past epoch
+                    DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+                    string foo = stringValue.Substring(0, stringValue.Length - 1);
+                    value = dateTime.AddSeconds(double.Parse(foo)).ToLocalTime();
+                }
             }
 
             //assign field value
