@@ -122,6 +122,7 @@ namespace Eastern
                     }
                     break;
                 default:
+                    i = ParseValue(i, currentDocument, fieldName);
                     break;
             }
 
@@ -171,12 +172,32 @@ namespace Eastern
 
         private int ParseRecordID(int i, Dictionary<string, object> document, string fieldName)
         {
-            // move to the inside of record id
-            i++;
-
             int startIndex = i;
 
             // search for end of parsed record ID value
+            while ((i < RawDocument.Length) && (RawDocument[i] != ',') && (RawDocument[i] != ')') && (RawDocument[i] != ']'))
+            {
+                i++;
+            }
+
+            //assign field value
+            if (document[fieldName] == null)
+            {
+                document[fieldName] = RawDocument.Substring(startIndex, i - startIndex);
+            }
+            else
+            {
+                ((List<object>)document[fieldName]).Add(RawDocument.Substring(startIndex, i - startIndex));
+            }
+
+            return i;
+        }
+
+        private int ParseValue(int i, Dictionary<string, object> document, string fieldName)
+        {
+            int startIndex = i;
+
+            // search for end of parsed field value
             while ((i < RawDocument.Length) && (RawDocument[i] != ',') && (RawDocument[i] != ')') && (RawDocument[i] != ']'))
             {
                 i++;
@@ -199,8 +220,6 @@ namespace Eastern
         {
             // move to the inside of embedded document (go past starting bracket character)
             i++;
-
-            //int startIndex = i;
 
             // create new dictionary which would hold K/V pairs of embedded document
             Dictionary<string, object> embeddedDocument = new Dictionary<string, object>();
@@ -251,6 +270,7 @@ namespace Eastern
                         i++;
                         break;
                     default:
+                        i = ParseValue(i, document, fieldName);
                         break;
                 }
             }

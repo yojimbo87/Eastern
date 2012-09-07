@@ -56,13 +56,13 @@ namespace ConsoleTest
             record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 
-            /*raw = "moe:#3:43,joe:\"whoa\",johny:[12],kyle:[13b,45b,244f],huh:12365676t,wow:78910,wise:[5.34f],kate:[6.45f,12.9f]";
+            raw = "moe:#3:43,joe:\"whoa\",johny:[12],kyle:[13b,45b,244f],huh:12365676t,wow:78910,wise:[5.34f],kate:[6.45f,12.9f]";
             record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 
             raw = "kyle:[(kyle1:13b),(kyle2:45b),(kyle3:244f)],joe:[(joe1_1:[1,2,4],joe1_2:12b),(joe2_1:3443.334,joe2_2:[\"asd\",\"fds\"])],hoe:(goe:(shmoe:4))";
             record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintDocument(raw, record.ToDocument());*/
+            PrintDocument(raw, record.ToDocument());
 
             Console.ReadLine();
         }
