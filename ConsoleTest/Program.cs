@@ -40,6 +40,9 @@ namespace ConsoleTest
             // map
             raw = "rules:{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},array:[{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}],nested:{\"database.query\":2,\"database.command\":{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},\"database.hook.record\":2,\"database.hook2.record\":{\"database.hook.record\":2}}";
 
+            // string
+            raw = "simple:\"whoa this is awesome\",singleQuoted:\"a" + "\\" + "\"\",doubleQuotes:\"" + "\\" + "\"adsf" + "\\" + "\"\",twoBackslashes:\"" + "\\a" + "\\a" + "\"";
+            Console.WriteLine(raw);
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 

@@ -156,17 +156,35 @@ namespace Eastern
             // search for end of the parsed string value
             while (RawDocument[i] != '"')
             {
-                i++;
+                // strings must escape these characters:
+                // " -> \"
+                // \ -> \\
+                // therefore there needs to be a check for valid end of the string which
+                // is quote character that is not preceeded by backslash character \
+                if ((RawDocument[i] == '\\') && (RawDocument[i + 1] == '"'))
+                {
+                    i = i + 2;
+                }
+                else 
+                {
+                    i++;
+                }
             }
+
+            string value = RawDocument.Substring(startIndex, i - startIndex);
+            // escape quotes
+            value = value.Replace("\\" + "\"", "\"");
+            // escape backslashes
+            value = value.Replace("\\\\", "\\");
 
             // assign field value
             if (document[fieldName] == null)
             {
-                document[fieldName] = RawDocument.Substring(startIndex, i - startIndex);
+                document[fieldName] = value;
             }
             else
             {
-                ((List<object>)document[fieldName]).Add(RawDocument.Substring(startIndex, i - startIndex));
+                ((List<object>)document[fieldName]).Add(value);
             }
 
             // move past the closing quote character
