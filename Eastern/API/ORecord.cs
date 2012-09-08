@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Collections.Generic;
 using Eastern.Protocol;
 
@@ -209,10 +210,10 @@ namespace Eastern
             string stringValue = RawDocument.Substring(startIndex, i - startIndex);
             object value = new object();
 
-            if (stringValue.Length > 2)
+            if (stringValue.Length > 0)
             {
                 // binary content
-                if ((stringValue[0] == '_') && (stringValue[stringValue.Length - 1] == '_'))
+                if ((stringValue.Length > 2) && (stringValue[0] == '_') && (stringValue[stringValue.Length - 1] == '_'))
                 {
                     stringValue = stringValue.Substring(1, stringValue.Length - 2);
 
@@ -227,7 +228,7 @@ namespace Eastern
                     value = Convert.FromBase64String(stringValue);
                 }
                 // datetime or date
-                else if ((stringValue[stringValue.Length - 1] == 't') || (stringValue[stringValue.Length - 1] == 'a'))
+                else if ((stringValue.Length > 2) && (stringValue[stringValue.Length - 1] == 't') || (stringValue[stringValue.Length - 1] == 'a'))
                 {
                     // Unix timestamp is miliseconds past epoch
                     DateTimeOffset epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
@@ -236,9 +237,39 @@ namespace Eastern
                     value = epoch.AddMilliseconds(d).ToUniversalTime();
                 }
                 // boolean
-                else if ((stringValue == "true") || (stringValue == "false"))
+                else if ((stringValue.Length > 2) && (stringValue == "true") || (stringValue == "false"))
                 {
                     value = (stringValue == "true") ? true : false;
+                }
+                // numbers
+                else
+                {
+                    char lastCharacter = stringValue[stringValue.Length - 1];
+
+                    switch (lastCharacter)
+                    {
+                        case 'b':
+                            value = byte.Parse(stringValue.Substring(0, stringValue.Length - 1));
+                            break;
+                        case 's':
+                            value = short.Parse(stringValue.Substring(0, stringValue.Length - 1));
+                            break;
+                        case 'l':
+                            value = long.Parse(stringValue.Substring(0, stringValue.Length - 1));
+                            break;
+                        case 'f':
+                            value = float.Parse(stringValue.Substring(0, stringValue.Length - 1), CultureInfo.InvariantCulture);
+                            break;
+                        case 'd':
+                            value = double.Parse(stringValue.Substring(0, stringValue.Length - 1), CultureInfo.InvariantCulture);
+                            break;
+                        case 'c':
+                            value = decimal.Parse(stringValue.Substring(0, stringValue.Length - 1), CultureInfo.InvariantCulture);
+                            break;
+                        default:
+                            value = int.Parse(stringValue);
+                            break;
+                    }
                 }
             }
             // null

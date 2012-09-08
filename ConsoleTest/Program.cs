@@ -26,13 +26,16 @@ namespace ConsoleTest
             raw = "single:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,array:[_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_]";
 
             // date and datetime
-            raw = "datetime:1296279468000t,date:1306274400000a,array:[1296279468000t,1306274400000a]";
+            raw = "datetime:1296279468000t,date:1306281600000a,array:[1296279468000t,1306281600000a]";
 
             // boolean
             raw = "singleT:true,singleF:false,array:[true,false]";
 
             // null
             raw = "nick:,joe:";
+
+            // numbers
+            raw = "byte:123b,short:23456s,int:1543345,long:132432455l,float:1234.432f,double:123123.4324d,bigdecimal:12312.24324c,array:[123b,23456s,1543345,132432455l,1234.432f,123123.4324d,12312.24324c]";
 
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
