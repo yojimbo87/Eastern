@@ -201,9 +201,10 @@ namespace Eastern
         private int ParseMap(int i, Dictionary<string, object> document, string fieldName)
         {
             int startIndex = i;
+            int nestingLevel = 1;
 
             // search for end of parsed map
-            while ((i < RawDocument.Length) && (RawDocument[i] != '}'))
+            while ((i < RawDocument.Length) && (nestingLevel != 0))
             {
                 // check for beginning of the string to prevent finding an end of map within string value
                 if (RawDocument[i + 1] == '"')
@@ -219,6 +220,20 @@ namespace Eastern
 
                     // move to the end of string
                     i++;
+                }
+                else if (RawDocument[i + 1] == '{')
+                {
+                    // move to the beginning of the string
+                    i++;
+
+                    nestingLevel++;
+                }
+                else if (RawDocument[i + 1] == '}')
+                {
+                    // move to the beginning of the string
+                    i++;
+
+                    nestingLevel--;
                 }
                 else
                 {
