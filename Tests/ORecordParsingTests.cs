@@ -88,5 +88,23 @@ namespace Tests
             Assert.IsTrue(array.Last().GetType() == typeof(bool));
             Assert.IsTrue((bool)array.Last() == false);
         }
+
+        [TestMethod]
+        public void TestNull()
+        {
+            string raw = "nick:,embedded:(nick:,joe:),joe:";
+
+            ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            ODocument document = record.ToDocument();
+
+            Assert.IsTrue(document.Fields["nick"] == null);
+
+            Dictionary<string, object> embedded = (Dictionary<string, object>)document.Fields["embedded"];
+
+            Assert.IsTrue(embedded["nick"] == null);
+            Assert.IsTrue(embedded["joe"] == null);
+
+            Assert.IsTrue(document.Fields["joe"] == null);
+        }
     }
 }
