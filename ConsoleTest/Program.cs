@@ -20,19 +20,26 @@ namespace ConsoleTest
 
         static void Main(string[] args)
         {
+            TestParsing();
+
+            Console.ReadLine();
+        }
+
+        static void TestParsing()
+        {
             string raw;
 
             // binary
-            raw = "single:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,array:[_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_]";
+            raw = "single:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,embedded:(binary:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_),array:[_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_]";
 
             // date and datetime
-            raw = "datetime:1296279468000t,date:1306281600000a,array:[1296279468000t,1306281600000a]";
+            raw = "datetime:1296279468000t,date:1306281600000a,embedded:(datetime:1296279468000t,date:1306281600000a),array:[1296279468000t,1306281600000a]";
 
             // boolean
-            raw = "singleT:true,singleF:false,array:[true,false]";
+            raw = "singleT:true,singleF:false,embedded:(singleT:true,singleF:false),array:[true,false]";
 
             // null
-            raw = "nick:,joe:";
+            raw = "nick:,embedded:(nick:,joe:),joe:";
 
             // numbers
             raw = "byte:123b,short:23456s,int:1543345,long:132432455l,float:1234.432f,double:123123.4324d,bigdecimal:12312.24324c,array:[123b,23456s,1543345,132432455l,1234.432f,123123.4324d,12312.24324c]";
@@ -42,59 +49,25 @@ namespace ConsoleTest
 
             // string
             raw = "simple:\"whoa this is awesome\",singleQuoted:\"a" + "\\" + "\"\",doubleQuotes:\"" + "\\" + "\"adsf" + "\\" + "\"\",twoBackslashes:\"" + "\\a" + "\\a" + "\"";
+
+            // array with embedded documents
+            raw = "nick:[(joe1:\"js1\"),(joe2:\"js2\"),(joe3:\"s3\")]";
+
+            // complex array and embedded documents
+            raw = "mary:[(zak1:(nick:[(joe1:\"js1\"),(joe2:\"js2\"),(joe3:\"s3\")])),(zak2:(nick:[(joe4:\"js4\"),(joe5:\"js5\"),(joe6:\"s6\")]))]";
+
+            // example 1
+            raw = "Profile@nick:\"ThePresident\",follows:[],followers:[#10:5,#10:6],name:\"Barack\",surname:\"Obama\",location:#3:2,invitedBy:,salary_cloned:,salary:120.3f";
+
+            // example 2
+            raw = "name:\"ORole\",id:0,defaultClusterId:3,clusterIds:[3],properties:[(name:\"mode\",type:17,offset:0,mandatory:false,notNull:false,min:,max:,linkedClass:,linkedType:,index:),(name:\"rules\",type:12,offset:1,mandatory:false,notNull:false,min:,max:,linkedClass:,linkedType:17,index:)]";
+
+            // example 3
+            raw = "ORole@name:\"reader\",inheritedRole:,mode:0,rules:{\"database\":2,\"database.cluster.internal\":2,\"database.cluster.orole\":2,\"database.cluster.ouser\":2,\"database.class.*\":2,\"database.cluster.*\":2,\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}";
+
             Console.WriteLine(raw);
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
-
-            /*string raw = "Profile@nick:\"ThePr,whoa:esident\",follows:(moe:#1:1,joe:#1:3),followers:(moe:\"whoa:,\"),name:\"Barack\",surname:\"Obama\",location:#3:2,invitedBy:,salary_cloned:";
-            ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintDocument(raw, record.ToDocument());
-
-            raw = "nick:";
-            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintDocument(raw, record.ToDocument());
-
-            raw = "nick:,joe:";
-            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintDocument(raw, record.ToDocument());
-
-            raw = "nick:[\"s1\",\"s2\",\"s3\"]";
-            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintDocument(raw, record.ToDocument());
-
-            raw = "nick:[(joe1:\"js1\"),(joe2:\"js2\"),(joe3:\"s3\")]";
-            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintDocument(raw, record.ToDocument());
-
-            raw = "mary:(nick:[(joe1:\"js1\"),(joe2:\"js2\"),(joe3:\"s3\")])";
-            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintDocument(raw, record.ToDocument());
-
-            raw = "mary:[(zak1:(nick:[(joe1:\"js1\"),(joe2:\"js2\"),(joe3:\"s3\")])),(zak2:(nick:[(joe4:\"js4\"),(joe5:\"js5\"),(joe6:\"s6\")]))]";
-            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintDocument(raw, record.ToDocument());
-
-            raw = "moe:#3:43,joe:\"whoa\",johny:[\"waoh\"],kyle:[\"wwww\",\"\",\"hhhh\"],wise:[#3:13],kate:[#3:554,#55:23]";
-            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintDocument(raw, record.ToDocument());
-
-            raw = "nick:[(nick1:\"xxx\"),(nick2:\"yyy\")],joe:[(joe_1_1:\"xxx\",joe_1_2:\"yyy\")],moe:[(moe_1_1:#3:23,moe_1_2:\",whoa:#1:3,\",moe_1_3:#3:43,moe_1_4:[#124:34433],moe_1_5:[#124:344,#344:23])]";
-            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintDocument(raw, record.ToDocument());
-
-            raw = "moe:#3:43,joe:\"whoa\",johny:[12],kyle:[13b,45b,244f],huh:12365676t,wow:78910,wise:[5.34f],kate:[6.45f,12.9f]";
-            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintDocument(raw, record.ToDocument());
-
-            raw = "kyle:[(kyle1:13b),(kyle2:45b),(kyle3:244f)],joe:[(joe1_1:[1,2,4],joe1_2:12b),(joe2_1:3443.334,joe2_2:[\"asd\",\"fds\"])],hoe:(goe:(shmoe:4))";
-            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintDocument(raw, record.ToDocument());
-
-            raw = "nick:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_";
-            record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintDocument(raw, record.ToDocument());*/
-
-            Console.ReadLine();
         }
 
         static void PrintDocument(string raw, ODocument document)
