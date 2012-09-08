@@ -241,6 +241,11 @@ namespace Eastern
                     value = (stringValue == "true") ? true : false;
                 }
             }
+            // null
+            else if (stringValue.Length == 0)
+            {
+                value = null;
+            }
 
             //assign field value
             if (document[fieldName] == null)
