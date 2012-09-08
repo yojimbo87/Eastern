@@ -123,6 +123,9 @@ namespace Eastern
                         i = ParseCollection(i, currentDocument, fieldName);
                     }
                     break;
+                case '{':
+                    i = ParseMap(i, currentDocument, fieldName);
+                    break;
                 default:
                     i = ParseValue(i, currentDocument, fieldName);
                     break;
@@ -181,6 +184,50 @@ namespace Eastern
             {
                 i++;
             }
+
+            //assign field value
+            if (document[fieldName] == null)
+            {
+                document[fieldName] = RawDocument.Substring(startIndex, i - startIndex);
+            }
+            else
+            {
+                ((List<object>)document[fieldName]).Add(RawDocument.Substring(startIndex, i - startIndex));
+            }
+
+            return i;
+        }
+
+        private int ParseMap(int i, Dictionary<string, object> document, string fieldName)
+        {
+            int startIndex = i;
+
+            // search for end of parsed map
+            while ((i < RawDocument.Length) && (RawDocument[i] != '}'))
+            {
+                // check for beginning of the string to prevent finding an end of map within string value
+                if (RawDocument[i + 1] == '"')
+                {
+                    // move to the beginning of the string
+                    i++;
+
+                    // go to the end of string
+                    while ((i < RawDocument.Length) && (RawDocument[i] != '"'))
+                    {
+                        i++;
+                    }
+
+                    // move to the end of string
+                    i++;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+
+            // move past the closing bracket character
+            i++;
 
             //assign field value
             if (document[fieldName] == null)
@@ -340,6 +387,9 @@ namespace Eastern
                         break;
                     case '(':
                         i = ParseEmbeddedDocument(i, document, fieldName);
+                        break;
+                    case '{':
+                        i = ParseMap(i, document, fieldName);
                         break;
                     case ',':
                         i++;

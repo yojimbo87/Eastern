@@ -37,6 +37,9 @@ namespace ConsoleTest
             // numbers
             raw = "byte:123b,short:23456s,int:1543345,long:132432455l,float:1234.432f,double:123123.4324d,bigdecimal:12312.24324c,array:[123b,23456s,1543345,132432455l,1234.432f,123123.4324d,12312.24324c]";
 
+            // map
+            raw = "rules:{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},array:[{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}]";
+
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 
