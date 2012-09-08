@@ -311,7 +311,7 @@ namespace Eastern
                 else if ((stringValue.Length > 2) && (stringValue[stringValue.Length - 1] == 't') || (stringValue[stringValue.Length - 1] == 'a'))
                 {
                     // Unix timestamp is miliseconds past epoch
-                    DateTimeOffset epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                    DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
                     string foo = stringValue.Substring(0, stringValue.Length - 1);
                     double d = double.Parse(foo);
                     value = epoch.AddMilliseconds(d).ToUniversalTime();
