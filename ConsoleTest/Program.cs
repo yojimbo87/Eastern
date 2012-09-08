@@ -20,7 +20,17 @@ namespace ConsoleTest
 
         static void Main(string[] args)
         {
-            string raw = "nick:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,datetime:1296279468000t,date:1306274400000a";
+            string raw;
+
+            // binary
+            raw = "nick:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,array:[_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_]";
+
+            // date and datetime
+            raw = "nick:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,datetime:1296279468000t,date:1306274400000a,dates:[1296279468000t,1306274400000a]";
+
+            // boolean
+            raw = "singleT:true,singleF:false,array:[true,false]";
+
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
             PrintDocument(raw, record.ToDocument());
 
