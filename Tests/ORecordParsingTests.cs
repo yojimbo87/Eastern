@@ -428,5 +428,27 @@ namespace Tests
 
             Assert.IsTrue(embedded["index"] == null);
         }
+
+        [TestMethod]
+        public void TestExample3()
+        {
+            string raw = "ORole@name:\"reader\",inheritedRole:,mode:0,rules:{\"database\":2,\"database.cluster.internal\":2,\"database.cluster.orole\":2,\"database.cluster.ouser\":2,\"database.class.*\":2,\"database.cluster.*\":2,\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}";
+
+            ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            ODocument document = record.ToDocument();
+
+            Assert.IsTrue(document.Class == "ORole");
+
+            Assert.IsTrue(document.Fields["name"].GetType() == typeof(string));
+            Assert.IsTrue((string)document.Fields["name"] == "reader");
+
+            Assert.IsTrue(document.Fields["inheritedRole"] == null);
+
+            Assert.IsTrue(document.Fields["mode"].GetType() == typeof(int));
+            Assert.IsTrue((int)document.Fields["mode"] == 0);
+
+            Assert.IsTrue(document.Fields["rules"].GetType() == typeof(string));
+            Assert.IsTrue((string)document.Fields["rules"] == "{\"database\":2,\"database.cluster.internal\":2,\"database.cluster.orole\":2,\"database.cluster.ouser\":2,\"database.class.*\":2,\"database.cluster.*\":2,\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}");
+        }
     }
 }
