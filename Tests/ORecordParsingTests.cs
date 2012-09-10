@@ -231,5 +231,31 @@ namespace Tests
             Assert.IsTrue(document.Fields["twoBackslashes"].GetType() == typeof(string));
             Assert.IsTrue((string)document.Fields["twoBackslashes"] == "\\a\\a");
         }
+
+        [TestMethod]
+        public void TestEmbeddedDocumentsArray()
+        {
+            string raw = "nick:[(joe1:\"js1\"),(joe2:\"js2\"),(joe3:\"s3\")]";
+
+            ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            ODocument document = record.ToDocument();
+
+            List<object> array = (List<object>)document.Fields["nick"];
+
+            Dictionary<string, object> embedded = (Dictionary<string, object>)array[0];
+
+            Assert.IsTrue(embedded["joe1"].GetType() == typeof(string));
+            Assert.IsTrue((string)embedded["joe1"] == "js1");
+
+            embedded = (Dictionary<string, object>)array[1];
+
+            Assert.IsTrue(embedded["joe2"].GetType() == typeof(string));
+            Assert.IsTrue((string)embedded["joe2"] == "js2");
+
+            embedded = (Dictionary<string, object>)array[2];
+
+            Assert.IsTrue(embedded["joe3"].GetType() == typeof(string));
+            Assert.IsTrue((string)embedded["joe3"] == "s3");
+        }
     }
 }
