@@ -352,5 +352,81 @@ namespace Tests
             Assert.IsTrue(document.Fields["salary"].GetType() == typeof(float));
             Assert.IsTrue((float)document.Fields["salary"] == 120.3f);
         }
+
+        [TestMethod]
+        public void TestExample2()
+        {
+            string raw = "name:\"ORole\",id:0,defaultClusterId:3,clusterIds:[3],properties:[(name:\"mode\",type:17,offset:0,mandatory:false,notNull:false,min:,max:,linkedClass:,linkedType:,index:),(name:\"rules\",type:12,offset:1,mandatory:false,notNull:false,min:,max:,linkedClass:,linkedType:17,index:)]";
+
+            ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            ODocument document = record.ToDocument();
+
+            Assert.IsTrue(document.Fields["name"].GetType() == typeof(string));
+            Assert.IsTrue((string)document.Fields["name"] == "ORole");
+
+            Assert.IsTrue(document.Fields["id"].GetType() == typeof(int));
+            Assert.IsTrue((int)document.Fields["id"] == 0);
+
+            Assert.IsTrue(document.Fields["defaultClusterId"].GetType() == typeof(int));
+            Assert.IsTrue((int)document.Fields["defaultClusterId"] == 3);
+
+            Assert.IsTrue(document.Fields["properties"].GetType() == typeof(List<object>));
+            List<object> properties = (List<object>)document.Fields["properties"];
+
+            Dictionary<string, object> embedded = (Dictionary<string, object>)properties[0];
+
+            Assert.IsTrue(embedded["name"].GetType() == typeof(string));
+            Assert.IsTrue((string)embedded["name"] == "mode");
+
+            Assert.IsTrue(embedded["type"].GetType() == typeof(int));
+            Assert.IsTrue((int)embedded["type"] == 17);
+
+            Assert.IsTrue(embedded["offset"].GetType() == typeof(int));
+            Assert.IsTrue((int)embedded["offset"] == 0);
+
+            Assert.IsTrue(embedded["mandatory"].GetType() == typeof(bool));
+            Assert.IsTrue((bool)embedded["mandatory"] == false);
+
+            Assert.IsTrue(embedded["notNull"].GetType() == typeof(bool));
+            Assert.IsTrue((bool)embedded["notNull"] == false);
+
+            Assert.IsTrue(embedded["min"] == null);
+
+            Assert.IsTrue(embedded["max"] == null);
+
+            Assert.IsTrue(embedded["linkedClass"] == null);
+
+            Assert.IsTrue(embedded["linkedType"] == null);
+
+            Assert.IsTrue(embedded["index"] == null);
+
+            embedded = (Dictionary<string, object>)properties[1];
+
+            Assert.IsTrue(embedded["name"].GetType() == typeof(string));
+            Assert.IsTrue((string)embedded["name"] == "rules");
+
+            Assert.IsTrue(embedded["type"].GetType() == typeof(int));
+            Assert.IsTrue((int)embedded["type"] == 12);
+
+            Assert.IsTrue(embedded["offset"].GetType() == typeof(int));
+            Assert.IsTrue((int)embedded["offset"] == 1);
+
+            Assert.IsTrue(embedded["mandatory"].GetType() == typeof(bool));
+            Assert.IsTrue((bool)embedded["mandatory"] == false);
+
+            Assert.IsTrue(embedded["notNull"].GetType() == typeof(bool));
+            Assert.IsTrue((bool)embedded["notNull"] == false);
+
+            Assert.IsTrue(embedded["min"] == null);
+
+            Assert.IsTrue(embedded["max"] == null);
+
+            Assert.IsTrue(embedded["linkedClass"] == null);
+
+            Assert.IsTrue(embedded["linkedType"].GetType() == typeof(int));
+            Assert.IsTrue((int)embedded["linkedType"] == 17);
+
+            Assert.IsTrue(embedded["index"] == null);
+        }
     }
 }
