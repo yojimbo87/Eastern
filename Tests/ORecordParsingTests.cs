@@ -257,5 +257,59 @@ namespace Tests
             Assert.IsTrue(embedded["joe3"].GetType() == typeof(string));
             Assert.IsTrue((string)embedded["joe3"] == "s3");
         }
+
+        [TestMethod]
+        public void TestComplexEmbeddedDocumentsArray()
+        {
+            string raw = "mary:[(zak1:(nick:[(joe1:\"js1\"),(joe2:\"js2\"),(joe3:\"s3\")])),(zak2:(nick:[(joe4:\"js4\"),(joe5:\"js5\"),(joe6:\"s6\")]))]";
+
+            ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            ODocument document = record.ToDocument();
+
+            // mary
+            List<object> array1 = (List<object>)document.Fields["mary"];
+            // zak1
+            Dictionary<string, object> embedded1 = (Dictionary<string, object>)array1[0];
+            // nick
+            Dictionary<string, object> embedded2 = (Dictionary<string, object>)embedded1["zak1"];
+
+            List<object> array2 = (List<object>)embedded2["nick"];
+            Dictionary<string, object> embedded3 = (Dictionary<string, object>)array2[0];
+
+            Assert.IsTrue(embedded3["joe1"].GetType() == typeof(string));
+            Assert.IsTrue((string)embedded3["joe1"] == "js1");
+
+            embedded3 = (Dictionary<string, object>)array2[1];
+
+            Assert.IsTrue(embedded3["joe2"].GetType() == typeof(string));
+            Assert.IsTrue((string)embedded3["joe2"] == "js2");
+
+            embedded3 = (Dictionary<string, object>)array2[2];
+
+            Assert.IsTrue(embedded3["joe3"].GetType() == typeof(string));
+            Assert.IsTrue((string)embedded3["joe3"] == "s3");
+
+            // zak2
+            embedded1 = (Dictionary<string, object>)array1[1];
+            // nick
+            embedded2 = (Dictionary<string, object>)embedded1["zak2"];
+
+            // joe1
+            array2 = (List<object>)embedded2["nick"];
+            embedded3 = (Dictionary<string, object>)array2[0];
+
+            Assert.IsTrue(embedded3["joe4"].GetType() == typeof(string));
+            Assert.IsTrue((string)embedded3["joe4"] == "js4");
+
+            embedded3 = (Dictionary<string, object>)array2[1];
+
+            Assert.IsTrue(embedded3["joe5"].GetType() == typeof(string));
+            Assert.IsTrue((string)embedded3["joe5"] == "js5");
+
+            embedded3 = (Dictionary<string, object>)array2[2];
+
+            Assert.IsTrue(embedded3["joe6"].GetType() == typeof(string));
+            Assert.IsTrue((string)embedded3["joe6"] == "s6");
+        }
     }
 }
