@@ -106,5 +106,81 @@ namespace Tests
 
             Assert.IsTrue(document.Fields["joe"] == null);
         }
+
+        [TestMethod]
+        public void TestNumbers()
+        {
+            string raw = "byte:123b,short:23456s,int:1543345,long:132432455l,float:1234.432f,double:123123.4324d,bigdecimal:12312.24324c,embedded:(byte:123b,short:23456s,int:1543345,long:132432455l,float:1234.432f,double:123123.4324d,bigdecimal:12312.24324c),array:[123b,23456s,1543345,132432455l,1234.432f,123123.4324d,12312.24324c]";
+
+            ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            ODocument document = record.ToDocument();
+
+            Assert.IsTrue(document.Fields["byte"].GetType() == typeof(byte));
+            Assert.IsTrue((byte)document.Fields["byte"] == 123);
+
+            Assert.IsTrue(document.Fields["short"].GetType() == typeof(short));
+            Assert.IsTrue((short)document.Fields["short"] == 23456);
+
+            Assert.IsTrue(document.Fields["int"].GetType() == typeof(int));
+            Assert.IsTrue((int)document.Fields["int"] == 1543345);
+
+            Assert.IsTrue(document.Fields["long"].GetType() == typeof(long));
+            Assert.IsTrue((long)document.Fields["long"] == 132432455);
+
+            Assert.IsTrue(document.Fields["float"].GetType() == typeof(float));
+            Assert.IsTrue((float)document.Fields["float"] == 1234.432f);
+
+            Assert.IsTrue(document.Fields["double"].GetType() == typeof(double));
+            Assert.IsTrue((double)document.Fields["double"] == 123123.4324);
+
+            Assert.IsTrue(document.Fields["bigdecimal"].GetType() == typeof(decimal));
+            Assert.IsTrue((decimal)document.Fields["bigdecimal"] == new Decimal(12312.24324));
+
+            Dictionary<string, object> embedded = (Dictionary<string, object>)document.Fields["embedded"];
+
+            Assert.IsTrue(embedded["byte"].GetType() == typeof(byte));
+            Assert.IsTrue((byte)embedded["byte"] == 123);
+
+            Assert.IsTrue(embedded["short"].GetType() == typeof(short));
+            Assert.IsTrue((short)embedded["short"] == 23456);
+
+            Assert.IsTrue(embedded["int"].GetType() == typeof(int));
+            Assert.IsTrue((int)embedded["int"] == 1543345);
+
+            Assert.IsTrue(embedded["long"].GetType() == typeof(long));
+            Assert.IsTrue((long)embedded["long"] == 132432455);
+
+            Assert.IsTrue(embedded["float"].GetType() == typeof(float));
+            Assert.IsTrue((float)embedded["float"] == 1234.432f);
+
+            Assert.IsTrue(embedded["double"].GetType() == typeof(double));
+            Assert.IsTrue((double)embedded["double"] == 123123.4324);
+
+            Assert.IsTrue(embedded["bigdecimal"].GetType() == typeof(decimal));
+            Assert.IsTrue((decimal)embedded["bigdecimal"] == new Decimal(12312.24324));
+
+            List<object> array = (List<object>)document.Fields["array"];
+
+            Assert.IsTrue(array[0].GetType() == typeof(byte));
+            Assert.IsTrue((byte)array[0] == 123);
+
+            Assert.IsTrue(array[1].GetType() == typeof(short));
+            Assert.IsTrue((short)array[1] == 23456);
+
+            Assert.IsTrue(array[2].GetType() == typeof(int));
+            Assert.IsTrue((int)array[2] == 1543345);
+
+            Assert.IsTrue(array[3].GetType() == typeof(long));
+            Assert.IsTrue((long)array[3] == 132432455);
+
+            Assert.IsTrue(array[4].GetType() == typeof(float));
+            Assert.IsTrue((float)array[4] == 1234.432f);
+
+            Assert.IsTrue(array[5].GetType() == typeof(double));
+            Assert.IsTrue((double)array[5] == 123123.4324);
+
+            Assert.IsTrue(array[6].GetType() == typeof(decimal));
+            Assert.IsTrue((decimal)array[6] == new Decimal(12312.24324));
+        }
     }
 }
