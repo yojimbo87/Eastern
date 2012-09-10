@@ -182,5 +182,33 @@ namespace Tests
             Assert.IsTrue(array[6].GetType() == typeof(decimal));
             Assert.IsTrue((decimal)array[6] == new Decimal(12312.24324));
         }
+
+        [TestMethod]
+        public void TestMap()
+        {
+            string raw = "rules:{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},embedded:(rules:{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}),array:[{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}],nested:{\"database.query\":2,\"database.command\":{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},\"database.hook.record\":2,\"database.hook2.record\":{\"database.hook.record\":2}}";
+
+            ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            ODocument document = record.ToDocument();
+
+            Assert.IsTrue(document.Fields["rules"].GetType() == typeof(string));
+            Assert.IsTrue((string)document.Fields["rules"] == "{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}");
+
+            Dictionary<string, object> embedded = (Dictionary<string, object>)document.Fields["embedded"];
+
+            Assert.IsTrue(embedded["rules"].GetType() == typeof(string));
+            Assert.IsTrue((string)embedded["rules"] == "{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}");
+
+            List<object> array = (List<object>)document.Fields["array"];
+
+            Assert.IsTrue(array[0].GetType() == typeof(string));
+            Assert.IsTrue((string)array[0] == "{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}");
+
+            Assert.IsTrue(array[1].GetType() == typeof(string));
+            Assert.IsTrue((string)array[1] == "{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}");
+
+            Assert.IsTrue(document.Fields["nested"].GetType() == typeof(string));
+            Assert.IsTrue((string)document.Fields["nested"] == "{\"database.query\":2,\"database.command\":{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},\"database.hook.record\":2,\"database.hook2.record\":{\"database.hook.record\":2}}");
+        }
     }
 }
