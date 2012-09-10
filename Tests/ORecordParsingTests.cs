@@ -311,5 +311,46 @@ namespace Tests
             Assert.IsTrue(embedded3["joe6"].GetType() == typeof(string));
             Assert.IsTrue((string)embedded3["joe6"] == "s6");
         }
+
+        [TestMethod]
+        public void TestExample1()
+        {
+            string raw = "Profile@nick:\"ThePresident\",follows:[],followers:[#10:5,#10:6],name:\"Barack\",surname:\"Obama\",location:#3:2,invitedBy:,salary_cloned:,salary:120.3f";
+
+            ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            ODocument document = record.ToDocument();
+
+            Assert.IsTrue(document.Class == "Profile");
+
+            Assert.IsTrue(document.Fields["nick"].GetType() == typeof(string));
+            Assert.IsTrue((string)document.Fields["nick"] == "ThePresident");
+
+            Assert.IsTrue(document.Fields["follows"].GetType() == typeof(List<object>));
+
+            Assert.IsTrue(document.Fields["followers"].GetType() == typeof(List<object>));
+            List<object> followers = (List<object>)document.Fields["followers"];
+
+            Assert.IsTrue(followers[0].GetType() == typeof(string));
+            Assert.IsTrue((string)followers[0] == "#10:5");
+
+            Assert.IsTrue(followers[1].GetType() == typeof(string));
+            Assert.IsTrue((string)followers[1] == "#10:6");
+
+            Assert.IsTrue(document.Fields["name"].GetType() == typeof(string));
+            Assert.IsTrue((string)document.Fields["name"] == "Barack");
+
+            Assert.IsTrue(document.Fields["surname"].GetType() == typeof(string));
+            Assert.IsTrue((string)document.Fields["surname"] == "Obama");
+
+            Assert.IsTrue(document.Fields["location"].GetType() == typeof(string));
+            Assert.IsTrue((string)document.Fields["location"] == "#3:2");
+
+            Assert.IsTrue(document.Fields["invitedBy"] == null);
+
+            Assert.IsTrue(document.Fields["salary_cloned"] == null);
+
+            Assert.IsTrue(document.Fields["salary"].GetType() == typeof(float));
+            Assert.IsTrue((float)document.Fields["salary"] == 120.3f);
+        }
     }
 }
