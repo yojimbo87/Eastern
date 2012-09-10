@@ -210,5 +210,26 @@ namespace Tests
             Assert.IsTrue(document.Fields["nested"].GetType() == typeof(string));
             Assert.IsTrue((string)document.Fields["nested"] == "{\"database.query\":2,\"database.command\":{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},\"database.hook.record\":2,\"database.hook2.record\":{\"database.hook.record\":2}}");
         }
+
+        [TestMethod]
+        public void TestString()
+        {
+            string raw = "simple:\"whoa this is awesome\",singleQuoted:\"a" + "\\" + "\"\",doubleQuotes:\"" + "\\" + "\"adsf" + "\\" + "\"\",twoBackslashes:\"" + "\\a" + "\\a" + "\"";
+
+            ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+            ODocument document = record.ToDocument();
+
+            Assert.IsTrue(document.Fields["simple"].GetType() == typeof(string));
+            Assert.IsTrue((string)document.Fields["simple"] == "whoa this is awesome");
+
+            Assert.IsTrue(document.Fields["singleQuoted"].GetType() == typeof(string));
+            Assert.IsTrue((string)document.Fields["singleQuoted"] == "a\"");
+
+            Assert.IsTrue(document.Fields["doubleQuotes"].GetType() == typeof(string));
+            Assert.IsTrue((string)document.Fields["doubleQuotes"] == "\"adsf\"");
+
+            Assert.IsTrue(document.Fields["twoBackslashes"].GetType() == typeof(string));
+            Assert.IsTrue((string)document.Fields["twoBackslashes"] == "\\a\\a");
+        }
     }
 }
