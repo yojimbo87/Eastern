@@ -10,6 +10,7 @@ namespace Eastern
         private ODocument Document { get; set; }
         private string RawDocument { get; set; }
 
+        public ORID ORID { get; set; }
         public ORecordType Type { get; set; }
         public int Version { get; set; }
         public byte[] Content { get; set; }
@@ -23,6 +24,7 @@ namespace Eastern
 
         internal ORecord(Record record)
         {
+            ORID = record.ORID;
             Type = record.Type;
             Version = record.Version;
             Content = record.Content;
