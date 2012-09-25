@@ -9,7 +9,7 @@ namespace Eastern.Protocol.Operations
         public Request Request(int sessionID)
         {
             Request request = new Connection.Request();
-            request.ExpectResponse = false;
+            request.OperationMode = OperationMode.Asynchronous;
 
             // standard request fields
             request.DataItems.Add(new DataItem() { Type = "byte", Data = BinaryParser.ToArray((byte)OperationType.DB_CLOSE) });
