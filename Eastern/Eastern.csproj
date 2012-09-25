@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="API\ODocument.cs" />
     <Compile Include="API\ORecord.cs" />
+    <Compile Include="API\ORID.cs" />
     <Compile Include="API\OServer.cs" />
     <Compile Include="Connection\DataItem.cs" />
     <Compile Include="Connection\Request.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="API\OException.cs" />
     <Compile Include="API\OExceptionType.cs" />
     <Compile Include="API\OStorageType.cs" />
+    <Compile Include="Protocol\OperationMode.cs" />
     <Compile Include="Protocol\Database.cs" />
     <Compile Include="Protocol\Operations\Count.cs" />
     <Compile Include="Protocol\Operations\DataClusterAdd.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="API\ODatabase.cs" />
     <Compile Include="API\ODatabaseType.cs" />
     <Compile Include="Protocol\Operations\OperationType.cs" />
+    <Compile Include="Protocol\Operations\RecordCreate.cs" />
     <Compile Include="Protocol\Operations\RecordLoad.cs" />
     <Compile Include="Protocol\Operations\Shutdown.cs" />
     <Compile Include="Protocol\PayloadStatus.cs" />

@@ -228,6 +228,24 @@ namespace Eastern
         }
 
         /// <summary>
+        /// Creates record within current database.
+        /// </summary>
+        /// <returns>
+        /// ORecord object.
+        /// </returns>
+        public ORecord CreateRecord(int segmentID, short clusterID, byte[] content, ORecordType type, bool isAsynchronous)
+        {
+            RecordCreate operation = new RecordCreate();
+            operation.SegmentID = segmentID;
+            operation.ClusterID = clusterID;
+            operation.RecordContent = content;
+            operation.RecordType = type;
+            operation.OperationMode = (isAsynchronous) ? OperationMode.Asynchronous : OperationMode.Synchronous;
+
+            return new ORecord((Record)WorkerConnection.ExecuteOperation<RecordCreate>(operation));
+        }
+
+        /// <summary>
         /// Load specific record from database.
         /// </summary>
         /// <returns>
