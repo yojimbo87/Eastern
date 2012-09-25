@@ -89,10 +89,10 @@ namespace Eastern.Connection
                 }
             }
 
-            Response response = new Response();
-
-            if (request.ExpectResponse)
+            if (request.OperationMode == OperationMode.Synchronous)
             {
+                Response response = new Response();
+
                 response.Data = Receive();
                 // parse standard response fields
                 response.Status = (ResponseStatus)BinaryParser.ToByte(response.Data.Take(1).ToArray());
@@ -102,9 +102,13 @@ namespace Eastern.Connection
                 {
                     ParseResponseError(response);
                 }
-            }
 
-            return ((IOperation)operation).Response(response);
+                return ((IOperation)operation).Response(response);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         internal void Close()
