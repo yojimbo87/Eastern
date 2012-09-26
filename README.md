@@ -3,7 +3,10 @@ Eastern is a C#/.NET driver for [OrientDB](http://code.google.com/p/orient/) whi
 Status
 ---
 
-Early alpha. Basic server and database operations are implemented. Now focusing on document parsing and data operations.
+Mid alpha:
+- Basic server and database operations are implemented 
+- CRUD operations and document parsing is implemented (except special use of LINKSET types)
+- Now focusing on data <-> POCO parser
 
 Features
 ---
@@ -30,6 +33,10 @@ Features
   - Count of records in cluster (COUNT)
   - Add data segment (DATASEGMENT_ADD)
   - Remove data segment (DATASEGMENT_REMOVE)
+  - Create record (RECORD_CREATE)
+  - Update record (RECORD_UPDATE)
+  - Delete record (RECORD_DELETE)
+  - Load record (RECORD_LOAD)
 
 Public API
 ===
