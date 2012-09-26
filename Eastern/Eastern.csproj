@@ -83,6 +83,7 @@
     <Compile Include="Protocol\Operations\OperationType.cs" />
     <Compile Include="Protocol\Operations\RecordCreate.cs" />
     <Compile Include="Protocol\Operations\RecordLoad.cs" />
+    <Compile Include="Protocol\Operations\RecordUpdate.cs" />
     <Compile Include="Protocol\Operations\Shutdown.cs" />
     <Compile Include="Protocol\PayloadStatus.cs" />
     <Compile Include="Protocol\Record.cs" />

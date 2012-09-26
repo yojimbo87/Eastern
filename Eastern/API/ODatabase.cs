@@ -231,7 +231,7 @@ namespace Eastern
         /// Creates record within current database.
         /// </summary>
         /// <returns>
-        /// ORecord object.
+        /// ORecord object with assigned new record ID and version.
         /// </returns>
         public ORecord CreateRecord(int segmentID, short clusterID, byte[] content, ORecordType type, bool isAsynchronous)
         {
@@ -243,6 +243,25 @@ namespace Eastern
             operation.OperationMode = (isAsynchronous) ? OperationMode.Asynchronous : OperationMode.Synchronous;
 
             return new ORecord((Record)WorkerConnection.ExecuteOperation<RecordCreate>(operation));
+        }
+
+        /// <summary>
+        /// Updates record within current database.
+        /// </summary>
+        /// <returns>
+        /// Integer indicating new record version.
+        /// </returns>
+        public int UpdateRecord(ORID orid, byte[] content, int version, ORecordType type, bool isAsynchronous)
+        {
+            RecordUpdate operation = new RecordUpdate();
+            operation.ClusterID = orid.ClusterID;
+            operation.ClusterPosition = orid.ClusterPosition;
+            operation.RecordContent = content;
+            operation.RecordVersion = version;
+            operation.RecordType = type;
+            operation.OperationMode = (isAsynchronous) ? OperationMode.Asynchronous : OperationMode.Synchronous;
+
+            return (int)WorkerConnection.ExecuteOperation<RecordUpdate>(operation);
         }
 
         /// <summary>
