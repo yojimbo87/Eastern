@@ -43,7 +43,7 @@ namespace Eastern.Protocol.Operations
             }
 
             // operation specific fields
-            recordVersion = (int)BinaryParser.ToByte(response.Data.Skip(offset).Take(4).ToArray());
+            recordVersion = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
             offset += 4;
 
             return recordVersion;

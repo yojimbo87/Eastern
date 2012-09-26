@@ -41,10 +41,10 @@ namespace Eastern.Protocol.Operations
             }
 
             // operation specific fields
-            record.ORID.ClusterPosition = (long)BinaryParser.ToByte(response.Data.Skip(offset).Take(8).ToArray());
+            record.ORID.ClusterPosition = BinaryParser.ToLong(response.Data.Skip(offset).Take(8).ToArray());
             offset += 8;
 
-            record.Version = (int)BinaryParser.ToByte(response.Data.Skip(offset).Take(4).ToArray());
+            record.Version = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
             offset += 4;
 
             return record;
