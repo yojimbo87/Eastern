@@ -82,6 +82,7 @@
     <Compile Include="API\ODatabaseType.cs" />
     <Compile Include="Protocol\Operations\OperationType.cs" />
     <Compile Include="Protocol\Operations\RecordCreate.cs" />
+    <Compile Include="Protocol\Operations\RecordDelete.cs" />
     <Compile Include="Protocol\Operations\RecordLoad.cs" />
     <Compile Include="Protocol\Operations\RecordUpdate.cs" />
     <Compile Include="Protocol\Operations\Shutdown.cs" />

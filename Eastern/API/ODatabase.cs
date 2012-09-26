@@ -231,7 +231,7 @@ namespace Eastern
         /// Creates record within current database.
         /// </summary>
         /// <returns>
-        /// ORecord object with assigned new record ID and version.
+        /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
         /// </returns>
         public ORecord CreateRecord(int segmentID, short clusterID, byte[] content, ORecordType type, bool isAsynchronous)
         {
@@ -249,7 +249,7 @@ namespace Eastern
         /// Updates record within current database.
         /// </summary>
         /// <returns>
-        /// Integer indicating new record version.
+        /// Integer indicating new record version (returned only in synchronous mode).
         /// </returns>
         public int UpdateRecord(ORID orid, byte[] content, int version, ORecordType type, bool isAsynchronous)
         {
@@ -262,6 +262,23 @@ namespace Eastern
             operation.OperationMode = (isAsynchronous) ? OperationMode.Asynchronous : OperationMode.Synchronous;
 
             return (int)WorkerConnection.ExecuteOperation<RecordUpdate>(operation);
+        }
+
+        /// <summary>
+        /// Deletes record within current database.
+        /// </summary>
+        /// <returns>
+        /// Boolean indicating if the record was deleted (returned only in synchronous mode).
+        /// </returns>
+        public bool DeleteRecord(ORID orid, int version, ORecordType type, bool isAsynchronous)
+        {
+            RecordDelete operation = new RecordDelete();
+            operation.ClusterID = orid.ClusterID;
+            operation.ClusterPosition = orid.ClusterPosition;
+            operation.RecordVersion = version;
+            operation.OperationMode = (isAsynchronous) ? OperationMode.Asynchronous : OperationMode.Synchronous;
+
+            return (bool)WorkerConnection.ExecuteOperation<RecordDelete>(operation);
         }
 
         /// <summary>
