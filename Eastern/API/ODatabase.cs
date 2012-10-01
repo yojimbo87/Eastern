@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using Eastern.Connection;
 using Eastern.Protocol;
@@ -11,6 +12,8 @@ namespace Eastern
         internal Worker WorkerConnection { get; set; }
         internal bool ReturnToPool { get; set; }
         internal string Hash { get; set; }
+
+        #region Public properties
 
         /// <summary>
         /// Represents ID of current session between client and server instance.
@@ -84,6 +87,8 @@ namespace Eastern
             }
         }
 
+        #endregion
+
         /// <summary>
         /// Initiates single dedicated connection with the server instance and retrieves specified database.
         /// </summary>
@@ -133,6 +138,8 @@ namespace Eastern
                 cluster.WorkerConnection = WorkerConnection;
             }
         }
+
+        #region Cluster methods
 
         /// <summary>
         /// Adds new cluster to the database.
@@ -198,6 +205,10 @@ namespace Eastern
             return false;
         }
 
+        #endregion
+
+        #region Segment methods
+
         /// <summary>
         /// Adds new data segment to the database.
         /// </summary>
@@ -227,6 +238,39 @@ namespace Eastern
             return (bool)WorkerConnection.ExecuteOperation<DataSegmentRemove>(operation);
         }
 
+        #endregion
+
+        #region Create record methods
+
+        /// <summary>
+        /// Creates record within current database.
+        /// </summary>
+        /// <returns>
+        /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
+        /// </returns>
+        /*public ORecord CreateRecord<T>(short clusterID, T recordObject, bool isAsynchronous)
+        {
+            Type type = recordObject.GetType();
+
+            foreach (PropertyInfo property in type.GetProperties())
+            {
+
+            }
+
+            //return CreateRecord(-1, clusterID, content, type, isAsynchronous);
+        }*/
+
+        /// <summary>
+        /// Creates record within current database.
+        /// </summary>
+        /// <returns>
+        /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
+        /// </returns>
+        public ORecord CreateRecord(short clusterID, byte[] content, ORecordType type, bool isAsynchronous)
+        {
+            return CreateRecord(-1, clusterID, content, type, isAsynchronous);
+        }
+
         /// <summary>
         /// Creates record within current database.
         /// </summary>
@@ -244,6 +288,10 @@ namespace Eastern
 
             return new ORecord((Record)WorkerConnection.ExecuteOperation<RecordCreate>(operation));
         }
+
+        #endregion
+
+        #region Update record methods
 
         /// <summary>
         /// Updates record within current database.
@@ -264,6 +312,10 @@ namespace Eastern
             return (int)WorkerConnection.ExecuteOperation<RecordUpdate>(operation);
         }
 
+        #endregion
+
+        #region Delete record methods
+
         /// <summary>
         /// Deletes record within current database.
         /// </summary>
@@ -281,6 +333,10 @@ namespace Eastern
             return (bool)WorkerConnection.ExecuteOperation<RecordDelete>(operation);
         }
 
+        #endregion
+
+        #region Load record methods
+
         /// <summary>
         /// Load specific record from database.
         /// </summary>
@@ -297,6 +353,8 @@ namespace Eastern
 
             return new ORecord((Record)WorkerConnection.ExecuteOperation<RecordLoad>(operation));
         }
+
+        #endregion
 
         /// <summary>
         /// Closes connection with server instance and resets session ID assigned to this object.
