@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Collections.Generic;
 using Eastern.Connection;
 using Eastern.Protocol;
@@ -250,12 +249,7 @@ namespace Eastern
         /// </returns>
         /*public ORecord CreateRecord<T>(short clusterID, T recordObject, bool isAsynchronous)
         {
-            Type type = recordObject.GetType();
-
-            foreach (PropertyInfo property in type.GetProperties())
-            {
-
-            }
+            
 
             //return CreateRecord(-1, clusterID, content, type, isAsynchronous);
         }*/
