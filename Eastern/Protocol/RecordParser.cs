@@ -69,7 +69,16 @@ namespace Eastern.Protocol
                                 break;
                             case TypeCode.String:
                             case TypeCode.Char:
-                                serializedString += propertyValue.ToString();
+                                // strings must escape these characters:
+                                // " -> \"
+                                // \ -> \\
+                                string value = propertyValue.ToString();
+                                // escape quotes
+                                value = value.Replace("\\", "\\\\");
+                                // escape backslashes
+                                value = value.Replace("\"", "\\" + "\"");
+
+                                serializedString += "\"" + value + "\"";
                                 break;
                             case TypeCode.Object:
                                 break;

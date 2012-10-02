@@ -30,6 +30,7 @@ namespace ConsoleTest
             using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
                 Profile profile = new Profile();
+                profile.Fullname = "Bra\"vo \\ asdf";
 
                 Console.WriteLine(database.CreateRecord<Profile>(2, profile, false));
             }
