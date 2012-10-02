@@ -11,10 +11,10 @@ namespace Eastern.Protocol
             Type type = objectToSerialize.GetType();
             string serializedString = type.Name + "@";
 
-            return SerializeObject(serializedString, type.GetProperties());
+            return SerializeObject(serializedString, type.GetProperties(), false);
         }
 
-        private static string SerializeObject(string serializedString, PropertyInfo[] properties)
+        private static string SerializeObject(string serializedString, PropertyInfo[] properties, bool isEmbedded)
         {
             if ((properties != null) && (properties.Length > 0))
             {
@@ -22,10 +22,20 @@ namespace Eastern.Protocol
                 {
                     PropertyInfo property = properties[i];
 
-                    serializedString += property.Name + ":";
+                    if (!isEmbedded)
+                    {
+                        serializedString += property.Name + ":";
+                    }
+                    else
+                    {
+                        serializedString += "(";
+                    }
 
                     switch (Type.GetTypeCode(property.PropertyType))
                     {
+                        case TypeCode.Empty:
+                            // null case is empty
+                            break;
                         case TypeCode.Boolean:
                             serializedString += property.GetValue(null, null).ToString().ToLower();
                             break;
@@ -55,7 +65,10 @@ namespace Eastern.Protocol
                             serializedString += ((long)((DateTime)property.GetValue(null, null) - unixEpoch).TotalMilliseconds).ToString() + "t";
                             break;
                         case TypeCode.String:
+                        case TypeCode.Char:
                             serializedString += property.GetValue(null, null).ToString();
+                            break;
+                        case TypeCode.Object:
                             break;
                         default:
                             break;
@@ -64,6 +77,13 @@ namespace Eastern.Protocol
                     if (i < (properties.Length - 1))
                     {
                         serializedString += ",";
+                    }
+                    else
+                    {
+                        if (isEmbedded)
+                        {
+                            serializedString += ")";
+                        }
                     }
                 }
             }
