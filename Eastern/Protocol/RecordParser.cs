@@ -5,20 +5,48 @@ namespace Eastern.Protocol
 {
     internal static class RecordParser
     {
-        internal static string MarshalObject<T>(T objectToMarshal) 
+        internal static string SerializeObject<T>(T objectToSerialize) 
         {
-            string marshaledObjectString = "";
+            string serializedString = "";
 
-            Type type = objectToMarshal.GetType();
+            Type type = objectToSerialize.GetType();
 
-            foreach (PropertyInfo property in type.GetProperties())
-            {
-                
-            }
+            serializedString = SerializeObject(serializedString, type.GetProperties());
 
-            return marshaledObjectString;
+            return serializedString;
         }
 
-        //private static string MarshalEmbeddedObject
+        private static string SerializeObject(string serializedString, PropertyInfo[] properties)
+        {
+            if ((properties != null) && (properties.Length > 0))
+            {
+                foreach (PropertyInfo property in properties)
+                {
+                    switch (Type.GetTypeCode(property.PropertyType))
+                    {
+                        case TypeCode.Boolean:
+                            break;
+                        case TypeCode.Byte:
+                            break;
+                        case TypeCode.Int16:
+                            break;
+                        case TypeCode.Int32:
+                            break;
+                        case TypeCode.Int64:
+                            break;
+                        case TypeCode.Double:
+                            break;
+                        case TypeCode.DateTime:
+                            break;
+                        case TypeCode.String:
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            return serializedString;
+        }
     }
 }
