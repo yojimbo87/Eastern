@@ -25,14 +25,12 @@ namespace Eastern.Protocol
                     PropertyInfo property = properties[i];
                     object propertyValue = property.GetValue(objectToSerialize, null);
 
-                    if (!isEmbedded)
-                    {
-                        serializedString += property.Name + ":";
-                    }
-                    else
+                    if (isEmbedded)
                     {
                         serializedString += "(";
                     }
+
+                    serializedString += property.Name + ":";
 
                     if (propertyValue != null)
                     {
