@@ -13,16 +13,26 @@ namespace ConsoleTest
         private const string _hostname = "127.0.0.1";
         private const int _port = 2424;
         private const string _rootName = "root";
-        private const string _rootPassword = "root";
-        private const string _databaseName = "tempEasternUniqueTestDatabase0001x";
+        private const string _rootPassword = "84079F1F2D9C6DB52DFE94A5F4B0D9F33C2390E70931E16AF77E191B929C857C";
+        private const string _databaseName = "test1";
         private const string _username = "admin";
         private const string _password = "admin";
 
         static void Main(string[] args)
         {
-            TestParsing();
+            TestCreateRecord();
 
             Console.ReadLine();
+        }
+
+        static void TestCreateRecord()
+        {
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
+            {
+                Profile profile = new Profile();
+
+                Console.WriteLine(database.CreateRecord<Profile>(2, profile, false));
+            }
         }
 
         static void TestParsing()
@@ -183,5 +193,11 @@ namespace ConsoleTest
                 _connection.Close();
             }
         }
+    }
+
+    public class Profile
+    {
+        public string Name { get; set; }
+        public string Fullname { get; set; }
     }
 }
