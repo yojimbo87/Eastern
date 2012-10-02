@@ -247,12 +247,10 @@ namespace Eastern
         /// <returns>
         /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
         /// </returns>
-        /*public ORecord CreateRecord<T>(short clusterID, T recordObject, bool isAsynchronous)
+        public ORecord CreateRecord<T>(short clusterID, T recordObject, bool isAsynchronous)
         {
-            
-
-            //return CreateRecord(-1, clusterID, content, type, isAsynchronous);
-        }*/
+            return CreateRecord(-1, clusterID, RecordParser.SerializeObject(recordObject), ORecordType.Document, isAsynchronous);
+        }
 
         /// <summary>
         /// Creates record within current database.

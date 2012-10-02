@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Reflection;
 using System.Globalization;
+using System.Text;
 
 namespace Eastern.Protocol
 {
     internal static class RecordParser
     {
-        internal static string SerializeObject<T>(T objectToSerialize) 
+        internal static byte[] SerializeObject<T>(T objectToSerialize) 
         {
             Type type = objectToSerialize.GetType();
             string serializedString = type.Name + "@";
 
-            return SerializeObject(serializedString, type.GetProperties(), false);
+            return Encoding.UTF8.GetBytes(SerializeObject(serializedString, type.GetProperties(), false));
         }
 
         private static string SerializeObject(string serializedString, PropertyInfo[] properties, bool isEmbedded)
