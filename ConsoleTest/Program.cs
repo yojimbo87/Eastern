@@ -30,7 +30,16 @@ namespace ConsoleTest
             using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
                 Profile profile = new Profile();
-                profile.Fullname = "Bra\"vo \\ asdf";
+                profile.IsBool = true;
+                profile.ByteNumber = 222;
+                profile.ShortNumber = 22222;
+                profile.IntNumber = 12345678;
+                profile.LongNumber = 1234567890123;
+                profile.FloatNumber = 3.14f;
+                profile.DoubleNumber = 12343.23442;
+                profile.DecimalNumber = new Decimal(1234567.890);
+                profile.DateTime = DateTime.Now;
+                profile.String = "Bra\"vo \\ asdf";
 
                 Console.WriteLine(database.CreateRecord<Profile>(2, profile, false));
             }
@@ -198,7 +207,15 @@ namespace ConsoleTest
 
     public class Profile
     {
-        public string Name { get; set; }
-        public string Fullname { get; set; }
+        public bool IsBool { get; set; }
+        public byte ByteNumber { get; set; }
+        public short ShortNumber { get; set; }
+        public int IntNumber { get; set; }
+        public long LongNumber { get; set; }
+        public float FloatNumber { get; set; }
+        public double DoubleNumber { get; set; }
+        public decimal DecimalNumber { get; set; }
+        public DateTime DateTime { get; set; }
+        public string String { get; set; }
     }
 }
