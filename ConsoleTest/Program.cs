@@ -218,10 +218,28 @@ namespace ConsoleTest
         public decimal DecimalNumber { get; set; }
         public DateTime DateTime { get; set; }
         public string String { get; set; }
+        public string[] StringArray { get; set; }
         public List<string> StringList { get; set; }
+        public TestNestedClass NestedClass { get; set; }
 
         public TestClass()
         {
+            StringArray = new string[3];
+            StringList = new List<string>();
+            NestedClass = new TestNestedClass("nested string xyz");
+        }
+    }
+
+    public class TestNestedClass
+    {
+        public string NestedString { get; set; }
+        public string[] StringArray { get; set; }
+        public List<string> StringList { get; set; }
+
+        public TestNestedClass(string s)
+        {
+            NestedString = s;
+            StringArray = new string[3];
             StringList = new List<string>();
         }
     }

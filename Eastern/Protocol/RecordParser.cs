@@ -12,11 +12,11 @@ namespace Eastern.Protocol
             Type type = objectToSerialize.GetType();
             string serializedString = type.Name + "@";
 
-            return SerializeObject(serializedString, objectToSerialize, type.GetProperties(), false);
+            return SerializeObject(serializedString, objectToSerialize, type.GetProperties());
             //return Encoding.UTF8.GetBytes(SerializeObject(serializedString, type.GetProperties(), false));
         }
 
-        private static string SerializeObject(string serializedString, object objectToSerialize, PropertyInfo[] properties, bool isEmbedded)
+        private static string SerializeObject(string serializedString, object objectToSerialize, PropertyInfo[] properties)
         {
             if ((properties != null) && (properties.Length > 0))
             {
@@ -24,11 +24,6 @@ namespace Eastern.Protocol
                 {
                     PropertyInfo property = properties[i];
                     object propertyValue = property.GetValue(objectToSerialize, null);
-
-                    if (isEmbedded)
-                    {
-                        serializedString += "(";
-                    }
 
                     serializedString += property.Name + ":";
 
@@ -81,6 +76,23 @@ namespace Eastern.Protocol
                                 serializedString += "\"" + value + "\"";
                                 break;
                             case TypeCode.Object:
+                                if ((property.PropertyType.IsArray) || (property.PropertyType.IsGenericType))
+                                {
+                                    /*serializedString += "[";
+
+                                    foreach (property.
+
+                                    serializedString += "]";*/
+                                }
+                                else if (property.PropertyType.IsClass)
+                                {
+                                    object embeddedObject = property.GetValue(objectToSerialize, null);
+                                    Type embeddedObjectType = embeddedObject.GetType();
+
+                                    serializedString += "(";
+                                    serializedString += SerializeObject(serializedString, embeddedObject, embeddedObjectType.GetProperties());
+                                    serializedString += ")";
+                                }
                                 break;
                             default:
                                 break;
@@ -90,13 +102,6 @@ namespace Eastern.Protocol
                     if (i < (properties.Length - 1))
                     {
                         serializedString += ",";
-                    }
-                    else
-                    {
-                        if (isEmbedded)
-                        {
-                            serializedString += ")";
-                        }
                     }
                 }
             }
