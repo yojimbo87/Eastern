@@ -225,8 +225,14 @@ namespace ConsoleTest
         public TestClass()
         {
             StringArray = new string[3];
+            StringArray[0] = "s1";
+            StringArray[1] = "s2";
+            StringArray[2] = "s3";
             StringList = new List<string>();
-            NestedClass = new TestNestedClass("nested string xyz");
+            StringList.Add("s4");
+            StringList.Add("s5");
+            StringList.Add("s6");
+            NestedClass = new TestNestedClass();
         }
     }
 
@@ -236,11 +242,17 @@ namespace ConsoleTest
         public string[] StringArray { get; set; }
         public List<string> StringList { get; set; }
 
-        public TestNestedClass(string s)
+        public TestNestedClass()
         {
-            NestedString = s;
+            NestedString = "nested string xyz";
             StringArray = new string[3];
+            StringArray[0] = "s1";
+            StringArray[1] = "s2";
+            StringArray[2] = "s3";
             StringList = new List<string>();
+            StringList.Add("s4");
+            StringList.Add("s5");
+            StringList.Add("s6");
         }
     }
 }
