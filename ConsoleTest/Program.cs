@@ -221,6 +221,7 @@ namespace ConsoleTest
         public string[] StringArray { get; set; }
         public List<string> StringList { get; set; }
         public TestNestedClass NestedClass { get; set; }
+        public List<TestNestedClass> ObjectList { get; set; }
 
         public TestClass()
         {
@@ -233,6 +234,9 @@ namespace ConsoleTest
             StringList.Add("s5");
             StringList.Add("s6");
             NestedClass = new TestNestedClass();
+            ObjectList = new List<TestNestedClass>();
+            ObjectList.Add(new TestNestedClass());
+            ObjectList.Add(new TestNestedClass());
         }
     }
 
