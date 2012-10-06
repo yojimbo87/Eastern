@@ -8,15 +8,15 @@ namespace Eastern.Protocol
 {
     internal static class RecordParser
     {
-        internal static string SerializeObject(object objectToSerialize) 
+        internal static byte[] SerializeObject(object objectToSerialize) 
         {
             Type type = objectToSerialize.GetType();
             string serializedString = type.Name + "@";
 
             serializedString += SerializeObject(objectToSerialize, type.GetProperties());
 
-            return serializedString;
-            //return Encoding.UTF8.GetBytes(SerializeObject(serializedString, type.GetProperties(), false));
+            //return serializedString;
+            return Encoding.UTF8.GetBytes(serializedString);
         }
 
         private static string SerializeObject(object objectToSerialize, PropertyInfo[] properties)

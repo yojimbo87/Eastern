@@ -31,7 +31,7 @@ namespace ConsoleTest
             {
                 TestClass foo = new TestClass();
                 foo.IsBool = true;
-                foo.ByteNumber = 222;
+                foo.ByteNumber = 22;
                 foo.ShortNumber = 22222;
                 foo.IntNumber = 12345678;
                 foo.LongNumber = 1234567890123;
@@ -41,7 +41,7 @@ namespace ConsoleTest
                 foo.DateTime = DateTime.Now;
                 foo.String = "Bra\"vo \\ asdf";
 
-                Console.WriteLine(database.CreateRecord<TestClass>(2, foo, false));
+                database.CreateRecord<TestClass>(2, foo, false);
             }
         }
 
