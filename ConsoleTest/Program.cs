@@ -41,7 +41,7 @@ namespace ConsoleTest
                 foo.DateTime = DateTime.Now;
                 foo.String = "Bra\"vo \\ asdf";
 
-                database.CreateRecord<TestClass>(2, foo, false);
+                database.CreateRecord<TestClass>(foo);
             }
         }
 

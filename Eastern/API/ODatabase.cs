@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Eastern.Connection;
 using Eastern.Protocol;
@@ -247,9 +248,34 @@ namespace Eastern
         /// <returns>
         /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
         /// </returns>
+        public ORecord CreateRecord<T>(T recordObject)
+        {
+            Type objectType = recordObject.GetType();
+
+            OCluster cluster = Clusters.Where(o => o.Name == objectType.Name.ToLower()).FirstOrDefault();
+
+            if (cluster != null)
+            {
+                return CreateRecord(-1, cluster.ID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, false);
+            }
+            else
+            {
+                return null;
+            }
+            //return RecordParser.SerializeObject(recordObject);
+        }
+
+        /// <summary>
+        /// Creates record within current database.
+        /// </summary>
+        /// <returns>
+        /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
+        /// </returns>
         public ORecord CreateRecord<T>(short clusterID, T recordObject, bool isAsynchronous)
         {
-            return CreateRecord(-1, clusterID, RecordParser.SerializeObject(recordObject), ORecordType.Document, isAsynchronous);
+            Type objectType = recordObject.GetType();
+
+            return CreateRecord(-1, clusterID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, isAsynchronous);
             //return RecordParser.SerializeObject(recordObject);
         }
 
