@@ -15,7 +15,7 @@ namespace Eastern.Protocol.Operations
             Request request = new Connection.Request();
 
             // standard request fields
-            request.DataItems.Add(new DataItem() { Type = "byte", Data = BinaryParser.ToArray((byte)OperationType.RECORD_LOAD) });
+            request.DataItems.Add(new DataItem() { Type = "byte", Data = BinaryParser.ToArray((byte)OperationType.RECORD_DELETE) });
             request.DataItems.Add(new DataItem() { Type = "int", Data = BinaryParser.ToArray(sessionID) });
             // operation specific fields
             request.DataItems.Add(new DataItem() { Type = "short", Data = BinaryParser.ToArray(ClusterID) });
