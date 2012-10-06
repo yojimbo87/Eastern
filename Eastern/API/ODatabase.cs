@@ -254,15 +254,12 @@ namespace Eastern
 
             OCluster cluster = Clusters.Where(o => o.Name == objectType.Name.ToLower()).FirstOrDefault();
 
-            if (cluster != null)
+            if (cluster == null)
             {
-                return CreateRecord(-1, cluster.ID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, false);
+                cluster = AddCluster(OClusterType.Physical, objectType.Name.ToLower());
             }
-            else
-            {
-                return null;
-            }
-            //return RecordParser.SerializeObject(recordObject);
+
+            return CreateRecord(-1, cluster.ID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, false);
         }
 
         /// <summary>

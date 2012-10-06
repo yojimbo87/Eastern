@@ -29,7 +29,7 @@ namespace ConsoleTest
         {
             using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
-                TestClass foo = new TestClass();
+                TestClass1 foo = new TestClass1();
                 foo.IsBool = true;
                 foo.ByteNumber = 22;
                 foo.ShortNumber = 22222;
@@ -41,7 +41,7 @@ namespace ConsoleTest
                 foo.DateTime = DateTime.Now;
                 foo.String = "Bra\"vo \\ asdf";
 
-                database.CreateRecord<TestClass>(foo);
+                database.CreateRecord<TestClass1>(foo);
             }
         }
 
@@ -205,7 +205,7 @@ namespace ConsoleTest
         }
     }
 
-    public class TestClass
+    public class TestClass1
     {
         public string Null { get; set; }
         public bool IsBool { get; set; }
@@ -223,7 +223,7 @@ namespace ConsoleTest
         public TestNestedClass NestedClass { get; set; }
         public List<TestNestedClass> ObjectList { get; set; }
 
-        public TestClass()
+        public TestClass1()
         {
             StringArray = new string[3];
             StringArray[0] = "s1";
