@@ -20,5 +20,16 @@ namespace Eastern
                 ClusterPosition = long.Parse(split[1]);
             } 
         }
+
+        public ORID()
+        {
+
+        }
+
+        public ORID(short clusterID, long clusterPosition)
+        {
+            ClusterID = clusterID;
+            ClusterPosition = clusterPosition;
+        }
     }
 }
