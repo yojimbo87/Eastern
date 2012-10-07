@@ -10,8 +10,193 @@ namespace Tests
     [TestClass]
     public class ORecordParsingTests
     {
+        #region Serialization
+
         [TestMethod]
-        public void TestBinary()
+        public void TestNullSerialization()
+        {
+            TestClass obj = new TestClass();
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+        }
+
+        [TestMethod]
+        public void TestBooleanSerialization()
+        {
+            TestClass obj = new TestClass();
+            obj.IsBool = true;
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:true,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+        }
+
+        [TestMethod]
+        public void TestByteSerialization()
+        {
+            TestClass obj = new TestClass();
+            obj.ByteNumber = 123;
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:123b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+        }
+
+        [TestMethod]
+        public void TestShortSerialization()
+        {
+            TestClass obj = new TestClass();
+            obj.ShortNumber = 12345;
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:12345s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+        }
+
+        [TestMethod]
+        public void TestIntSerialization()
+        {
+            TestClass obj = new TestClass();
+            obj.IntNumber = 1234567;
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:1234567,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+        }
+
+        [TestMethod]
+        public void TestLongSerialization()
+        {
+            TestClass obj = new TestClass();
+            obj.LongNumber = 1234567890123;
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:1234567890123l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+        }
+
+        [TestMethod]
+        public void TestFloatSerialization()
+        {
+            TestClass obj = new TestClass();
+            obj.FloatNumber = 3.14f;
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:3.14f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+        }
+
+        [TestMethod]
+        public void TestDoubleSerialization()
+        {
+            TestClass obj = new TestClass();
+            obj.DoubleNumber = 12343.23442;
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:12343.23442d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+        }
+
+        [TestMethod]
+        public void TestDecimalSerialization()
+        {
+            TestClass obj = new TestClass();
+            obj.DecimalNumber = new Decimal(1234567.8901);
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:1234567.8901c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+        }
+
+        [TestMethod]
+        public void TestDateTimeSerialization()
+        {
+            DateTime dateTime = DateTime.Now;
+
+            // get Unix time version
+            DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            string timeString = ((long)((DateTime)dateTime - unixEpoch).TotalMilliseconds).ToString();
+
+            TestClass obj = new TestClass();
+            obj.DateTime = dateTime;
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:" + timeString + "t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+        }
+
+        [TestMethod]
+        public void TestStringSerialization()
+        {
+            TestClass obj = new TestClass();
+            obj.String = "Bra\"vo \\ asdf";
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:\"Bra\\" + "\"vo \\\\ asdf\",StringArray:,StringList:,NestedClass:,ObjectList:"));
+        }
+
+        [TestMethod]
+        public void TestSimpleCollectionSerialization()
+        {
+            TestClass obj = new TestClass();
+            obj.StringArray = new string[3];
+            obj.StringArray[0] = "s1";
+            obj.StringArray[1] = "s2";
+            obj.StringArray[2] = "s3";
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:[\"s1\",\"s2\",\"s3\"],StringList:,NestedClass:,ObjectList:"));
+        }
+
+        [TestMethod]
+        public void TestListCollectionSerialization()
+        {
+            TestClass obj = new TestClass();
+            obj.StringList = new List<string>();
+            obj.StringList.Add("s4");
+            obj.StringList.Add("s5");
+            obj.StringList.Add("s6");
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:[\"s4\",\"s5\",\"s6\"],NestedClass:,ObjectList:"));
+        }
+
+        [TestMethod]
+        public void TestNestedClassSerialization()
+        {
+            TestClass obj = new TestClass();
+            obj.NestedClass = new TestNestedClass();
+            obj.NestedClass.NestedString = "test string";
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:(NestedString:\"test string\",StringArray:,StringList:),ObjectList:"));
+        }
+
+        [TestMethod]
+        public void TestNestedCollectionSerialization()
+        {
+            TestClass obj = new TestClass();
+            obj.ObjectList = new List<TestNestedClass>();
+            obj.ObjectList.Add(new TestNestedClass());
+            obj.ObjectList.Add(new TestNestedClass());
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:[(NestedString:,StringArray:,StringList:),(NestedString:,StringArray:,StringList:)]"));
+        }
+
+        #endregion
+
+        #region Deserialization/parsing
+
+        [TestMethod]
+        public void TestBinaryDeserialization()
         {
             string raw = "single:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,embedded:(binary:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_),array:[_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_]";
 
@@ -27,7 +212,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestDateTime()
+        public void TestDateTimeDeserialization()
         {
             string raw = "datetime:1296279468000t,date:1306281600000a,embedded:(datetime:1296279468000t,date:1306281600000a),array:[1296279468000t,1306281600000a]";
 
@@ -57,7 +242,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestBoolean()
+        public void TestBooleanDeserialization()
         {
             string raw = "singleT:true,singleF:false,embedded:(singleT:true,singleF:false),array:[true,false]";
 
@@ -87,7 +272,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestNull()
+        public void TestNullDeserialization()
         {
             string raw = "nick:,embedded:(nick:,joe:),joe:";
 
@@ -104,7 +289,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestNumbers()
+        public void TestNumbersDeserialization()
         {
             string raw = "byte:123b,short:23456s,int:1543345,long:132432455l,float:1234.432f,double:123123.4324d,bigdecimal:12312.24324c,embedded:(byte:123b,short:23456s,int:1543345,long:132432455l,float:1234.432f,double:123123.4324d,bigdecimal:12312.24324c),array:[123b,23456s,1543345,132432455l,1234.432f,123123.4324d,12312.24324c]";
 
@@ -179,7 +364,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestMap()
+        public void TestMapDeserialization()
         {
             string raw = "rules:{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},embedded:(rules:{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}),array:[{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}],nested:{\"database.query\":2,\"database.command\":{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},\"database.hook.record\":2,\"database.hook2.record\":{\"database.hook.record\":2}}";
 
@@ -206,7 +391,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestString()
+        public void TestStringDeserialization()
         {
             string raw = "simple:\"whoa this is awesome\",singleQuoted:\"a" + "\\" + "\"\",doubleQuotes:\"" + "\\" + "\"adsf" + "\\" + "\"\",twoBackslashes:\"" + "\\a" + "\\a" + "\"";
 
@@ -226,7 +411,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestEmbeddedrecordsArray()
+        public void TestEmbeddedrecordsArrayDeserialization()
         {
             string raw = "nick:[(joe1:\"js1\"),(joe2:\"js2\"),(joe3:\"s3\")]";
 
@@ -251,7 +436,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestComplexEmbeddedrecordsArray()
+        public void TestComplexEmbeddedrecordsArrayDeserialization()
         {
             string raw = "mary:[(zak1:(nick:[(joe1:\"js1\"),(joe2:\"js2\"),(joe3:\"s3\")])),(zak2:(nick:[(joe4:\"js4\"),(joe5:\"js5\"),(joe6:\"s6\")]))]";
 
@@ -304,7 +489,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestExample1()
+        public void TestWikiExample1Deserialization()
         {
             string raw = "Profile@nick:\"ThePresident\",follows:[],followers:[#10:5,#10:6],name:\"Barack\",surname:\"Obama\",location:#3:2,invitedBy:,salary_cloned:,salary:120.3f";
 
@@ -344,7 +529,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestExample2()
+        public void TestWikiExample2Deserialization()
         {
             string raw = "name:\"ORole\",id:0,defaultClusterId:3,clusterIds:[3],properties:[(name:\"mode\",type:17,offset:0,mandatory:false,notNull:false,min:,max:,linkedClass:,linkedType:,index:),(name:\"rules\",type:12,offset:1,mandatory:false,notNull:false,min:,max:,linkedClass:,linkedType:17,index:)]";
 
@@ -419,7 +604,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestExample3()
+        public void TestWikiExample3Deserialization()
         {
             string raw = "ORole@name:\"reader\",inheritedRole:,mode:0,rules:{\"database\":2,\"database.cluster.internal\":2,\"database.cluster.orole\":2,\"database.cluster.ouser\":2,\"database.class.*\":2,\"database.cluster.*\":2,\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}";
 
@@ -438,5 +623,62 @@ namespace Tests
             Assert.IsTrue(record.Fields["rules"].GetType() == typeof(string));
             Assert.IsTrue((string)record.Fields["rules"] == "{\"database\":2,\"database.cluster.internal\":2,\"database.cluster.orole\":2,\"database.cluster.ouser\":2,\"database.class.*\":2,\"database.cluster.*\":2,\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}");
         }
+
+        #endregion
+    }
+
+    class TestClass
+    {
+        public string Null { get; set; }
+        public bool IsBool { get; set; }
+        public byte ByteNumber { get; set; }
+        public short ShortNumber { get; set; }
+        public int IntNumber { get; set; }
+        public long LongNumber { get; set; }
+        public float FloatNumber { get; set; }
+        public double DoubleNumber { get; set; }
+        public decimal DecimalNumber { get; set; }
+        public DateTime DateTime { get; set; }
+        public string String { get; set; }
+        public string[] StringArray { get; set; }
+        public List<string> StringList { get; set; }
+        public TestNestedClass NestedClass { get; set; }
+        public List<TestNestedClass> ObjectList { get; set; }
+
+        /*public TestClass()
+        {
+            StringArray = new string[3];
+            StringArray[0] = "s1";
+            StringArray[1] = "s2";
+            StringArray[2] = "s3";
+            StringList = new List<string>();
+            StringList.Add("s4");
+            StringList.Add("s5");
+            StringList.Add("s6");
+            NestedClass = new TestNestedClass();
+            ObjectList = new List<TestNestedClass>();
+            ObjectList.Add(new TestNestedClass());
+            ObjectList.Add(new TestNestedClass());
+        }*/
+    }
+
+    class TestNestedClass
+    {
+        public string NestedString { get; set; }
+        public string[] StringArray { get; set; }
+        public List<string> StringList { get; set; }
+
+        /*public TestNestedClass()
+        {
+            NestedString = "nested string xyz";
+            StringArray = new string[3];
+            StringArray[0] = "s1";
+            StringArray[1] = "s2";
+            StringArray[2] = "s3";
+            StringList = new List<string>();
+            StringList.Add("s4");
+            StringList.Add("s5");
+            StringList.Add("s6");
+        }*/
     }
 }
