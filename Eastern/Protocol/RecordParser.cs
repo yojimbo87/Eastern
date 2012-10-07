@@ -113,8 +113,6 @@ namespace Eastern.Protocol
                                 }
                                 else
                                 {
-                                    //Type valType = val.GetType();
-                                    //serializedString += SerializeObject(val, valType.GetProperties());
                                     serializedString += SerializeValue(val);
                                 }
 
@@ -196,21 +194,7 @@ namespace Eastern.Protocol
 
             // parse field name string from raw document
             string fieldName = recordString.Substring(startIndex, i - startIndex);
-            /*Dictionary<string, object> currentDocument;
 
-            // if fields were not passed - current document is the root one
-            // otherwise - it's embedded document passed as fields parameter
-            if (fields == null)
-            {
-                currentDocument = Document.Fields;
-            }
-            else
-            {
-                currentDocument = fields;
-            }*/
-
-            // add parsed field name to current document
-            //currentDocument.Add(fieldName, null);
             fields.Add(fieldName, null);
 
             // move to position after colon (:)
