@@ -13,5 +13,10 @@ namespace Eastern.Protocol
         {
             ORID = new ORID();
         }
+
+        internal ORecord Deserialize()
+        {
+            return RecordParser.DeserializeRecord(this);
+        }
     }
 }
