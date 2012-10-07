@@ -21,6 +21,7 @@ namespace ConsoleTest
         static void Main(string[] args)
         {
             //TestCreateRecord();
+            TestLoadRecord();
             //TestParsing();
 
             Console.ReadLine();
@@ -43,6 +44,16 @@ namespace ConsoleTest
                 foo.String = "Bra\"vo \\ asdf";
 
                 database.CreateRecord<TestClass>(foo);*/
+            }
+        }
+
+        static void TestLoadRecord()
+        {
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
+            {
+                TestClass obj = database.LoadRecord<TestClass>(new ORID(6, 0));
+                
+                Console.WriteLine(obj);
             }
         }
 
@@ -203,6 +214,48 @@ namespace ConsoleTest
                 _connection.DeleteDatabase(_databaseName);
                 _connection.Close();
             }
+        }
+    }
+
+    class TestClass
+    {
+        public string Null { get; set; }
+        public bool IsBool { get; set; }
+        public byte ByteNumber { get; set; }
+        public short ShortNumber { get; set; }
+        public int IntNumber { get; set; }
+        public long LongNumber { get; set; }
+        public float FloatNumber { get; set; }
+        public double DoubleNumber { get; set; }
+        public decimal DecimalNumber { get; set; }
+        public DateTime DateTime { get; set; }
+        public string String { get; set; }
+        public string[] StringArray { get; set; }
+        public List<string> StringList { get; set; }
+        public TestNestedClass NestedClass { get; set; }
+        public List<TestNestedClass> ObjectList { get; set; }
+
+        public TestClass()
+        {
+            StringArray = new string[3];
+            StringList = new List<string>();
+            NestedClass = new TestNestedClass();
+            ObjectList = new List<TestNestedClass>();
+            ObjectList.Add(new TestNestedClass());
+            ObjectList.Add(new TestNestedClass());
+        }
+    }
+
+    class TestNestedClass
+    {
+        public string NestedString { get; set; }
+        public string[] StringArray { get; set; }
+        public List<string> StringList { get; set; }
+
+        public TestNestedClass()
+        {
+            StringArray = new string[3];
+            StringList = new List<string>();
         }
     }
 }
