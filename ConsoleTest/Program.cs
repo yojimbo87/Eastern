@@ -21,7 +21,7 @@ namespace ConsoleTest
         static void Main(string[] args)
         {
             //TestCreateRecord();
-            TestParsing();
+            //TestParsing();
 
             Console.ReadLine();
         }
@@ -30,7 +30,7 @@ namespace ConsoleTest
         {
             using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
-                TestClass1 foo = new TestClass1();
+                /*TestClass foo = new TestClass();
                 foo.IsBool = true;
                 foo.ByteNumber = 22;
                 foo.ShortNumber = 22222;
@@ -42,7 +42,7 @@ namespace ConsoleTest
                 foo.DateTime = DateTime.Now;
                 foo.String = "Bra\"vo \\ asdf";
 
-                database.CreateRecord<TestClass1>(foo);
+                database.CreateRecord<TestClass>(foo);*/
             }
         }
 
@@ -203,61 +203,6 @@ namespace ConsoleTest
                 _connection.DeleteDatabase(_databaseName);
                 _connection.Close();
             }
-        }
-    }
-
-    public class TestClass1
-    {
-        public string Null { get; set; }
-        public bool IsBool { get; set; }
-        public byte ByteNumber { get; set; }
-        public short ShortNumber { get; set; }
-        public int IntNumber { get; set; }
-        public long LongNumber { get; set; }
-        public float FloatNumber { get; set; }
-        public double DoubleNumber { get; set; }
-        public decimal DecimalNumber { get; set; }
-        public DateTime DateTime { get; set; }
-        public string String { get; set; }
-        public string[] StringArray { get; set; }
-        public List<string> StringList { get; set; }
-        public TestNestedClass NestedClass { get; set; }
-        public List<TestNestedClass> ObjectList { get; set; }
-
-        public TestClass1()
-        {
-            StringArray = new string[3];
-            StringArray[0] = "s1";
-            StringArray[1] = "s2";
-            StringArray[2] = "s3";
-            StringList = new List<string>();
-            StringList.Add("s4");
-            StringList.Add("s5");
-            StringList.Add("s6");
-            NestedClass = new TestNestedClass();
-            ObjectList = new List<TestNestedClass>();
-            ObjectList.Add(new TestNestedClass());
-            ObjectList.Add(new TestNestedClass());
-        }
-    }
-
-    public class TestNestedClass
-    {
-        public string NestedString { get; set; }
-        public string[] StringArray { get; set; }
-        public List<string> StringList { get; set; }
-
-        public TestNestedClass()
-        {
-            NestedString = "nested string xyz";
-            StringArray = new string[3];
-            StringArray[0] = "s1";
-            StringArray[1] = "s2";
-            StringArray[2] = "s3";
-            StringList = new List<string>();
-            StringList.Add("s4");
-            StringList.Add("s5");
-            StringList.Add("s6");
         }
     }
 }
