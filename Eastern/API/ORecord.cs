@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Globalization;
 using System.Collections.Generic;
 using Eastern.Protocol;
@@ -57,6 +58,36 @@ namespace Eastern
                 Class = deserializedRecord.Class;
                 Fields = deserializedRecord.Fields;
             }
+        }
+
+        public T ToObject<T>() where T : class, new()
+        {
+            T genericObject = new T();
+            Type genericObjectType = genericObject.GetType();
+
+            foreach (KeyValuePair<string, object> item in Fields)
+            {
+                PropertyInfo property = genericObjectType.GetProperty(item.Key);
+
+                if (property != null)
+                {
+                    if (property.PropertyType.IsArray)
+                    {
+                    }
+                    else if (property.PropertyType.IsGenericType)
+                    {
+                    }
+                    else if (property.PropertyType.IsClass && (property.PropertyType.Name != "String"))
+                    {
+                    }
+                    else
+                    {
+                        property.SetValue(genericObject, item.Value, null);
+                    }
+                }
+            }
+
+            return genericObject;
         }
     }
 }
