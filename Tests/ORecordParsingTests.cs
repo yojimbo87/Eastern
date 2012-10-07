@@ -16,12 +16,11 @@ namespace Tests
             string raw = "single:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,embedded:(binary:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_),array:[_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_]";
 
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            ODocument document = record.ToDocument();
 
-            Assert.IsTrue(document.Fields["single"].GetType() == typeof(byte[]));
-            Assert.IsTrue(((Dictionary<string, object>)document.Fields["embedded"])["binary"].GetType() == typeof(byte[]));
+            Assert.IsTrue(record.Fields["single"].GetType() == typeof(byte[]));
+            Assert.IsTrue(((Dictionary<string, object>)record.Fields["embedded"])["binary"].GetType() == typeof(byte[]));
 
-            foreach (object item in (List<object>)document.Fields["array"])
+            foreach (object item in (List<object>)record.Fields["array"])
             {
                 Assert.IsTrue(item.GetType() == typeof(byte[]));
             }
@@ -33,15 +32,14 @@ namespace Tests
             string raw = "datetime:1296279468000t,date:1306281600000a,embedded:(datetime:1296279468000t,date:1306281600000a),array:[1296279468000t,1306281600000a]";
 
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            ODocument document = record.ToDocument();
 
-            Assert.IsTrue(document.Fields["datetime"].GetType() == typeof(DateTime));
-            Assert.IsTrue((DateTime)document.Fields["datetime"] == new DateTime(2011, 1, 29, 5, 37, 48));
+            Assert.IsTrue(record.Fields["datetime"].GetType() == typeof(DateTime));
+            Assert.IsTrue((DateTime)record.Fields["datetime"] == new DateTime(2011, 1, 29, 5, 37, 48));
 
-            Assert.IsTrue(document.Fields["date"].GetType() == typeof(DateTime));
-            Assert.IsTrue((DateTime)document.Fields["date"] == new DateTime(2011, 5, 25, 0, 0, 0));
+            Assert.IsTrue(record.Fields["date"].GetType() == typeof(DateTime));
+            Assert.IsTrue((DateTime)record.Fields["date"] == new DateTime(2011, 5, 25, 0, 0, 0));
 
-            Dictionary<string, object> embeddedDates = (Dictionary<string, object>)document.Fields["embedded"];
+            Dictionary<string, object> embeddedDates = (Dictionary<string, object>)record.Fields["embedded"];
 
             Assert.IsTrue(embeddedDates["datetime"].GetType() == typeof(DateTime));
             Assert.IsTrue((DateTime)embeddedDates["datetime"] == new DateTime(2011, 1, 29, 5, 37, 48));
@@ -49,7 +47,7 @@ namespace Tests
             Assert.IsTrue(embeddedDates["date"].GetType() == typeof(DateTime));
             Assert.IsTrue((DateTime)embeddedDates["date"] == new DateTime(2011, 5, 25, 0, 0, 0));
 
-            List<object> arrayDates = (List<object>)document.Fields["array"];
+            List<object> arrayDates = (List<object>)record.Fields["array"];
 
             Assert.IsTrue(arrayDates.First().GetType() == typeof(DateTime));
             Assert.IsTrue((DateTime)arrayDates.First() == new DateTime(2011, 1, 29, 5, 37, 48));
@@ -64,15 +62,14 @@ namespace Tests
             string raw = "singleT:true,singleF:false,embedded:(singleT:true,singleF:false),array:[true,false]";
 
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            ODocument document = record.ToDocument();
 
-            Assert.IsTrue(document.Fields["singleT"].GetType() == typeof(bool));
-            Assert.IsTrue((bool)document.Fields["singleT"] == true);
+            Assert.IsTrue(record.Fields["singleT"].GetType() == typeof(bool));
+            Assert.IsTrue((bool)record.Fields["singleT"] == true);
 
-            Assert.IsTrue(document.Fields["singleF"].GetType() == typeof(bool));
-            Assert.IsTrue((bool)document.Fields["singleF"] == false);
+            Assert.IsTrue(record.Fields["singleF"].GetType() == typeof(bool));
+            Assert.IsTrue((bool)record.Fields["singleF"] == false);
 
-            Dictionary<string, object> embedded = (Dictionary<string, object>)document.Fields["embedded"];
+            Dictionary<string, object> embedded = (Dictionary<string, object>)record.Fields["embedded"];
 
             Assert.IsTrue(embedded["singleT"].GetType() == typeof(bool));
             Assert.IsTrue((bool)embedded["singleT"] == true);
@@ -80,7 +77,7 @@ namespace Tests
             Assert.IsTrue(embedded["singleF"].GetType() == typeof(bool));
             Assert.IsTrue((bool)embedded["singleF"] == false);
 
-            List<object> array = (List<object>)document.Fields["array"];
+            List<object> array = (List<object>)record.Fields["array"];
 
             Assert.IsTrue(array.First().GetType() == typeof(bool));
             Assert.IsTrue((bool)array.First() == true);
@@ -95,16 +92,15 @@ namespace Tests
             string raw = "nick:,embedded:(nick:,joe:),joe:";
 
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            ODocument document = record.ToDocument();
 
-            Assert.IsTrue(document.Fields["nick"] == null);
+            Assert.IsTrue(record.Fields["nick"] == null);
 
-            Dictionary<string, object> embedded = (Dictionary<string, object>)document.Fields["embedded"];
+            Dictionary<string, object> embedded = (Dictionary<string, object>)record.Fields["embedded"];
 
             Assert.IsTrue(embedded["nick"] == null);
             Assert.IsTrue(embedded["joe"] == null);
 
-            Assert.IsTrue(document.Fields["joe"] == null);
+            Assert.IsTrue(record.Fields["joe"] == null);
         }
 
         [TestMethod]
@@ -113,30 +109,29 @@ namespace Tests
             string raw = "byte:123b,short:23456s,int:1543345,long:132432455l,float:1234.432f,double:123123.4324d,bigdecimal:12312.24324c,embedded:(byte:123b,short:23456s,int:1543345,long:132432455l,float:1234.432f,double:123123.4324d,bigdecimal:12312.24324c),array:[123b,23456s,1543345,132432455l,1234.432f,123123.4324d,12312.24324c]";
 
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            ODocument document = record.ToDocument();
 
-            Assert.IsTrue(document.Fields["byte"].GetType() == typeof(byte));
-            Assert.IsTrue((byte)document.Fields["byte"] == 123);
+            Assert.IsTrue(record.Fields["byte"].GetType() == typeof(byte));
+            Assert.IsTrue((byte)record.Fields["byte"] == 123);
 
-            Assert.IsTrue(document.Fields["short"].GetType() == typeof(short));
-            Assert.IsTrue((short)document.Fields["short"] == 23456);
+            Assert.IsTrue(record.Fields["short"].GetType() == typeof(short));
+            Assert.IsTrue((short)record.Fields["short"] == 23456);
 
-            Assert.IsTrue(document.Fields["int"].GetType() == typeof(int));
-            Assert.IsTrue((int)document.Fields["int"] == 1543345);
+            Assert.IsTrue(record.Fields["int"].GetType() == typeof(int));
+            Assert.IsTrue((int)record.Fields["int"] == 1543345);
 
-            Assert.IsTrue(document.Fields["long"].GetType() == typeof(long));
-            Assert.IsTrue((long)document.Fields["long"] == 132432455);
+            Assert.IsTrue(record.Fields["long"].GetType() == typeof(long));
+            Assert.IsTrue((long)record.Fields["long"] == 132432455);
 
-            Assert.IsTrue(document.Fields["float"].GetType() == typeof(float));
-            Assert.IsTrue((float)document.Fields["float"] == 1234.432f);
+            Assert.IsTrue(record.Fields["float"].GetType() == typeof(float));
+            Assert.IsTrue((float)record.Fields["float"] == 1234.432f);
 
-            Assert.IsTrue(document.Fields["double"].GetType() == typeof(double));
-            Assert.IsTrue((double)document.Fields["double"] == 123123.4324);
+            Assert.IsTrue(record.Fields["double"].GetType() == typeof(double));
+            Assert.IsTrue((double)record.Fields["double"] == 123123.4324);
 
-            Assert.IsTrue(document.Fields["bigdecimal"].GetType() == typeof(decimal));
-            Assert.IsTrue((decimal)document.Fields["bigdecimal"] == new Decimal(12312.24324));
+            Assert.IsTrue(record.Fields["bigdecimal"].GetType() == typeof(decimal));
+            Assert.IsTrue((decimal)record.Fields["bigdecimal"] == new Decimal(12312.24324));
 
-            Dictionary<string, object> embedded = (Dictionary<string, object>)document.Fields["embedded"];
+            Dictionary<string, object> embedded = (Dictionary<string, object>)record.Fields["embedded"];
 
             Assert.IsTrue(embedded["byte"].GetType() == typeof(byte));
             Assert.IsTrue((byte)embedded["byte"] == 123);
@@ -159,7 +154,7 @@ namespace Tests
             Assert.IsTrue(embedded["bigdecimal"].GetType() == typeof(decimal));
             Assert.IsTrue((decimal)embedded["bigdecimal"] == new Decimal(12312.24324));
 
-            List<object> array = (List<object>)document.Fields["array"];
+            List<object> array = (List<object>)record.Fields["array"];
 
             Assert.IsTrue(array[0].GetType() == typeof(byte));
             Assert.IsTrue((byte)array[0] == 123);
@@ -189,17 +184,16 @@ namespace Tests
             string raw = "rules:{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},embedded:(rules:{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}),array:[{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}],nested:{\"database.query\":2,\"database.command\":{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},\"database.hook.record\":2,\"database.hook2.record\":{\"database.hook.record\":2}}";
 
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            ODocument document = record.ToDocument();
 
-            Assert.IsTrue(document.Fields["rules"].GetType() == typeof(string));
-            Assert.IsTrue((string)document.Fields["rules"] == "{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}");
+            Assert.IsTrue(record.Fields["rules"].GetType() == typeof(string));
+            Assert.IsTrue((string)record.Fields["rules"] == "{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}");
 
-            Dictionary<string, object> embedded = (Dictionary<string, object>)document.Fields["embedded"];
+            Dictionary<string, object> embedded = (Dictionary<string, object>)record.Fields["embedded"];
 
             Assert.IsTrue(embedded["rules"].GetType() == typeof(string));
             Assert.IsTrue((string)embedded["rules"] == "{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}");
 
-            List<object> array = (List<object>)document.Fields["array"];
+            List<object> array = (List<object>)record.Fields["array"];
 
             Assert.IsTrue(array[0].GetType() == typeof(string));
             Assert.IsTrue((string)array[0] == "{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}");
@@ -207,8 +201,8 @@ namespace Tests
             Assert.IsTrue(array[1].GetType() == typeof(string));
             Assert.IsTrue((string)array[1] == "{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}");
 
-            Assert.IsTrue(document.Fields["nested"].GetType() == typeof(string));
-            Assert.IsTrue((string)document.Fields["nested"] == "{\"database.query\":2,\"database.command\":{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},\"database.hook.record\":2,\"database.hook2.record\":{\"database.hook.record\":2}}");
+            Assert.IsTrue(record.Fields["nested"].GetType() == typeof(string));
+            Assert.IsTrue((string)record.Fields["nested"] == "{\"database.query\":2,\"database.command\":{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},\"database.hook.record\":2,\"database.hook2.record\":{\"database.hook.record\":2}}");
         }
 
         [TestMethod]
@@ -217,30 +211,28 @@ namespace Tests
             string raw = "simple:\"whoa this is awesome\",singleQuoted:\"a" + "\\" + "\"\",doubleQuotes:\"" + "\\" + "\"adsf" + "\\" + "\"\",twoBackslashes:\"" + "\\a" + "\\a" + "\"";
 
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            ODocument document = record.ToDocument();
 
-            Assert.IsTrue(document.Fields["simple"].GetType() == typeof(string));
-            Assert.IsTrue((string)document.Fields["simple"] == "whoa this is awesome");
+            Assert.IsTrue(record.Fields["simple"].GetType() == typeof(string));
+            Assert.IsTrue((string)record.Fields["simple"] == "whoa this is awesome");
 
-            Assert.IsTrue(document.Fields["singleQuoted"].GetType() == typeof(string));
-            Assert.IsTrue((string)document.Fields["singleQuoted"] == "a\"");
+            Assert.IsTrue(record.Fields["singleQuoted"].GetType() == typeof(string));
+            Assert.IsTrue((string)record.Fields["singleQuoted"] == "a\"");
 
-            Assert.IsTrue(document.Fields["doubleQuotes"].GetType() == typeof(string));
-            Assert.IsTrue((string)document.Fields["doubleQuotes"] == "\"adsf\"");
+            Assert.IsTrue(record.Fields["doubleQuotes"].GetType() == typeof(string));
+            Assert.IsTrue((string)record.Fields["doubleQuotes"] == "\"adsf\"");
 
-            Assert.IsTrue(document.Fields["twoBackslashes"].GetType() == typeof(string));
-            Assert.IsTrue((string)document.Fields["twoBackslashes"] == "\\a\\a");
+            Assert.IsTrue(record.Fields["twoBackslashes"].GetType() == typeof(string));
+            Assert.IsTrue((string)record.Fields["twoBackslashes"] == "\\a\\a");
         }
 
         [TestMethod]
-        public void TestEmbeddedDocumentsArray()
+        public void TestEmbeddedrecordsArray()
         {
             string raw = "nick:[(joe1:\"js1\"),(joe2:\"js2\"),(joe3:\"s3\")]";
 
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            ODocument document = record.ToDocument();
 
-            List<object> array = (List<object>)document.Fields["nick"];
+            List<object> array = (List<object>)record.Fields["nick"];
 
             Dictionary<string, object> embedded = (Dictionary<string, object>)array[0];
 
@@ -259,15 +251,14 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestComplexEmbeddedDocumentsArray()
+        public void TestComplexEmbeddedrecordsArray()
         {
             string raw = "mary:[(zak1:(nick:[(joe1:\"js1\"),(joe2:\"js2\"),(joe3:\"s3\")])),(zak2:(nick:[(joe4:\"js4\"),(joe5:\"js5\"),(joe6:\"s6\")]))]";
 
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            ODocument document = record.ToDocument();
 
             // mary
-            List<object> array1 = (List<object>)document.Fields["mary"];
+            List<object> array1 = (List<object>)record.Fields["mary"];
             // zak1
             Dictionary<string, object> embedded1 = (Dictionary<string, object>)array1[0];
             // nick
@@ -318,17 +309,16 @@ namespace Tests
             string raw = "Profile@nick:\"ThePresident\",follows:[],followers:[#10:5,#10:6],name:\"Barack\",surname:\"Obama\",location:#3:2,invitedBy:,salary_cloned:,salary:120.3f";
 
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            ODocument document = record.ToDocument();
 
-            Assert.IsTrue(document.Class == "Profile");
+            Assert.IsTrue(record.Class == "Profile");
 
-            Assert.IsTrue(document.Fields["nick"].GetType() == typeof(string));
-            Assert.IsTrue((string)document.Fields["nick"] == "ThePresident");
+            Assert.IsTrue(record.Fields["nick"].GetType() == typeof(string));
+            Assert.IsTrue((string)record.Fields["nick"] == "ThePresident");
 
-            Assert.IsTrue(document.Fields["follows"].GetType() == typeof(List<object>));
+            Assert.IsTrue(record.Fields["follows"].GetType() == typeof(List<object>));
 
-            Assert.IsTrue(document.Fields["followers"].GetType() == typeof(List<object>));
-            List<object> followers = (List<object>)document.Fields["followers"];
+            Assert.IsTrue(record.Fields["followers"].GetType() == typeof(List<object>));
+            List<object> followers = (List<object>)record.Fields["followers"];
 
             Assert.IsTrue(followers[0].GetType() == typeof(string));
             Assert.IsTrue((string)followers[0] == "#10:5");
@@ -336,21 +326,21 @@ namespace Tests
             Assert.IsTrue(followers[1].GetType() == typeof(string));
             Assert.IsTrue((string)followers[1] == "#10:6");
 
-            Assert.IsTrue(document.Fields["name"].GetType() == typeof(string));
-            Assert.IsTrue((string)document.Fields["name"] == "Barack");
+            Assert.IsTrue(record.Fields["name"].GetType() == typeof(string));
+            Assert.IsTrue((string)record.Fields["name"] == "Barack");
 
-            Assert.IsTrue(document.Fields["surname"].GetType() == typeof(string));
-            Assert.IsTrue((string)document.Fields["surname"] == "Obama");
+            Assert.IsTrue(record.Fields["surname"].GetType() == typeof(string));
+            Assert.IsTrue((string)record.Fields["surname"] == "Obama");
 
-            Assert.IsTrue(document.Fields["location"].GetType() == typeof(string));
-            Assert.IsTrue((string)document.Fields["location"] == "#3:2");
+            Assert.IsTrue(record.Fields["location"].GetType() == typeof(string));
+            Assert.IsTrue((string)record.Fields["location"] == "#3:2");
 
-            Assert.IsTrue(document.Fields["invitedBy"] == null);
+            Assert.IsTrue(record.Fields["invitedBy"] == null);
 
-            Assert.IsTrue(document.Fields["salary_cloned"] == null);
+            Assert.IsTrue(record.Fields["salary_cloned"] == null);
 
-            Assert.IsTrue(document.Fields["salary"].GetType() == typeof(float));
-            Assert.IsTrue((float)document.Fields["salary"] == 120.3f);
+            Assert.IsTrue(record.Fields["salary"].GetType() == typeof(float));
+            Assert.IsTrue((float)record.Fields["salary"] == 120.3f);
         }
 
         [TestMethod]
@@ -359,19 +349,18 @@ namespace Tests
             string raw = "name:\"ORole\",id:0,defaultClusterId:3,clusterIds:[3],properties:[(name:\"mode\",type:17,offset:0,mandatory:false,notNull:false,min:,max:,linkedClass:,linkedType:,index:),(name:\"rules\",type:12,offset:1,mandatory:false,notNull:false,min:,max:,linkedClass:,linkedType:17,index:)]";
 
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            ODocument document = record.ToDocument();
 
-            Assert.IsTrue(document.Fields["name"].GetType() == typeof(string));
-            Assert.IsTrue((string)document.Fields["name"] == "ORole");
+            Assert.IsTrue(record.Fields["name"].GetType() == typeof(string));
+            Assert.IsTrue((string)record.Fields["name"] == "ORole");
 
-            Assert.IsTrue(document.Fields["id"].GetType() == typeof(int));
-            Assert.IsTrue((int)document.Fields["id"] == 0);
+            Assert.IsTrue(record.Fields["id"].GetType() == typeof(int));
+            Assert.IsTrue((int)record.Fields["id"] == 0);
 
-            Assert.IsTrue(document.Fields["defaultClusterId"].GetType() == typeof(int));
-            Assert.IsTrue((int)document.Fields["defaultClusterId"] == 3);
+            Assert.IsTrue(record.Fields["defaultClusterId"].GetType() == typeof(int));
+            Assert.IsTrue((int)record.Fields["defaultClusterId"] == 3);
 
-            Assert.IsTrue(document.Fields["properties"].GetType() == typeof(List<object>));
-            List<object> properties = (List<object>)document.Fields["properties"];
+            Assert.IsTrue(record.Fields["properties"].GetType() == typeof(List<object>));
+            List<object> properties = (List<object>)record.Fields["properties"];
 
             Dictionary<string, object> embedded = (Dictionary<string, object>)properties[0];
 
@@ -435,20 +424,19 @@ namespace Tests
             string raw = "ORole@name:\"reader\",inheritedRole:,mode:0,rules:{\"database\":2,\"database.cluster.internal\":2,\"database.cluster.orole\":2,\"database.cluster.ouser\":2,\"database.class.*\":2,\"database.cluster.*\":2,\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}";
 
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            ODocument document = record.ToDocument();
 
-            Assert.IsTrue(document.Class == "ORole");
+            Assert.IsTrue(record.Class == "ORole");
 
-            Assert.IsTrue(document.Fields["name"].GetType() == typeof(string));
-            Assert.IsTrue((string)document.Fields["name"] == "reader");
+            Assert.IsTrue(record.Fields["name"].GetType() == typeof(string));
+            Assert.IsTrue((string)record.Fields["name"] == "reader");
 
-            Assert.IsTrue(document.Fields["inheritedRole"] == null);
+            Assert.IsTrue(record.Fields["inheritedRole"] == null);
 
-            Assert.IsTrue(document.Fields["mode"].GetType() == typeof(int));
-            Assert.IsTrue((int)document.Fields["mode"] == 0);
+            Assert.IsTrue(record.Fields["mode"].GetType() == typeof(int));
+            Assert.IsTrue((int)record.Fields["mode"] == 0);
 
-            Assert.IsTrue(document.Fields["rules"].GetType() == typeof(string));
-            Assert.IsTrue((string)document.Fields["rules"] == "{\"database\":2,\"database.cluster.internal\":2,\"database.cluster.orole\":2,\"database.cluster.ouser\":2,\"database.class.*\":2,\"database.cluster.*\":2,\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}");
+            Assert.IsTrue(record.Fields["rules"].GetType() == typeof(string));
+            Assert.IsTrue((string)record.Fields["rules"] == "{\"database\":2,\"database.cluster.internal\":2,\"database.cluster.orole\":2,\"database.cluster.ouser\":2,\"database.class.*\":2,\"database.cluster.*\":2,\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}");
         }
     }
 }

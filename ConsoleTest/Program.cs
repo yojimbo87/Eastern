@@ -20,7 +20,8 @@ namespace ConsoleTest
 
         static void Main(string[] args)
         {
-            TestCreateRecord();
+            //TestCreateRecord();
+            TestParsing();
 
             Console.ReadLine();
         }
@@ -87,17 +88,17 @@ namespace ConsoleTest
 
             Console.WriteLine(raw);
             ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintDocument(raw, record.ToDocument());
+            PrintRecord(raw, record);
         }
 
-        static void PrintDocument(string raw, ODocument document)
+        static void PrintRecord(string raw, ORecord record)
         {
             Console.WriteLine("Raw string: {0}", raw);
             Console.WriteLine("---------------------------------------------");
-            Console.WriteLine("Version: {0}, Class name: {1}", document.Version, document.Class);
+            Console.WriteLine("Version: {0}, Class name: {1}", record.Version, record.Class);
             Console.WriteLine("---------------------------------------------");
 
-            PrintTree(0, document.Fields);
+            PrintTree(0, record.Fields);
 
             Console.WriteLine("=============================================");
         }
@@ -187,9 +188,9 @@ namespace ConsoleTest
                 {
                     Console.WriteLine("Session ID: {0}", database.SessionID);
 
-                    ORecord record = database.LoadRecord(4, 0, "*:0", false);
+                    /*ORecord record = database.LoadRecord(4, 0, "*:0", false);
                     ODocument document = record.ToDocument();
-                    Console.WriteLine("Version: {0}, Class name: {1}", document.Version, document.Class);
+                    Console.WriteLine("Version: {0}, Class name: {1}", document.Version, document.Class);*/
                 }
             }
             catch (OException ex)
