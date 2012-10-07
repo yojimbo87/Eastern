@@ -357,6 +357,17 @@ namespace Eastern
         /// Load specific record from database.
         /// </summary>
         /// <returns>
+        /// Generic object.
+        /// </returns>
+        public T LoadRecord<T>(ORID orid) where T : class, new()
+        {
+            return LoadRecord(orid, "*:0", true).ToObject<T>();
+        }
+
+        /// <summary>
+        /// Load specific record from database.
+        /// </summary>
+        /// <returns>
         /// ORecord object.
         /// </returns>
         public ORecord LoadRecord(ORID orid)
