@@ -359,15 +359,26 @@ namespace Eastern
         /// <returns>
         /// ORecord object.
         /// </returns>
-        public ORecord LoadRecord(short clusterID, long clusterPosition, string fetchPlan, bool ignoreCache)
+        public ORecord LoadRecord(ORID orid)
+        {
+            return LoadRecord(orid, "*:0", true);
+        }
+
+        /// <summary>
+        /// Load specific record from database.
+        /// </summary>
+        /// <returns>
+        /// ORecord object.
+        /// </returns>
+        public ORecord LoadRecord(ORID orid, string fetchPlan, bool ignoreCache)
         {
             RecordLoad operation = new RecordLoad();
-            operation.ClusterID = clusterID;
-            operation.ClusterPosition = clusterPosition;
+            operation.ClusterID = orid.ClusterID;
+            operation.ClusterPosition = orid.ClusterPosition;
             operation.FetchPlan = fetchPlan;
             operation.IgnoreCache = ignoreCache;
 
-            return new ORecord((Record)WorkerConnection.ExecuteOperation<RecordLoad>(operation));
+            return ((Record)WorkerConnection.ExecuteOperation<RecordLoad>(operation)).Deserialize();
         }
 
         #endregion
