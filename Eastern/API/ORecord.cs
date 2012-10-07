@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using System.Globalization;
 using System.Collections.Generic;
 using Eastern.Protocol;
@@ -37,6 +36,11 @@ namespace Eastern
             Version = record.Version;
             Content = record.Content;
             Fields = new Dictionary<string, object>();
+        }
+
+        public static byte[] Serialize<T>(T o)
+        {
+            return RecordParser.SerializeObject(o, o.GetType());
         }
 
         // for testing parser logic
