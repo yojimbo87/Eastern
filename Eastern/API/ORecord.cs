@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using System.Globalization;
+using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using Eastern.Protocol;
 
@@ -71,14 +73,52 @@ namespace Eastern
 
                 if (property != null)
                 {
-                    if (property.PropertyType.IsArray)
+                    if ((property.PropertyType.IsArray || property.PropertyType.IsGenericType))
                     {
-                    }
-                    else if (property.PropertyType.IsGenericType)
-                    {
+                        IList value = (IList)item.Value;
+
+                        if (value.Count > 0)
+                        {
+                            object values = Activator.CreateInstance(property.PropertyType, value.Count);
+
+                            for (int i = 0; i < value.Count; i++)
+                            {
+                                if (property.PropertyType.IsArray)
+                                {
+                                    ((object[])values)[i] = value[i];
+                                }
+                                else if (property.PropertyType.IsGenericType && (item.Value is IEnumerable))
+                                {
+                                    Type t = value[i].GetType();
+
+                                    if (t.IsPrimitive || (t == typeof(string)) || (t == typeof(DateTime)) || (t == typeof(decimal)))
+                                    {
+                                        ((IList)values).Add(value[i]);
+                                    }
+                                    else
+                                    {
+                                        // t is dictionary here which should be NestedClass - Type of value[i] is therefore probably incorrect
+                                        object o = Activator.CreateInstance(t, null);
+                                        o = value[i];
+                                        ((IList)values).Add(o);
+                                    }
+                                }
+                                else
+                                {
+                                    Type t = value[i].GetType();
+                                    object v = Activator.CreateInstance(t, value[i]);
+
+                                    ((IList)values).Add(v);
+                                }
+                            }
+
+                            property.SetValue(genericObject, values, null);
+                        }
                     }
                     else if (property.PropertyType.IsClass && (property.PropertyType.Name != "String"))
                     {
+                        object value = Activator.CreateInstance(property.PropertyType);
+                        property.SetValue(genericObject, value, null);
                     }
                     else
                     {
