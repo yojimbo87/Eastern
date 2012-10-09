@@ -73,40 +73,53 @@ namespace Eastern
 
                 if (property != null)
                 {
+                    // property is array or generic collection 
                     if ((property.PropertyType.IsArray || property.PropertyType.IsGenericType))
                     {
-                        IList value = (IList)item.Value;
+                        IList collection = (IList)item.Value;
 
-                        if (value.Count > 0)
+                        if (collection.Count > 0)
                         {
-                            object values = Activator.CreateInstance(property.PropertyType, value.Count);
+                            // create instance of property type
+                            object values = Activator.CreateInstance(property.PropertyType, collection.Count);
 
-                            for (int i = 0; i < value.Count; i++)
+                            for (int i = 0; i < collection.Count; i++)
                             {
+                                // collection is simple array
                                 if (property.PropertyType.IsArray)
                                 {
-                                    ((object[])values)[i] = value[i];
+                                    ((object[])values)[i] = collection[i];
                                 }
+                                // collection is generic
                                 else if (property.PropertyType.IsGenericType && (item.Value is IEnumerable))
                                 {
-                                    Type t = value[i].GetType();
+                                    Type elementType = collection[i].GetType();
 
-                                    if (t.IsPrimitive || (t == typeof(string)) || (t == typeof(DateTime)) || (t == typeof(decimal)))
+                                    // generic collection consists of basic types
+                                    if (elementType.IsPrimitive ||
+                                        (elementType == typeof(string)) ||
+                                        (elementType == typeof(DateTime)) || 
+                                        (elementType == typeof(decimal)))
                                     {
-                                        ((IList)values).Add(value[i]);
+                                        ((IList)values).Add(collection[i]);
                                     }
+                                    // generic collection consists of generic type which should be parsed
                                     else
                                     {
-                                        // t is dictionary here which should be NestedClass - Type of value[i] is therefore probably incorrect
-                                        object o = Activator.CreateInstance(t, null);
-                                        o = value[i];
+                                        
+                                        var foo2 = property.PropertyType.GetGenericArguments();
+
+                                        object o = Activator.CreateInstance(property.PropertyType.GetGenericArguments().First(), null);
+                                        o = collection[i];
+
+                                        // there needs to be a recursion to set properties to object instance from dictionary
                                         ((IList)values).Add(o);
                                     }
                                 }
                                 else
                                 {
-                                    Type t = value[i].GetType();
-                                    object v = Activator.CreateInstance(t, value[i]);
+                                    Type t = collection[i].GetType();
+                                    object v = Activator.CreateInstance(t, collection[i]);
 
                                     ((IList)values).Add(v);
                                 }
@@ -115,11 +128,14 @@ namespace Eastern
                             property.SetValue(genericObject, values, null);
                         }
                     }
+                    // property is class except string type
                     else if (property.PropertyType.IsClass && (property.PropertyType.Name != "String"))
                     {
                         object value = Activator.CreateInstance(property.PropertyType);
+                        // recursion oved dictionary values also here
                         property.SetValue(genericObject, value, null);
                     }
+                    // property is basic type
                     else
                     {
                         property.SetValue(genericObject, item.Value, null);
