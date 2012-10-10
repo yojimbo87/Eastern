@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using System.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Eastern;
 
@@ -10,14 +11,13 @@ namespace Tests
     [TestClass]
     public class OServerTests
     {
-        private const string _hostname = "127.0.0.1";
-        private const int _port = 2424;
-        private const string _rootName = "root";
-        private const string _rootPassword = "84079F1F2D9C6DB52DFE94A5F4B0D9F33C2390E70931E16AF77E191B929C857C";
-        //private const string _rootPassword = "root";
-        private const string _username = "admin";
-        private const string _password = "admin";
-        private const string _newDatabaseName = "tempEasternUniqueTestDatabase0001x";
+        private string _hostname = ConfigurationManager.AppSettings["hostname"];
+        private int _port = int.Parse(ConfigurationManager.AppSettings["port"]);
+        private string _rootName = ConfigurationManager.AppSettings["root.name"];
+        private string _rootPassword = ConfigurationManager.AppSettings["root.password"];
+        private string _databaseName = ConfigurationManager.AppSettings["database.name"];
+        private string _username = ConfigurationManager.AppSettings["user.name"];
+        private string _password = ConfigurationManager.AppSettings["user.password"];
 
         [TestMethod]
         public void TestServerConnect()
@@ -44,11 +44,11 @@ namespace Tests
         {
             using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
             {
-                connection.CreateDatabase(_newDatabaseName, ODatabaseType.Document, OStorageType.Local);
+                connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
 
-                Assert.IsTrue(connection.DatabaseExist(_newDatabaseName));
+                Assert.IsTrue(connection.DatabaseExist(_databaseName));
 
-                connection.DeleteDatabase(_newDatabaseName);
+                connection.DeleteDatabase(_databaseName);
             }
         }
 
@@ -66,13 +66,13 @@ namespace Tests
         {
             using (OServer connection = new OServer(_hostname, _port, _rootName, _rootPassword))
             {
-                bool databaseCreateResult = connection.CreateDatabase(_newDatabaseName, ODatabaseType.Document, OStorageType.Local);
+                bool databaseCreateResult = connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
 
                 Assert.IsTrue(databaseCreateResult);
 
-                connection.DeleteDatabase(_newDatabaseName);
+                connection.DeleteDatabase(_databaseName);
 
-                Assert.IsFalse(connection.DatabaseExist(_newDatabaseName));
+                Assert.IsFalse(connection.DatabaseExist(_databaseName));
             }
         }
 

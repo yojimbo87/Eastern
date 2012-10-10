@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using System.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Eastern;
 
@@ -12,20 +13,23 @@ namespace Tests
     {
         private OServer _connection;
 
-        private const string _hostname = "127.0.0.1";
-        private const int _port = 2424;
-        private const string _rootName = "root";
-        private const string _rootPassword = "9F696830A58E8187F6CC36674C666AE73E202DE3B0216C5B8BF8403C276CEE52";
-        private const string _databaseName = "tempEasternUniqueTestDatabase0001x";
-        private const string _username = "admin";
-        private const string _password = "admin";
+        private string _hostname =  ConfigurationManager.AppSettings["hostname"];
+        private int _port = int.Parse(ConfigurationManager.AppSettings["port"]);
+        private string _rootName = ConfigurationManager.AppSettings["root.name"];
+        private string _rootPassword = ConfigurationManager.AppSettings["root.password"];
+        private string _databaseName = ConfigurationManager.AppSettings["database.name"];
+        private string _username = ConfigurationManager.AppSettings["user.name"];
+        private string _password = ConfigurationManager.AppSettings["user.password"];
 
         public ODatabaseTests()
         {
             _connection = new OServer(_hostname, _port, _rootName, _rootPassword);
 
             // create test database
-            _connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
+            if (!_connection.DatabaseExist(_databaseName))
+            {
+                _connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
+            }
         }
 
         [TestMethod]
@@ -151,7 +155,10 @@ namespace Tests
         public void Dispose()
         {
             // delete test database
-            _connection.DeleteDatabase(_databaseName);
+            if (_connection.DatabaseExist(_databaseName))
+            {
+                _connection.DeleteDatabase(_databaseName);
+            }
 
             _connection.Close();
         }
