@@ -248,7 +248,7 @@ namespace Eastern
         /// <returns>
         /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
         /// </returns>
-        public ORecord CreateRecord<T>(T recordObject)
+        public ORecord CreateRecord<T>(T recordObject, bool isAsynchronous = false)
         {
             Type objectType = recordObject.GetType();
 
@@ -259,7 +259,7 @@ namespace Eastern
                 cluster = AddCluster(OClusterType.Physical, objectType.Name.ToLower());
             }
 
-            return CreateRecord(-1, cluster.ID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, false);
+            return CreateRecord(-1, cluster.ID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, isAsynchronous);
         }
 
         /// <summary>
@@ -268,12 +268,31 @@ namespace Eastern
         /// <returns>
         /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
         /// </returns>
-        public ORecord CreateRecord<T>(short clusterID, T recordObject, bool isAsynchronous)
+        public ORecord CreateRecord<T>(string clusterName, T recordObject, bool isAsynchronous = false)
+        {
+            Type objectType = recordObject.GetType();
+
+            OCluster cluster = Clusters.Where(o => o.Name == clusterName).FirstOrDefault();
+
+            if (cluster == null)
+            {
+                cluster = AddCluster(OClusterType.Physical, clusterName);
+            }
+
+            return CreateRecord(-1, cluster.ID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, isAsynchronous);
+        }
+
+        /// <summary>
+        /// Creates record within current database.
+        /// </summary>
+        /// <returns>
+        /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
+        /// </returns>
+        public ORecord CreateRecord<T>(short clusterID, T recordObject, bool isAsynchronous = false)
         {
             Type objectType = recordObject.GetType();
 
             return CreateRecord(-1, clusterID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, isAsynchronous);
-            //return RecordParser.SerializeObject(recordObject);
         }
 
         /// <summary>
@@ -282,7 +301,7 @@ namespace Eastern
         /// <returns>
         /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
         /// </returns>
-        public ORecord CreateRecord(short clusterID, byte[] content, ORecordType type, bool isAsynchronous)
+        public ORecord CreateRecord(short clusterID, byte[] content, ORecordType type, bool isAsynchronous = false)
         {
             return CreateRecord(-1, clusterID, content, type, isAsynchronous);
         }
@@ -293,7 +312,7 @@ namespace Eastern
         /// <returns>
         /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
         /// </returns>
-        public ORecord CreateRecord(int segmentID, short clusterID, byte[] content, ORecordType type, bool isAsynchronous)
+        public ORecord CreateRecord(int segmentID, short clusterID, byte[] content, ORecordType type, bool isAsynchronous = false)
         {
             RecordCreate operation = new RecordCreate();
             operation.SegmentID = segmentID;
@@ -359,9 +378,9 @@ namespace Eastern
         /// <returns>
         /// Generic object.
         /// </returns>
-        public T LoadRecord<T>(ORID orid) where T : class, new()
+        public T LoadRecord<T>(ORID orid, string fetchPlan = "*:0") where T : class, new()
         {
-            return LoadRecord(orid, "*:0", true).ToObject<T>();
+            return LoadRecord(orid, fetchPlan, true).ToObject<T>();
         }
 
         /// <summary>
@@ -370,9 +389,9 @@ namespace Eastern
         /// <returns>
         /// ORecord object.
         /// </returns>
-        public ORecord LoadRecord(ORID orid)
+        public ORecord LoadRecord(ORID orid, string fetchPlan = "*:0")
         {
-            return LoadRecord(orid, "*:0", true);
+            return LoadRecord(orid, fetchPlan, true);
         }
 
         /// <summary>
