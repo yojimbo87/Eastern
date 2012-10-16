@@ -10,83 +10,54 @@ namespace Eastern
 {
     public class ODatabase : IDisposable
     {
-        internal Worker WorkerConnection { get; set; }
-        internal bool ReturnToPool { get; set; }
-        internal string Hash { get; set; }
+        private Database Database { get; set; }
 
         #region Public properties
 
         /// <summary>
         /// Represents ID of current session between client and server instance.
         /// </summary>
-        public int SessionID { get { return WorkerConnection.SessionID; } }
+        public int SessionID { get { return Database.SessionID; } }
 
         /// <summary>
         /// Indicates if underlying socket is connected to server instance.
         /// </summary>
-        public bool IsConnected
-        {
-            get
-            {
-                if ((WorkerConnection != null) && WorkerConnection.IsConnected)
-                {
-                    return true;
-                }
-
-                return false;
-            }
-        }
+        public bool IsConnected { get { return Database.IsConnected; } }
 
         /// <summary>
         /// Represents name of the database.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get { return Database.Name; } }
 
         /// <summary>
         /// Represents type of the database.
         /// </summary>
-        public ODatabaseType Type { get; set; }
+        public ODatabaseType Type { get { return Database.Type; } }
 
         /// <summary>
         /// Represents count of clusters within database.
         /// </summary>
-        public short ClustersCount { get; set; }
+        public short ClustersCount { get { return Database.ClustersCount; } }
 
         /// <summary>
         /// List of clusters within database.
         /// </summary>
-        public List<OCluster> Clusters { get; set; }
+        public List<OCluster> Clusters { get { return Database.Clusters; } }
 
         /// <summary>
         /// Represents cluster configuration in binary format.
         /// </summary>
-        public byte[] ClusterConfig { get; set; }
+        public byte[] ClusterConfig { get { return Database.ClusterConfig; } }
 
         /// <summary>
         /// Represents size of the database in bytes. Always retrieves most recent size when accessed.
         /// </summary>
-        public long Size
-        {
-            get
-            {
-                DbSize operation = new DbSize();
-
-                return (long)WorkerConnection.ExecuteOperation<DbSize>(operation);
-            }
-        }
+        public long Size { get { return Database.Size; } }
 
         /// <summary>
         /// Represents count of records within database. Always retrieves most recent count when accessed.
         /// </summary>
-        public long RecordsCount
-        {
-            get
-            {
-                DbCountRecords operation = new DbCountRecords();
-
-                return (long)WorkerConnection.ExecuteOperation<DbCountRecords>(operation);
-            }
-        }
+        public long RecordsCount { get { return Database.RecordsCount; } }
 
         #endregion
 
@@ -95,31 +66,7 @@ namespace Eastern
         /// </summary>
         public ODatabase(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
         {
-            WorkerConnection = new Worker();
-            WorkerConnection.Initialize(hostname, port);
-            ReturnToPool = false;
-            Hash = hostname + port + databaseName + databaseType.ToString() + userName;
-
-            DbOpen operation = new DbOpen();
-            operation.DatabaseName = databaseName;
-            operation.DatabaseType = databaseType;
-            operation.UserName = userName;
-            operation.UserPassword = userPassword;
-
-            DtoDatabase database = (DtoDatabase)WorkerConnection.ExecuteOperation<DbOpen>(operation);
-
-            WorkerConnection.SessionID = database.SessionID;
-            Name = database.Name;
-            Type = database.Type;
-            ClustersCount = database.ClustersCount;
-            Clusters = database.Clusters;
-            ClusterConfig = database.ClusterConfig;
-
-            // assign worker connection to each cluster since each instance of cluster can perform some operations
-            foreach (OCluster cluster in Clusters)
-            {
-                cluster.WorkerConnection = WorkerConnection;
-            }
+            Database = new Database(hostname, port, databaseName, databaseType, userName, userPassword);
         }
 
         /// <summary>
@@ -127,17 +74,7 @@ namespace Eastern
         /// </summary>
         public void Reload()
         {
-            DbReload operation = new DbReload();
-            DtoDatabase database = (DtoDatabase)WorkerConnection.ExecuteOperation<DbReload>(operation);
-
-            ClustersCount = database.ClustersCount;
-            Clusters = database.Clusters;
-
-            // assign worker connection to each cluster since each instance of cluster can perform some operations
-            foreach (OCluster cluster in Clusters)
-            {
-                cluster.WorkerConnection = WorkerConnection;
-            }
+            Database.Reload();
         }
 
         #region Cluster methods
@@ -147,7 +84,7 @@ namespace Eastern
         /// </summary>
         public OCluster AddCluster(OClusterType type, string name)
         {
-            return AddCluster(type, name, "default", "default");
+            return Database.AddCluster(type, name, "default", "default");
         }
 
         /// <summary>
@@ -155,26 +92,7 @@ namespace Eastern
         /// </summary>
         public OCluster AddCluster(OClusterType type, string name, string location, string dataSegmentName)
         {
-            DataClusterAdd operation = new DataClusterAdd();
-            operation.Type = type;
-            operation.Name = name;
-            operation.Location = location;
-            operation.DataSegmentName = dataSegmentName;
-
-            short clusterID = (short)WorkerConnection.ExecuteOperation<DataClusterAdd>(operation);
-
-            OCluster cluster = new OCluster();
-            cluster.WorkerConnection = WorkerConnection;
-            cluster.ID = clusterID;
-            cluster.Type = type;
-            cluster.Name = name;
-            cluster.Location = location;
-            cluster.DataSegmentName = dataSegmentName;
-
-            Clusters.Add(cluster);
-            ClustersCount++;
-
-            return cluster;
+            return Database.AddCluster(type, name, location, dataSegmentName);
         }
 
         /// <summary>
@@ -185,25 +103,7 @@ namespace Eastern
         /// </returns>
         public bool RemoveCluster(short clusterID)
         {
-            DataClusterRemove operation = new DataClusterRemove();
-            operation.ClusterID = clusterID;
-
-            byte deleteOnClientSide = (byte)WorkerConnection.ExecuteOperation<DataClusterRemove>(operation);
-
-            if (deleteOnClientSide == 1)
-            {
-                OCluster cluster = Clusters.Find(q => q.ID == clusterID);
-
-                if (cluster != null)
-                {
-                    Clusters.Remove(cluster);
-                    ClustersCount--;
-
-                    return true;
-                }
-            }
-
-            return false;
+            return Database.RemoveCluster(clusterID);
         }
 
         #endregion
@@ -218,11 +118,7 @@ namespace Eastern
         /// </returns>
         public int AddSegment(string name, string location)
         {
-            DataSegmentAdd operation = new DataSegmentAdd();
-            operation.SegmentName = name;
-            operation.SegmentLocation = location;
-
-            return (int)WorkerConnection.ExecuteOperation<DataSegmentAdd>(operation);
+            return Database.AddSegment(name, location);
         }
 
         /// <summary>
@@ -233,10 +129,7 @@ namespace Eastern
         /// </returns>
         public bool RemoveSegment(string name)
         {
-            DataSegmentRemove operation = new DataSegmentRemove();
-            operation.SegmentName = name;
-
-            return (bool)WorkerConnection.ExecuteOperation<DataSegmentRemove>(operation);
+            return Database.RemoveSegment(name);
         }
 
         #endregion
@@ -251,16 +144,7 @@ namespace Eastern
         /// </returns>
         public ORecord CreateRecord<T>(T recordObject, bool isAsynchronous = false)
         {
-            Type objectType = recordObject.GetType();
-
-            OCluster cluster = Clusters.Where(o => o.Name == objectType.Name.ToLower()).FirstOrDefault();
-
-            if (cluster == null)
-            {
-                cluster = AddCluster(OClusterType.Physical, objectType.Name.ToLower());
-            }
-
-            return CreateRecord(-1, cluster.ID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, isAsynchronous);
+            return Database.CreateRecord<T>(recordObject, isAsynchronous);
         }
 
         /// <summary>
@@ -271,16 +155,7 @@ namespace Eastern
         /// </returns>
         public ORecord CreateRecord<T>(string clusterName, T recordObject, bool isAsynchronous = false)
         {
-            Type objectType = recordObject.GetType();
-
-            OCluster cluster = Clusters.Where(o => o.Name == clusterName).FirstOrDefault();
-
-            if (cluster == null)
-            {
-                cluster = AddCluster(OClusterType.Physical, clusterName);
-            }
-
-            return CreateRecord(-1, cluster.ID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, isAsynchronous);
+            return Database.CreateRecord<T>(clusterName, recordObject, isAsynchronous);
         }
 
         /// <summary>
@@ -291,9 +166,7 @@ namespace Eastern
         /// </returns>
         public ORecord CreateRecord<T>(short clusterID, T recordObject, bool isAsynchronous = false)
         {
-            Type objectType = recordObject.GetType();
-
-            return CreateRecord(-1, clusterID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, isAsynchronous);
+            return Database.CreateRecord<T>(clusterID, recordObject, isAsynchronous);
         }
 
         /// <summary>
@@ -304,7 +177,7 @@ namespace Eastern
         /// </returns>
         public ORecord CreateRecord(short clusterID, byte[] content, ORecordType type, bool isAsynchronous = false)
         {
-            return CreateRecord(-1, clusterID, content, type, isAsynchronous);
+            return Database.CreateRecord(clusterID, content, type, isAsynchronous);
         }
 
         /// <summary>
@@ -315,14 +188,7 @@ namespace Eastern
         /// </returns>
         public ORecord CreateRecord(int segmentID, short clusterID, byte[] content, ORecordType type, bool isAsynchronous = false)
         {
-            RecordCreate operation = new RecordCreate();
-            operation.SegmentID = segmentID;
-            operation.ClusterID = clusterID;
-            operation.RecordContent = content;
-            operation.RecordType = type;
-            operation.OperationMode = (isAsynchronous) ? OperationMode.Asynchronous : OperationMode.Synchronous;
-
-            return new ORecord((DtoRecord)WorkerConnection.ExecuteOperation<RecordCreate>(operation));
+            return Database.CreateRecord(segmentID, clusterID, content, type, isAsynchronous);
         }
 
         #endregion
@@ -337,15 +203,7 @@ namespace Eastern
         /// </returns>
         public int UpdateRecord(ORID orid, byte[] content, int version, ORecordType type, bool isAsynchronous)
         {
-            RecordUpdate operation = new RecordUpdate();
-            operation.ClusterID = orid.ClusterID;
-            operation.ClusterPosition = orid.ClusterPosition;
-            operation.RecordContent = content;
-            operation.RecordVersion = version;
-            operation.RecordType = type;
-            operation.OperationMode = (isAsynchronous) ? OperationMode.Asynchronous : OperationMode.Synchronous;
-
-            return (int)WorkerConnection.ExecuteOperation<RecordUpdate>(operation);
+            return Database.UpdateRecord(orid, content, version, type, isAsynchronous);
         }
 
         #endregion
@@ -360,13 +218,7 @@ namespace Eastern
         /// </returns>
         public bool DeleteRecord(ORID orid, int version, ORecordType type, bool isAsynchronous)
         {
-            RecordDelete operation = new RecordDelete();
-            operation.ClusterID = orid.ClusterID;
-            operation.ClusterPosition = orid.ClusterPosition;
-            operation.RecordVersion = version;
-            operation.OperationMode = (isAsynchronous) ? OperationMode.Asynchronous : OperationMode.Synchronous;
-
-            return (bool)WorkerConnection.ExecuteOperation<RecordDelete>(operation);
+            return Database.DeleteRecord(orid, version, type, isAsynchronous);
         }
 
         #endregion
@@ -381,7 +233,7 @@ namespace Eastern
         /// </returns>
         public T LoadRecord<T>(ORID orid, string fetchPlan = "*:0") where T : class, new()
         {
-            return LoadRecord(orid, fetchPlan, true).ToObject<T>();
+            return Database.LoadRecord<T>(orid, fetchPlan);
         }
 
         /// <summary>
@@ -392,7 +244,7 @@ namespace Eastern
         /// </returns>
         public ORecord LoadRecord(ORID orid, string fetchPlan = "*:0")
         {
-            return LoadRecord(orid, fetchPlan, true);
+            return Database.LoadRecord(orid, fetchPlan, true);
         }
 
         /// <summary>
@@ -403,13 +255,7 @@ namespace Eastern
         /// </returns>
         public ORecord LoadRecord(ORID orid, string fetchPlan, bool ignoreCache)
         {
-            RecordLoad operation = new RecordLoad();
-            operation.ClusterID = orid.ClusterID;
-            operation.ClusterPosition = orid.ClusterPosition;
-            operation.FetchPlan = fetchPlan;
-            operation.IgnoreCache = ignoreCache;
-
-            return ((DtoRecord)WorkerConnection.ExecuteOperation<RecordLoad>(operation)).Deserialize();
+            return Database.LoadRecord(orid, fetchPlan, ignoreCache);
         }
 
         #endregion
@@ -419,18 +265,7 @@ namespace Eastern
         /// </summary>
         public void Close()
         {
-            if (ReturnToPool)
-            {
-                EasternClient.ReturnDatabase(this);
-            }
-            else
-            {
-                DbClose operation = new DbClose();
-
-                WorkerConnection.ExecuteOperation<DbClose>(operation);
-                WorkerConnection.SessionID = -1;
-                WorkerConnection.Close();
-            }
+            Database.Close();
         }
 
         /// <summary>
