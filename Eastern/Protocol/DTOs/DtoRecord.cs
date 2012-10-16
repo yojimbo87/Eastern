@@ -2,14 +2,14 @@
 
 namespace Eastern.Protocol
 {
-    internal class Record
+    internal class DtoRecord
     {
         internal ORID ORID { get; set; }
         internal ORecordType Type { get; set; }
         internal int Version { get; set; }
         internal byte[] Content { get; set; }
 
-        internal Record()
+        internal DtoRecord()
         {
             ORID = new ORID();
         }

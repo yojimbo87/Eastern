@@ -106,7 +106,7 @@ namespace Eastern
             operation.UserName = userName;
             operation.UserPassword = userPassword;
 
-            Database database = (Database)WorkerConnection.ExecuteOperation<DbOpen>(operation);
+            DtoDatabase database = (DtoDatabase)WorkerConnection.ExecuteOperation<DbOpen>(operation);
 
             WorkerConnection.SessionID = database.SessionID;
             Name = database.Name;
@@ -128,7 +128,7 @@ namespace Eastern
         public void Reload()
         {
             DbReload operation = new DbReload();
-            Database database = (Database)WorkerConnection.ExecuteOperation<DbReload>(operation);
+            DtoDatabase database = (DtoDatabase)WorkerConnection.ExecuteOperation<DbReload>(operation);
 
             ClustersCount = database.ClustersCount;
             Clusters = database.Clusters;
@@ -322,7 +322,7 @@ namespace Eastern
             operation.RecordType = type;
             operation.OperationMode = (isAsynchronous) ? OperationMode.Asynchronous : OperationMode.Synchronous;
 
-            return new ORecord((Record)WorkerConnection.ExecuteOperation<RecordCreate>(operation));
+            return new ORecord((DtoRecord)WorkerConnection.ExecuteOperation<RecordCreate>(operation));
         }
 
         #endregion
@@ -409,7 +409,7 @@ namespace Eastern
             operation.FetchPlan = fetchPlan;
             operation.IgnoreCache = ignoreCache;
 
-            return ((Record)WorkerConnection.ExecuteOperation<RecordLoad>(operation)).Deserialize();
+            return ((DtoRecord)WorkerConnection.ExecuteOperation<RecordLoad>(operation)).Deserialize();
         }
 
         #endregion

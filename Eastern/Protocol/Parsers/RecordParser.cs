@@ -146,7 +146,7 @@ namespace Eastern.Protocol
 
         #region Parsing
 
-        public static ORecord DeserializeRecord(Record record)
+        public static ORecord DeserializeRecord(DtoRecord record)
         {
             ORecord deserializedRecord = new ORecord(record);
             

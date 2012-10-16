@@ -2,7 +2,7 @@
 
 namespace Eastern.Protocol
 {
-    internal class Database
+    internal class DtoDatabase
     {
         internal int SessionID { get; set; }
         internal string Name { get; set; }
@@ -11,7 +11,7 @@ namespace Eastern.Protocol
         internal List<OCluster> Clusters { get; set; }
         internal byte[] ClusterConfig { get; set; }
 
-        internal Database()
+        internal DtoDatabase()
         {
             Clusters = new List<OCluster>();
         }

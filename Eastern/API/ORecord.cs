@@ -32,7 +32,7 @@ namespace Eastern
             Deserialize();
         }
 
-        internal ORecord(Record record)
+        internal ORecord(DtoRecord record)
         {
             ORID = record.ORID;
             Type = record.Type;
@@ -49,7 +49,7 @@ namespace Eastern
         // for testing parser logic
         private void Deserialize()
         {
-            Record record = new Record();
+            DtoRecord record = new DtoRecord();
             record.Type = Type;
             record.Content = Content;
 

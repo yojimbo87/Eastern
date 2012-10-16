@@ -32,7 +32,7 @@ namespace Eastern.Protocol.Operations
         {
             // start from this position since standard fields (status, session ID) has been already parsed
             int offset = 5;
-            Record record = new Record();
+            DtoRecord record = new DtoRecord();
             record.ORID.ClusterID = ClusterID;
 
             if (response == null)
