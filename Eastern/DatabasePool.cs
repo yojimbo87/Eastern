@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using Eastern.Connection;
 
 namespace Eastern
@@ -37,6 +38,18 @@ namespace Eastern
 
                 Databases.Enqueue(database);
             }
+        }
+
+        public bool ContainsDatabaseSession(int sessionID)
+        {
+            Database database = Databases.FirstOrDefault(db => db.SessionID == sessionID);
+
+            if (database != null)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

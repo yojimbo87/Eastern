@@ -22,6 +22,7 @@ namespace Tests
         private string _username = ConfigurationManager.AppSettings["user.name"];
         private string _password = ConfigurationManager.AppSettings["user.password"];
         private int _poolSize = 5;
+        private string _poolAlias = "myOrientDatabasePool";
 
         public ODatabasePoolTests()
         {
@@ -37,35 +38,34 @@ namespace Tests
         [TestMethod]
         public void TestCreateDatabasePool()
         {
-            EasternClient.CreateDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password, _poolSize);
+            EasternClient.CreateDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password, _poolSize, _poolAlias);
 
-            ODatabasePool pool = EasternClient.GetDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username);
-            //int poolSize = EasternClient.GetDatabasePoolSize(_hostname, _port, _databaseName, ODatabaseType.Document, _username);
+            DatabasePool pool = EasternClient.GetDatabasePool(_poolAlias);
 
             Assert.IsTrue(pool.PoolSize == _poolSize);
         }
 
-        /*[TestMethod]
+        [TestMethod]
         public void TestGetDatabase()
         {
-            EasternClient.CreateDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password, _poolSize);
+            EasternClient.CreateDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password, _poolSize, _poolAlias);
 
-            ODatabase database = EasternClient.GetDatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password);
+            ODatabase database = new ODatabase(_poolAlias);
             int sessionID = database.SessionID;
             
             Assert.IsTrue(sessionID > 0);
             Assert.IsTrue(database.Size > 0);
 
-            ODatabasePool pool = EasternClient.GetDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username);
+            DatabasePool pool = EasternClient.GetDatabasePool(_poolAlias);
 
             Assert.IsTrue(pool.CurrentPoolSize == (pool.PoolSize - 1));
-            Assert.IsFalse(pool.Databases.Contains(database));
+            Assert.IsFalse(pool.ContainsDatabaseSession(database.SessionID));
 
             database.Close();
 
             Assert.IsTrue(pool.CurrentPoolSize == pool.PoolSize);
-            Assert.IsTrue(pool.Databases.Contains(database));
-        }*/
+            Assert.IsTrue(pool.ContainsDatabaseSession(database.SessionID));
+        }
 
         public void Dispose()
         {
