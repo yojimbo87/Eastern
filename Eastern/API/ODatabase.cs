@@ -11,6 +11,7 @@ namespace Eastern
     public class ODatabase : IDisposable
     {
         private Database Database { get; set; }
+        internal bool ReturnToPool { get { return Database.ReturnToPool; } set { Database.ReturnToPool = value; } }
 
         #region Public properties
 
@@ -60,6 +61,14 @@ namespace Eastern
         public long RecordsCount { get { return Database.RecordsCount; } }
 
         #endregion
+
+        /// <summary>
+        /// Gets pre-initiated connection with the server instance from database pool.
+        /// </summary>
+        public ODatabase(string alias)
+        {
+            Database = EasternClient.GetDatabase(alias);
+        }
 
         /// <summary>
         /// Initiates single dedicated connection with the server instance and retrieves specified database.

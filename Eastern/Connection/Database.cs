@@ -12,7 +12,7 @@ namespace Eastern.Connection
 
         internal Worker WorkerConnection { get; set; }
         internal bool ReturnToPool { get; set; }
-        internal string Hash { get; set; }
+        internal string Alias { get; set; }
         internal int SessionID { get { return WorkerConnection.SessionID; } }
 
         internal bool IsConnected
@@ -61,7 +61,6 @@ namespace Eastern.Connection
             WorkerConnection = new Worker();
             WorkerConnection.Initialize(hostname, port);
             ReturnToPool = false;
-            Hash = hostname + port + databaseName + databaseType.ToString() + userName;
 
             DbOpen operation = new DbOpen();
             operation.DatabaseName = databaseName;

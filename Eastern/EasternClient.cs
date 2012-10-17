@@ -7,7 +7,7 @@ namespace Eastern
     public static class EasternClient
     {
         private static object SyncRoot { get; set; }
-        private static List<ODatabasePool> DatabasePools { get; set; }
+        private static List<DatabasePool> DatabasePools { get; set; }
 
         internal static string DriverName { get { return "Eastern"; } }
         internal static string DriverVersion { get { return "0.0.1 pre-alpha"; } }
@@ -17,26 +17,24 @@ namespace Eastern
         static EasternClient()
         {
             SyncRoot = new object();
-            DatabasePools = new List<ODatabasePool>();
+            DatabasePools = new List<DatabasePool>();
         }
 
-        public static void CreateDatabasePool(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword, int poolSize)
+        public static void CreateDatabasePool(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword, int poolSize, string alias)
         {
             lock (SyncRoot)
             {
-                ODatabasePool pool = new ODatabasePool(hostname, port, databaseName, databaseType, userName, userPassword, poolSize);
+                DatabasePool pool = new DatabasePool(hostname, port, databaseName, databaseType, userName, userPassword, poolSize, alias);
 
                 DatabasePools.Add(pool);
             }
         }
 
-        public static ODatabasePool GetDatabasePool(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName)
+        public static DatabasePool GetDatabasePool(string poolAlias)
         {
             lock (SyncRoot)
             {
-                string poolHash = hostname + port + databaseName + databaseType.ToString() + userName;
-
-                return DatabasePools.Find(q => q.PoolHash == poolHash);
+                return DatabasePools.Find(q => q.Alias == poolAlias);
             }
         }
 
@@ -51,46 +49,46 @@ namespace Eastern
             }
         }*/
 
-        public static ODatabase GetDatabase(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
+        internal static Database GetDatabase(string alias)
         {
             lock (SyncRoot)
             {
-                ODatabase database;
-                string hash = hostname + port + databaseName + databaseType.ToString() + userName;
-
-                if (DatabasePools.Exists(q => q.PoolHash == hash))
+                if (DatabasePools.Exists(db => db.Alias == alias))
                 {
-                    ODatabasePool pool = DatabasePools.Find(q => q.PoolHash == hash);
+                    DatabasePool pool = DatabasePools.Find(db => db.Alias == alias);
 
+                    // deque free database connection if the pool has one
                     if (pool.Databases.Count > 0)
                     {
-                        database = pool.Databases.Dequeue();
-                        database.Reload();
+                        return pool.Databases.Dequeue();
+                    }
+                    // if the pool is empty - create new dedicated database connection
+                    else if (pool.Databases.Count == 0)
+                    {
+                        Database database = new Database(pool.Hostname, pool.Port, pool.DatabaseName, pool.DatabaseType, pool.UserName, pool.UserPassword);
+                        database.ReturnToPool = false;
 
                         return database;
                     }
                 }
 
-                database = new ODatabase(hostname, port, databaseName, databaseType, userName, userPassword);
-                database.ReturnToPool = false;
-
-                return database;
+                return null;
             }
         }
 
-        internal static void ReturnDatabase(ODatabase database)
+        internal static void ReturnDatabase(Database database)
         {
             lock (SyncRoot)
             {
-                if (DatabasePools.Exists(q => q.PoolHash == database.Hash) && database.ReturnToPool)
+                if (DatabasePools.Exists(db => db.Alias == database.Alias) && database.ReturnToPool)
                 {
-                    ODatabasePool pool = DatabasePools.Find(q => q.PoolHash == database.Hash);
+                    DatabasePool pool = DatabasePools.Find(q => q.Alias == database.Alias);
 
                     pool.Databases.Enqueue(database);
                 }
                 else
                 {
-                    database.Close();
+                    database.Dispose();
                 }
             }
         }
