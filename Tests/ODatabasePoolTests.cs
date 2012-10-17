@@ -33,13 +33,14 @@ namespace Tests
             {
                 _connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
             }
+
+            // create database pool
+            EasternClient.CreateDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password, _poolSize, _poolAlias);
         }
 
         [TestMethod]
-        public void TestCreateDatabasePool()
+        public void TestDatabasePoolSize()
         {
-            EasternClient.CreateDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password, _poolSize, _poolAlias);
-
             DatabasePool pool = EasternClient.GetDatabasePool(_poolAlias);
 
             Assert.IsTrue(pool.PoolSize == _poolSize);
@@ -48,13 +49,9 @@ namespace Tests
         [TestMethod]
         public void TestGetDatabase()
         {
-            EasternClient.CreateDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password, _poolSize, _poolAlias);
-
             ODatabase database = new ODatabase(_poolAlias);
-            int sessionID = database.SessionID;
-            
-            Assert.IsTrue(sessionID > 0);
-            Assert.IsTrue(database.Size > 0);
+
+            Assert.IsTrue(database.SessionID > 0);
 
             DatabasePool pool = EasternClient.GetDatabasePool(_poolAlias);
 
