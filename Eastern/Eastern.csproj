@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\ODocument.cs" />
     <Compile Include="API\ORecord.cs" />
     <Compile Include="API\ORID.cs" />
     <Compile Include="API\OServer.cs" />

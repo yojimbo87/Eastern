@@ -21,10 +21,22 @@ namespace ConsoleTest
         static void Main(string[] args)
         {
             //TestCreateRecord();
-            TestLoadRecord();
+            //TestLoadRecord();
             //TestParsing();
 
+            TestThreadLocal();
+
             Console.ReadLine();
+        }
+
+        static void TestThreadLocal()
+        {
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
+            {
+                ODocument document = new ODocument();
+
+                Console.WriteLine(document.GetDatabaseName());
+            }
         }
 
         static void TestCreateRecord()
