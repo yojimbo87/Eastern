@@ -68,14 +68,14 @@ namespace Eastern.Connection
             operation.UserName = userName;
             operation.UserPassword = userPassword;
 
-            DtoDatabase database = (DtoDatabase)WorkerConnection.ExecuteOperation<DbOpen>(operation);
+            DtoDatabase dtoDatabase = (DtoDatabase)WorkerConnection.ExecuteOperation<DbOpen>(operation);
 
-            WorkerConnection.SessionID = database.SessionID;
-            Name = database.Name;
-            Type = database.Type;
-            ClustersCount = database.ClustersCount;
-            Clusters = database.Clusters;
-            ClusterConfig = database.ClusterConfig;
+            WorkerConnection.SessionID = dtoDatabase.SessionID;
+            Name = databaseName;
+            Type = databaseType;
+            ClustersCount = dtoDatabase.ClustersCount;
+            Clusters = dtoDatabase.Clusters;
+            ClusterConfig = dtoDatabase.ClusterConfig;
 
             // assign worker connection to each cluster since each instance of cluster can perform some operations
             foreach (OCluster cluster in Clusters)
