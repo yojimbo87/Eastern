@@ -10,55 +10,54 @@ namespace Eastern
 {
     public class ODatabase : IDisposable
     {
-        private Database Database { get; set; }
-        internal bool ReturnToPool { get { return Database.ReturnToPool; } set { Database.ReturnToPool = value; } }
+        private Database _database { get; set; }
 
         #region Public properties
 
         /// <summary>
         /// Represents ID of current session between client and server instance.
         /// </summary>
-        public int SessionID { get { return Database.SessionID; } }
+        public int SessionID { get { return _database.SessionID; } }
 
         /// <summary>
         /// Indicates if underlying socket is connected to server instance.
         /// </summary>
-        public bool IsConnected { get { return Database.IsConnected; } }
+        public bool IsConnected { get { return _database.IsConnected; } }
 
         /// <summary>
         /// Represents name of the database.
         /// </summary>
-        public string Name { get { return Database.Name; } }
+        public string Name { get { return _database.Name; } }
 
         /// <summary>
         /// Represents type of the database.
         /// </summary>
-        public ODatabaseType Type { get { return Database.Type; } }
+        public ODatabaseType Type { get { return _database.Type; } }
 
         /// <summary>
         /// Represents count of clusters within database.
         /// </summary>
-        public short ClustersCount { get { return Database.ClustersCount; } }
+        public short ClustersCount { get { return _database.ClustersCount; } }
 
         /// <summary>
         /// List of clusters within database.
         /// </summary>
-        public List<OCluster> Clusters { get { return Database.Clusters; } }
+        public List<OCluster> Clusters { get { return _database.Clusters; } }
 
         /// <summary>
         /// Represents cluster configuration in binary format.
         /// </summary>
-        public byte[] ClusterConfig { get { return Database.ClusterConfig; } }
+        public byte[] ClusterConfig { get { return _database.ClusterConfig; } }
 
         /// <summary>
         /// Represents size of the database in bytes. Always retrieves most recent size when accessed.
         /// </summary>
-        public long Size { get { return Database.Size; } }
+        public long Size { get { return _database.Size; } }
 
         /// <summary>
         /// Represents count of records within database. Always retrieves most recent count when accessed.
         /// </summary>
-        public long RecordsCount { get { return Database.RecordsCount; } }
+        public long RecordsCount { get { return _database.RecordsCount; } }
 
         #endregion
 
@@ -67,7 +66,11 @@ namespace Eastern
         /// </summary>
         public ODatabase(string alias)
         {
-            Database = EasternClient.GetDatabase(alias);
+            _database = EasternClient.GetDatabase(alias);
+
+            // put database connection instance into local thread so that it will be accessible for document operations
+            Thread.AllocateNamedDataSlot(EasternClient.ThreadLocalDatabaseSlotName);
+            Thread.SetData(Thread.GetNamedDataSlot(EasternClient.ThreadLocalDatabaseSlotName), _database);
         }
 
         /// <summary>
@@ -75,7 +78,11 @@ namespace Eastern
         /// </summary>
         public ODatabase(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
         {
-            Database = new Database(hostname, port, databaseName, databaseType, userName, userPassword);
+            _database = new Database(hostname, port, databaseName, databaseType, userName, userPassword);
+
+            // put database connection instance into local thread so that it will be accessible for document operations
+            Thread.AllocateNamedDataSlot(EasternClient.ThreadLocalDatabaseSlotName);
+            Thread.SetData(Thread.GetNamedDataSlot(EasternClient.ThreadLocalDatabaseSlotName), _database);
         }
 
         /// <summary>
@@ -83,7 +90,7 @@ namespace Eastern
         /// </summary>
         public void Reload()
         {
-            Database.Reload();
+            _database.Reload();
         }
 
         #region Cluster methods
@@ -93,7 +100,7 @@ namespace Eastern
         /// </summary>
         public OCluster AddCluster(OClusterType type, string name)
         {
-            return Database.AddCluster(type, name, "default", "default");
+            return _database.AddCluster(type, name, "default", "default");
         }
 
         /// <summary>
@@ -101,7 +108,7 @@ namespace Eastern
         /// </summary>
         public OCluster AddCluster(OClusterType type, string name, string location, string dataSegmentName)
         {
-            return Database.AddCluster(type, name, location, dataSegmentName);
+            return _database.AddCluster(type, name, location, dataSegmentName);
         }
 
         /// <summary>
@@ -112,7 +119,7 @@ namespace Eastern
         /// </returns>
         public bool RemoveCluster(short clusterID)
         {
-            return Database.RemoveCluster(clusterID);
+            return _database.RemoveCluster(clusterID);
         }
 
         #endregion
@@ -127,7 +134,7 @@ namespace Eastern
         /// </returns>
         public int AddSegment(string name, string location)
         {
-            return Database.AddSegment(name, location);
+            return _database.AddSegment(name, location);
         }
 
         /// <summary>
@@ -138,7 +145,7 @@ namespace Eastern
         /// </returns>
         public bool RemoveSegment(string name)
         {
-            return Database.RemoveSegment(name);
+            return _database.RemoveSegment(name);
         }
 
         #endregion
@@ -153,7 +160,7 @@ namespace Eastern
         /// </returns>
         public ORecord CreateRecord<T>(T recordObject, bool isAsynchronous = false)
         {
-            return Database.CreateRecord<T>(recordObject, isAsynchronous);
+            return _database.CreateRecord<T>(recordObject, isAsynchronous);
         }
 
         /// <summary>
@@ -164,7 +171,7 @@ namespace Eastern
         /// </returns>
         public ORecord CreateRecord<T>(string clusterName, T recordObject, bool isAsynchronous = false)
         {
-            return Database.CreateRecord<T>(clusterName, recordObject, isAsynchronous);
+            return _database.CreateRecord<T>(clusterName, recordObject, isAsynchronous);
         }
 
         /// <summary>
@@ -175,7 +182,7 @@ namespace Eastern
         /// </returns>
         public ORecord CreateRecord<T>(short clusterID, T recordObject, bool isAsynchronous = false)
         {
-            return Database.CreateRecord<T>(clusterID, recordObject, isAsynchronous);
+            return _database.CreateRecord<T>(clusterID, recordObject, isAsynchronous);
         }
 
         /// <summary>
@@ -186,7 +193,7 @@ namespace Eastern
         /// </returns>
         public ORecord CreateRecord(short clusterID, byte[] content, ORecordType type, bool isAsynchronous = false)
         {
-            return Database.CreateRecord(clusterID, content, type, isAsynchronous);
+            return _database.CreateRecord(clusterID, content, type, isAsynchronous);
         }
 
         /// <summary>
@@ -197,7 +204,7 @@ namespace Eastern
         /// </returns>
         public ORecord CreateRecord(int segmentID, short clusterID, byte[] content, ORecordType type, bool isAsynchronous = false)
         {
-            return Database.CreateRecord(segmentID, clusterID, content, type, isAsynchronous);
+            return _database.CreateRecord(segmentID, clusterID, content, type, isAsynchronous);
         }
 
         #endregion
@@ -212,7 +219,7 @@ namespace Eastern
         /// </returns>
         public int UpdateRecord(ORID orid, byte[] content, int version, ORecordType type, bool isAsynchronous)
         {
-            return Database.UpdateRecord(orid, content, version, type, isAsynchronous);
+            return _database.UpdateRecord(orid, content, version, type, isAsynchronous);
         }
 
         #endregion
@@ -227,7 +234,7 @@ namespace Eastern
         /// </returns>
         public bool DeleteRecord(ORID orid, int version, ORecordType type, bool isAsynchronous)
         {
-            return Database.DeleteRecord(orid, version, type, isAsynchronous);
+            return _database.DeleteRecord(orid, version, type, isAsynchronous);
         }
 
         #endregion
@@ -242,7 +249,7 @@ namespace Eastern
         /// </returns>
         public T LoadRecord<T>(ORID orid, string fetchPlan = "*:0") where T : class, new()
         {
-            return Database.LoadRecord<T>(orid, fetchPlan);
+            return _database.LoadRecord<T>(orid, fetchPlan);
         }
 
         /// <summary>
@@ -253,7 +260,7 @@ namespace Eastern
         /// </returns>
         public ORecord LoadRecord(ORID orid, string fetchPlan = "*:0")
         {
-            return Database.LoadRecord(orid, fetchPlan, true);
+            return _database.LoadRecord(orid, fetchPlan, true);
         }
 
         /// <summary>
@@ -264,7 +271,7 @@ namespace Eastern
         /// </returns>
         public ORecord LoadRecord(ORID orid, string fetchPlan, bool ignoreCache)
         {
-            return Database.LoadRecord(orid, fetchPlan, ignoreCache);
+            return _database.LoadRecord(orid, fetchPlan, ignoreCache);
         }
 
         #endregion
@@ -274,7 +281,10 @@ namespace Eastern
         /// </summary>
         public void Close()
         {
-            Database.Close();
+            // release database connection instance object from local thread
+            Thread.FreeNamedDataSlot(EasternClient.ThreadLocalDatabaseSlotName);
+
+            _database.Close();
         }
 
         /// <summary>

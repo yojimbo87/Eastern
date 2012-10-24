@@ -13,6 +13,7 @@ namespace Eastern
         internal static string DriverVersion { get { return "0.0.1 pre-alpha"; } }
         internal static short ProtocolVersion { get { return 12; } }
         internal static string ClientID { get { return "null"; } }
+        internal static string ThreadLocalDatabaseSlotName { get { return "ThreadLocalOrientDatabase"; } }
 
         static EasternClient()
         {
