@@ -193,6 +193,11 @@ namespace Eastern.Protocol
             while (recordString[i] != ':')
             {
                 i++;
+
+                if (i >= recordString.Length)
+                {
+                    return recordString.Length;
+                }
             }
 
             // parse field name string from raw document
