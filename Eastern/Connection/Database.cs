@@ -202,21 +202,16 @@ namespace Eastern.Connection
             }
 
             return CreateRecord(-1, cluster.ID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, isAsynchronous);
-        }
+        }*/
 
-        public ORecord CreateRecord<T>(short clusterID, T recordObject, bool isAsynchronous = false)
+        public ORecord CreateRecord<T>(int segmentID, short clusterID, T recordObject, bool isAsynchronous)
         {
             Type objectType = recordObject.GetType();
 
-            return CreateRecord(-1, clusterID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, isAsynchronous);
+            return CreateRecord(segmentID, clusterID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, isAsynchronous);
         }
 
-        public ORecord CreateRecord(short clusterID, byte[] content, ORecordType type, bool isAsynchronous = false)
-        {
-            return CreateRecord(-1, clusterID, content, type, isAsynchronous);
-        }*/
-
-        public ORecord CreateRecord(int segmentID, short clusterID, byte[] content, ORecordType type, bool isAsynchronous = false)
+        public ORecord CreateRecord(int segmentID, short clusterID, byte[] content, ORecordType type, bool isAsynchronous)
         {
             RecordCreate operation = new RecordCreate();
             operation.SegmentID = segmentID;
