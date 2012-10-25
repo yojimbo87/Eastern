@@ -33,8 +33,19 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestMethod1()
+        public void TestPocoCreateRecordLoadRecord()
         {
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
+            {
+                Foo foo = new Foo();
+                foo.String = "test string value";
+
+                ORecord record = database.CreateRecord("testcluster", foo);
+
+                Foo fooRetrieved = database.LoadRecord<Foo>(record.ORID);
+
+                Assert.IsTrue(foo.String == fooRetrieved.String);
+            }
         }
 
         public void Dispose()
@@ -47,5 +58,10 @@ namespace Tests
 
             _connection.Close();
         }
+    }
+
+    class Foo
+    {
+        public string String { get; set; }
     }
 }
