@@ -79,7 +79,7 @@ namespace Eastern
             {
                 PropertyInfo property = genericObjectType.GetProperty(item.Key);
 
-                if (property != null)
+                if ((property != null) && (property.PropertyType.IsPublic))
                 {
                     // property is array or generic collection 
                     if ((property.PropertyType.IsArray || property.PropertyType.IsGenericType))

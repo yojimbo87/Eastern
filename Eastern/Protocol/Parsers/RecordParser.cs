@@ -30,13 +30,16 @@ namespace Eastern.Protocol
                 for (int i = 0; i < properties.Length; i++)
                 {
                     PropertyInfo property = properties[i];
-                    
-                    serializedString += property.Name + ":";
-                    serializedString += SerializeValue(property.GetValue(objectToSerialize, null));
 
-                    if (i < (properties.Length - 1))
+                    if (property.PropertyType.IsPublic)
                     {
-                        serializedString += ",";
+                        serializedString += property.Name + ":";
+                        serializedString += SerializeValue(property.GetValue(objectToSerialize, null));
+
+                        if (i < (properties.Length - 1))
+                        {
+                            serializedString += ",";
+                        }
                     }
                 }
             }
