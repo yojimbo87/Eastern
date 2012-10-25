@@ -21,22 +21,10 @@ namespace ConsoleTest
         static void Main(string[] args)
         {
             //TestCreateRecord();
-            //TestLoadRecord();
+            TestLoadRecord();
             //TestParsing();
 
-            TestThreadLocal();
-
             Console.ReadLine();
-        }
-
-        static void TestThreadLocal()
-        {
-            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
-            {
-                ODocument document = new ODocument();
-
-                Console.WriteLine(document.GetDatabaseName());
-            }
         }
 
         static void TestCreateRecord()
@@ -64,7 +52,7 @@ namespace ConsoleTest
             using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
                 TestClass obj = database.LoadRecord<TestClass>(new ORID(6, 0));
-                
+
                 Console.WriteLine(obj);
             }
         }
@@ -246,16 +234,6 @@ namespace ConsoleTest
         public List<string> StringList { get; set; }
         public TestNestedClass NestedClass { get; set; }
         public List<TestNestedClass> ObjectList { get; set; }
-
-        public TestClass()
-        {
-            /*StringArray = new string[3];
-            StringList = new List<string>();
-            NestedClass = new TestNestedClass();
-            ObjectList = new List<TestNestedClass>();
-            ObjectList.Add(new TestNestedClass());
-            ObjectList.Add(new TestNestedClass());*/
-        }
     }
 
     class TestNestedClass
@@ -263,11 +241,5 @@ namespace ConsoleTest
         public string NestedString { get; set; }
         public string[] StringArray { get; set; }
         public List<string> StringList { get; set; }
-
-        public TestNestedClass()
-        {
-            /*StringArray = new string[3];
-            StringList = new List<string>();*/
-        }
     }
 }

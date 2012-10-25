@@ -67,10 +67,6 @@ namespace Eastern
         public ODatabase(string alias)
         {
             _database = EasternClient.GetDatabase(alias);
-
-            // put database connection instance into local thread so that it will be accessible for document operations
-            Thread.AllocateNamedDataSlot(EasternClient.ThreadLocalDatabaseSlotName);
-            Thread.SetData(Thread.GetNamedDataSlot(EasternClient.ThreadLocalDatabaseSlotName), _database);
         }
 
         /// <summary>
@@ -79,10 +75,6 @@ namespace Eastern
         public ODatabase(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
         {
             _database = new Database(hostname, port, databaseName, databaseType, userName, userPassword);
-
-            // put database connection instance into local thread so that it will be accessible for document operations
-            Thread.AllocateNamedDataSlot(EasternClient.ThreadLocalDatabaseSlotName);
-            Thread.SetData(Thread.GetNamedDataSlot(EasternClient.ThreadLocalDatabaseSlotName), _database);
         }
 
         /// <summary>
@@ -156,11 +148,11 @@ namespace Eastern
         /// Creates record within current database.
         /// </summary>
         /// <returns>
-        /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
+        /// ORecord object with assigned new record ID and version.
         /// </returns>
-        public ORecord CreateRecord<T>(T recordObject, bool isAsynchronous = false)
+        public ORecord CreateRecord<T>(short clusterID, T recordObject)
         {
-            return _database.CreateRecord<T>(recordObject, isAsynchronous);
+            return CreateRecord<T>(-1, clusterID, recordObject, false);
         }
 
         /// <summary>
@@ -169,9 +161,9 @@ namespace Eastern
         /// <returns>
         /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
         /// </returns>
-        public ORecord CreateRecord<T>(string clusterName, T recordObject, bool isAsynchronous = false)
+        public ORecord CreateRecord<T>(short clusterID, T recordObject, bool isAsynchronous)
         {
-            return _database.CreateRecord<T>(clusterName, recordObject, isAsynchronous);
+            return CreateRecord<T>(-1, clusterID, recordObject, isAsynchronous);
         }
 
         /// <summary>
@@ -180,9 +172,20 @@ namespace Eastern
         /// <returns>
         /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
         /// </returns>
-        public ORecord CreateRecord<T>(short clusterID, T recordObject, bool isAsynchronous = false)
+        public ORecord CreateRecord<T>(int segmentID, short clusterID, T recordObject, bool isAsynchronous)
         {
-            return _database.CreateRecord<T>(clusterID, recordObject, isAsynchronous);
+            return _database.CreateRecord<T>(segmentID, clusterID, recordObject, isAsynchronous);
+        }
+
+        /// <summary>
+        /// Creates record within current database.
+        /// </summary>
+        /// <returns>
+        /// ORecord object with assigned new record ID and version.
+        /// </returns>
+        public ORecord CreateRecord(short clusterID, byte[] content, ORecordType type)
+        {
+            return CreateRecord(-1, clusterID, content, type, false);
         }
 
         /// <summary>
@@ -191,18 +194,7 @@ namespace Eastern
         /// <returns>
         /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
         /// </returns>
-        public ORecord CreateRecord(short clusterID, byte[] content, ORecordType type, bool isAsynchronous = false)
-        {
-            return _database.CreateRecord(clusterID, content, type, isAsynchronous);
-        }
-
-        /// <summary>
-        /// Creates record within current database.
-        /// </summary>
-        /// <returns>
-        /// ORecord object with assigned new record ID and version (returned only in synchronous mode).
-        /// </returns>
-        public ORecord CreateRecord(int segmentID, short clusterID, byte[] content, ORecordType type, bool isAsynchronous = false)
+        public ORecord CreateRecord(int segmentID, short clusterID, byte[] content, ORecordType type, bool isAsynchronous)
         {
             return _database.CreateRecord(segmentID, clusterID, content, type, isAsynchronous);
         }
@@ -245,11 +237,33 @@ namespace Eastern
         /// Load specific record from database.
         /// </summary>
         /// <returns>
-        /// Generic object.
+        /// POCO mapped from ORecord.
         /// </returns>
-        public T LoadRecord<T>(ORID orid, string fetchPlan = "*:0") where T : class, new()
+        public T LoadRecord<T>(ORID orid) where T : class, new()
         {
-            return _database.LoadRecord<T>(orid, fetchPlan);
+            return LoadRecord(orid, "*:0", true).ToObject<T>();
+        }
+
+        /// <summary>
+        /// Load specific record from database.
+        /// </summary>
+        /// <returns>
+        /// POCO mapped from ORecord.
+        /// </returns>
+        public T LoadRecord<T>(ORID orid, string fetchPlan) where T : class, new()
+        {
+            return LoadRecord(orid, fetchPlan, true).ToObject<T>();
+        }
+
+        /// <summary>
+        /// Load specific record from database.
+        /// </summary>
+        /// <returns>
+        /// POCO mapped from ORecord.
+        /// </returns>
+        public T LoadRecord<T>(ORID orid, string fetchPlan, bool ignoreCache) where T : class, new()
+        {
+            return LoadRecord(orid, fetchPlan, ignoreCache).ToObject<T>();
         }
 
         /// <summary>
@@ -258,9 +272,20 @@ namespace Eastern
         /// <returns>
         /// ORecord object.
         /// </returns>
-        public ORecord LoadRecord(ORID orid, string fetchPlan = "*:0")
+        public ORecord LoadRecord(ORID orid)
         {
-            return _database.LoadRecord(orid, fetchPlan, true);
+            return LoadRecord(orid, "*:0", true);
+        }
+ 
+        /// <summary>
+        /// Load specific record from database.
+        /// </summary>
+        /// <returns>
+        /// ORecord object.
+        /// </returns>
+        public ORecord LoadRecord(ORID orid, string fetchPlan)
+        {
+            return LoadRecord(orid, fetchPlan, true);
         }
 
         /// <summary>
@@ -281,9 +306,6 @@ namespace Eastern
         /// </summary>
         public void Close()
         {
-            // release database connection instance object from local thread
-            Thread.FreeNamedDataSlot(EasternClient.ThreadLocalDatabaseSlotName);
-
             _database.Close();
         }
 
