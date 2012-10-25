@@ -176,9 +176,7 @@ namespace Eastern.Connection
 
         #endregion
 
-        #region Create record methods
-
-        public ORecord CreateRecord<T>(T recordObject, bool isAsynchronous = false)
+        /*public ORecord CreateRecord<T>(T recordObject, bool isAsynchronous = false)
         {
             Type objectType = recordObject.GetType();
 
@@ -216,7 +214,7 @@ namespace Eastern.Connection
         public ORecord CreateRecord(short clusterID, byte[] content, ORecordType type, bool isAsynchronous = false)
         {
             return CreateRecord(-1, clusterID, content, type, isAsynchronous);
-        }
+        }*/
 
         public ORecord CreateRecord(int segmentID, short clusterID, byte[] content, ORecordType type, bool isAsynchronous = false)
         {
@@ -229,10 +227,6 @@ namespace Eastern.Connection
 
             return new ORecord((DtoRecord)WorkerConnection.ExecuteOperation<RecordCreate>(operation));
         }
-
-        #endregion
-
-        #region Update record methods
 
         public int UpdateRecord(ORID orid, byte[] content, int version, ORecordType type, bool isAsynchronous)
         {
@@ -247,10 +241,6 @@ namespace Eastern.Connection
             return (int)WorkerConnection.ExecuteOperation<RecordUpdate>(operation);
         }
 
-        #endregion
-
-        #region Delete record methods
-
         public bool DeleteRecord(ORID orid, int version, ORecordType type, bool isAsynchronous)
         {
             RecordDelete operation = new RecordDelete();
@@ -260,20 +250,6 @@ namespace Eastern.Connection
             operation.OperationMode = (isAsynchronous) ? OperationMode.Asynchronous : OperationMode.Synchronous;
 
             return (bool)WorkerConnection.ExecuteOperation<RecordDelete>(operation);
-        }
-
-        #endregion
-
-        #region Load record methods
-
-        public T LoadRecord<T>(ORID orid, string fetchPlan = "*:0") where T : class, new()
-        {
-            return LoadRecord(orid, fetchPlan, true).ToObject<T>();
-        }
-
-        public ORecord LoadRecord(ORID orid, string fetchPlan = "*:0")
-        {
-            return LoadRecord(orid, fetchPlan, true);
         }
 
         public ORecord LoadRecord(ORID orid, string fetchPlan, bool ignoreCache)
@@ -286,8 +262,6 @@ namespace Eastern.Connection
 
             return ((DtoRecord)WorkerConnection.ExecuteOperation<RecordLoad>(operation)).Deserialize();
         }
-
-        #endregion
 
         public void Close()
         {
