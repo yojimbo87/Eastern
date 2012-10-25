@@ -145,6 +145,24 @@ namespace Eastern
         #region Create record methods
 
         /// <summary>
+        /// Creates record within current database. If cluster with specified name doesn't exist, it's created.
+        /// </summary>
+        /// <returns>
+        /// ORecord object with assigned new record ID and version.
+        /// </returns>
+        public ORecord CreateRecord<T>(string clusterName, T recordObject)
+        {
+            OCluster cluster = Clusters.Where(o => o.Name == clusterName).FirstOrDefault();
+
+            if (cluster == null)
+            {
+                cluster = AddCluster(OClusterType.Physical, clusterName);
+            }
+
+            return CreateRecord<T>(-1, cluster.ID, recordObject, false);
+        }
+
+        /// <summary>
         /// Creates record within current database.
         /// </summary>
         /// <returns>
