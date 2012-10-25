@@ -46,6 +46,15 @@ namespace Eastern
             return RecordParser.SerializeObject(o, o.GetType());
         }
 
+        public T ToObject<T>() where T : class, new()
+        {
+            T genericObject = new T();
+
+            genericObject = (T)ToObject(genericObject, Fields);
+
+            return genericObject;
+        }
+
         // for testing parser logic
         private void Deserialize()
         {
@@ -60,15 +69,6 @@ namespace Eastern
                 Class = deserializedRecord.Class;
                 Fields = deserializedRecord.Fields;
             }
-        }
-
-        public T ToObject<T>() where T : class, new()
-        {
-            T genericObject = new T();
-
-            genericObject = (T)ToObject(genericObject, Fields);
-
-            return genericObject;
         }
 
         private object ToObject(object genericObject, Dictionary<string, object> fields)
