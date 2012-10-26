@@ -176,33 +176,7 @@ namespace Eastern.Connection
 
         #endregion
 
-        /*public ORecord CreateRecord<T>(T recordObject, bool isAsynchronous = false)
-        {
-            Type objectType = recordObject.GetType();
-
-            OCluster cluster = Clusters.Where(o => o.Name == objectType.Name.ToLower()).FirstOrDefault();
-
-            if (cluster == null)
-            {
-                cluster = AddCluster(OClusterType.Physical, objectType.Name.ToLower());
-            }
-
-            return CreateRecord(-1, cluster.ID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, isAsynchronous);
-        }
-
-        public ORecord CreateRecord<T>(string clusterName, T recordObject, bool isAsynchronous = false)
-        {
-            Type objectType = recordObject.GetType();
-
-            OCluster cluster = Clusters.Where(o => o.Name == clusterName).FirstOrDefault();
-
-            if (cluster == null)
-            {
-                cluster = AddCluster(OClusterType.Physical, clusterName);
-            }
-
-            return CreateRecord(-1, cluster.ID, RecordParser.SerializeObject(recordObject, objectType), ORecordType.Document, isAsynchronous);
-        }*/
+        #region Create methods
 
         public ORecord CreateRecord<T>(int segmentID, short clusterID, T recordObject, bool isAsynchronous)
         {
@@ -223,6 +197,17 @@ namespace Eastern.Connection
             return new ORecord((DtoRecord)WorkerConnection.ExecuteOperation<RecordCreate>(operation));
         }
 
+        #endregion
+
+        #region Update methods
+
+        public int UpdateRecord<T>(ORID orid, T recordObject, int version, bool isAsynchronous)
+        {
+            Type objectType = recordObject.GetType();
+
+            return UpdateRecord(orid, RecordParser.SerializeObject(recordObject, objectType), version, ORecordType.Document, isAsynchronous);
+        }
+
         public int UpdateRecord(ORID orid, byte[] content, int version, ORecordType type, bool isAsynchronous)
         {
             RecordUpdate operation = new RecordUpdate();
@@ -235,6 +220,8 @@ namespace Eastern.Connection
 
             return (int)WorkerConnection.ExecuteOperation<RecordUpdate>(operation);
         }
+
+        #endregion
 
         public bool DeleteRecord(ORID orid, int version, ORecordType type, bool isAsynchronous)
         {
