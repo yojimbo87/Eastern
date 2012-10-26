@@ -21,7 +21,7 @@ namespace Eastern.Protocol.Operations
             request.DataItems.Add(new DataItem() { Type = "short", Data = BinaryParser.ToArray(ClusterID) });
             request.DataItems.Add(new DataItem() { Type = "long", Data = BinaryParser.ToArray(ClusterPosition) });
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(FetchPlan) });
-            request.DataItems.Add(new DataItem() { Type = "byte", Data = BinaryParser.ToArray((IgnoreCache == true) ? 1 : 0) });
+            request.DataItems.Add(new DataItem() { Type = "byte", Data = BinaryParser.ToArray((byte)((IgnoreCache == true) ? 1 : 0)) });
 
             return request;
         }
