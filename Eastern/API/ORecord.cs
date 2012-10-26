@@ -81,68 +81,76 @@ namespace Eastern
 
                 if (property != null)
                 {
-                    // property is array or generic collection 
-                    if ((property.PropertyType.IsArray || property.PropertyType.IsGenericType))
+                    // field item need to have a value otherwise property is set to null
+                    if (item.Value != null)
                     {
-                        IList collection = (IList)item.Value;
-
-                        if (collection.Count > 0)
+                        // property is array or generic collection 
+                        if ((property.PropertyType.IsArray || property.PropertyType.IsGenericType))
                         {
-                            // create instance of property type
-                            object collectionInstance = Activator.CreateInstance(property.PropertyType, collection.Count);
+                            IList collection = (IList)item.Value;
 
-                            for (int i = 0; i < collection.Count; i++)
+                            if (collection.Count > 0)
                             {
-                                // collection is simple array
-                                if (property.PropertyType.IsArray)
-                                {
-                                    ((object[])collectionInstance)[i] = collection[i];
-                                }
-                                // collection is generic
-                                else if (property.PropertyType.IsGenericType && (item.Value is IEnumerable))
-                                {
-                                    Type elementType = collection[i].GetType();
+                                // create instance of property type
+                                object collectionInstance = Activator.CreateInstance(property.PropertyType, collection.Count);
 
-                                    // generic collection consists of basic types
-                                    if (elementType.IsPrimitive ||
-                                        (elementType == typeof(string)) ||
-                                        (elementType == typeof(DateTime)) ||
-                                        (elementType == typeof(decimal)))
+                                for (int i = 0; i < collection.Count; i++)
+                                {
+                                    // collection is simple array
+                                    if (property.PropertyType.IsArray)
                                     {
-                                        ((IList)collectionInstance).Add(collection[i]);
+                                        ((object[])collectionInstance)[i] = collection[i];
                                     }
-                                    // generic collection consists of generic type which should be parsed
+                                    // collection is generic
+                                    else if (property.PropertyType.IsGenericType && (item.Value is IEnumerable))
+                                    {
+                                        Type elementType = collection[i].GetType();
+
+                                        // generic collection consists of basic types
+                                        if (elementType.IsPrimitive ||
+                                            (elementType == typeof(string)) ||
+                                            (elementType == typeof(DateTime)) ||
+                                            (elementType == typeof(decimal)))
+                                        {
+                                            ((IList)collectionInstance).Add(collection[i]);
+                                        }
+                                        // generic collection consists of generic type which should be parsed
+                                        else
+                                        {
+                                            // create instance object based on first element of generic collection
+                                            object instance = Activator.CreateInstance(property.PropertyType.GetGenericArguments().First(), null);
+
+                                            ((IList)collectionInstance).Add(ToObject(instance, (Dictionary<string, object>)collection[i]));
+                                        }
+                                    }
                                     else
                                     {
-                                        // create instance object based on first element of generic collection
-                                        object instance = Activator.CreateInstance(property.PropertyType.GetGenericArguments().First(), null);
+                                        object v = Activator.CreateInstance(collection[i].GetType(), collection[i]);
 
-                                        ((IList)collectionInstance).Add(ToObject(instance, (Dictionary<string, object>)collection[i]));
+                                        ((IList)collectionInstance).Add(v);
                                     }
                                 }
-                                else
-                                {
-                                    object v = Activator.CreateInstance(collection[i].GetType(), collection[i]);
 
-                                    ((IList)collectionInstance).Add(v);
-                                }
+                                property.SetValue(genericObject, collectionInstance, null);
                             }
+                        }
+                        // property is class except string type
+                        else if (property.PropertyType.IsClass && (property.PropertyType.Name != "String"))
+                        {
+                            // create object instance of embedded class
+                            object instance = Activator.CreateInstance(property.PropertyType);
 
-                            property.SetValue(genericObject, collectionInstance, null);
+                            property.SetValue(genericObject, ToObject(instance, (Dictionary<string, object>)item.Value), null);
+                        }
+                        // property is basic type
+                        else
+                        {
+                            property.SetValue(genericObject, item.Value, null);
                         }
                     }
-                    // property is class except string type
-                    else if (property.PropertyType.IsClass && (property.PropertyType.Name != "String"))
-                    {
-                        // create object instance of embedded class
-                        object instance = Activator.CreateInstance(property.PropertyType);
-
-                        property.SetValue(genericObject, ToObject(instance, (Dictionary<string, object>)item.Value), null);
-                    }
-                    // property is basic type
                     else
                     {
-                        property.SetValue(genericObject, item.Value, null);
+                        property.SetValue(genericObject, null, null);
                     }
                 }
             }
