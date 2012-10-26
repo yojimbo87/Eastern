@@ -77,9 +77,9 @@ namespace Eastern
 
             foreach (KeyValuePair<string, object> item in fields)
             {
-                PropertyInfo property = genericObjectType.GetProperty(item.Key);
+                PropertyInfo property = genericObjectType.GetProperty(item.Key, BindingFlags.Public | BindingFlags.Instance);
 
-                if ((property != null) && (property.PropertyType.IsPublic))
+                if (property != null)
                 {
                     // property is array or generic collection 
                     if ((property.PropertyType.IsArray || property.PropertyType.IsGenericType))
