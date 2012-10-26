@@ -234,6 +234,39 @@ namespace Eastern
         #region Update record methods
 
         /// <summary>
+        /// Updates record within current database with version control.
+        /// </summary>
+        /// <returns>
+        /// Integer indicating new record version.
+        /// </returns>
+        public int UpdateRecord<T>(ORID orid, T recordObject)
+        {
+            return UpdateRecord<T>(orid, recordObject, 0, false);
+        }
+
+        /// <summary>
+        /// Updates record within current database with version control.
+        /// </summary>
+        /// <returns>
+        /// Integer indicating new record version (returned only in synchronous mode).
+        /// </returns>
+        public int UpdateRecord<T>(ORID orid, T recordObject, bool isAsynchronous)
+        {
+            return UpdateRecord<T>(orid, recordObject, 0, isAsynchronous);
+        }
+
+        /// <summary>
+        /// Updates record within current database.
+        /// </summary>
+        /// <returns>
+        /// Integer indicating new record version (returned only in synchronous mode).
+        /// </returns>
+        public int UpdateRecord<T>(ORID orid, T recordObject, int version, bool isAsynchronous)
+        {
+            return _database.UpdateRecord(orid, recordObject, version, isAsynchronous);
+        }
+
+        /// <summary>
         /// Updates record within current database.
         /// </summary>
         /// <returns>
