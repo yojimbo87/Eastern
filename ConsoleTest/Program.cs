@@ -44,6 +44,13 @@ namespace ConsoleTest
                 foo.String = "Bra\"vo \\ asdf";
 
                 database.CreateRecord<TestClass>(foo);*/
+
+                Foo foo = new Foo();
+                foo.String = "test string value";
+
+                ORecord record = database.CreateRecord("Foo", foo);
+
+                Foo fooRetrieved = database.LoadRecord<Foo>(record.ORID);
             }
         }
 
@@ -241,5 +248,10 @@ namespace ConsoleTest
         public string NestedString { get; set; }
         public string[] StringArray { get; set; }
         public List<string> StringList { get; set; }
+    }
+
+    class Foo
+    {
+        public string String { get; set; }
     }
 }
