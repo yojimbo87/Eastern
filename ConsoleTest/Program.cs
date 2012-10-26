@@ -22,7 +22,6 @@ namespace ConsoleTest
         {
             //TestCreateRecord();
             TestLoadRecord();
-            //TestParsing();
 
             Console.ReadLine();
         }
@@ -31,26 +30,7 @@ namespace ConsoleTest
         {
             using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
-                /*TestClass foo = new TestClass();
-                foo.IsBool = true;
-                foo.ByteNumber = 22;
-                foo.ShortNumber = 22222;
-                foo.IntNumber = 12345678;
-                foo.LongNumber = 1234567890123;
-                foo.FloatNumber = 3.14f;
-                foo.DoubleNumber = 12343.23442;
-                foo.DecimalNumber = new Decimal(1234567.890);
-                foo.DateTime = DateTime.Now;
-                foo.String = "Bra\"vo \\ asdf";
-
-                database.CreateRecord<TestClass>(foo);*/
-
-                Foo foo = new Foo();
-                foo.String = "test string value";
-
-                ORecord record = database.CreateRecord("Foo", foo);
-
-                Foo fooRetrieved = database.LoadRecord<Foo>(record.ORID);
+                
             }
         }
 
@@ -61,132 +41,6 @@ namespace ConsoleTest
                 TestClass obj = database.LoadRecord<TestClass>(new ORID(6, 0));
 
                 Console.WriteLine(obj);
-            }
-        }
-
-        static void TestParsing()
-        {
-            string raw;
-
-            // binary
-            raw = "single:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,embedded:(binary:_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_),array:[_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_,_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGx_]";
-
-            // date and datetime
-            raw = "datetime:1296279468000t,date:1306281600000a,embedded:(datetime:1296279468000t,date:1306281600000a),array:[1296279468000t,1306281600000a]";
-
-            // boolean
-            raw = "singleT:true,singleF:false,embedded:(singleT:true,singleF:false),array:[true,false]";
-
-            // null
-            raw = "nick:,embedded:(nick:,joe:),joe:";
-
-            // numbers
-            raw = "byte:123b,short:23456s,int:1543345,long:132432455l,float:1234.432f,double:123123.4324d,bigdecimal:12312.24324c,embedded:(byte:123b,short:23456s,int:1543345,long:132432455l,float:1234.432f,double:123123.4324d,bigdecimal:12312.24324c),array:[123b,23456s,1543345,132432455l,1234.432f,123123.4324d,12312.24324c]";
-
-            // map
-            raw = "rules:{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},array:[{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}],nested:{\"database.query\":2,\"database.command\":{\"database.query\":2,\"database.command\":2,\"database.hook.record\":2},\"database.hook.record\":2,\"database.hook2.record\":{\"database.hook.record\":2}}";
-
-            // string
-            raw = "simple:\"whoa this is awesome\",singleQuoted:\"a" + "\\" + "\"\",doubleQuotes:\"" + "\\" + "\"adsf" + "\\" + "\"\",twoBackslashes:\"" + "\\a" + "\\a" + "\"";
-
-            // array with embedded documents
-            raw = "nick:[(joe1:\"js1\"),(joe2:\"js2\"),(joe3:\"s3\")]";
-
-            // complex array and embedded documents
-            raw = "mary:[(zak1:(nick:[(joe1:\"js1\"),(joe2:\"js2\"),(joe3:\"s3\")])),(zak2:(nick:[(joe4:\"js4\"),(joe5:\"js5\"),(joe6:\"s6\")]))]";
-
-            // example 1
-            raw = "Profile@nick:\"ThePresident\",follows:[],followers:[#10:5,#10:6],name:\"Barack\",surname:\"Obama\",location:#3:2,invitedBy:,salary_cloned:,salary:120.3f";
-
-            // example 2
-            raw = "name:\"ORole\",id:0,defaultClusterId:3,clusterIds:[3],properties:[(name:\"mode\",type:17,offset:0,mandatory:false,notNull:false,min:,max:,linkedClass:,linkedType:,index:),(name:\"rules\",type:12,offset:1,mandatory:false,notNull:false,min:,max:,linkedClass:,linkedType:17,index:)]";
-
-            // example 3
-            raw = "ORole@name:\"reader\",inheritedRole:,mode:0,rules:{\"database\":2,\"database.cluster.internal\":2,\"database.cluster.orole\":2,\"database.cluster.ouser\":2,\"database.class.*\":2,\"database.cluster.*\":2,\"database.query\":2,\"database.command\":2,\"database.hook.record\":2}";
-
-            Console.WriteLine(raw);
-            ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
-            PrintRecord(raw, record);
-        }
-
-        static void PrintRecord(string raw, ORecord record)
-        {
-            Console.WriteLine("Raw string: {0}", raw);
-            Console.WriteLine("---------------------------------------------");
-            Console.WriteLine("Version: {0}, Class name: {1}", record.Version, record.Class);
-            Console.WriteLine("---------------------------------------------");
-
-            PrintTree(0, record.Fields);
-
-            Console.WriteLine("=============================================");
-        }
-
-        static void PrintTree(int level, Dictionary<string, object> properties)
-        {
-            foreach (KeyValuePair<string, object> kve in properties)
-            {
-                if (kve.Value == null)
-                {
-                    for (int i = 0; i < level; i++)
-                    {
-                        Console.Write(" ");
-                    }
-                    Console.WriteLine("- {0}: null", kve.Key);
-                }
-                else if (kve.Value.GetType() == typeof(List<object>))
-                {
-                    for (int i = 0; i < level; i++)
-                    {
-                        Console.Write(" ");
-                    }
-                    Console.Write("- {0} (COL): ", kve.Key);
-                    bool isNewLined = false;
-                    int index = 1;
-
-                    foreach(object item in (List<object>)kve.Value)
-                    {
-                        if (item.GetType() == typeof(Dictionary<string, object>))
-                        {
-                            isNewLined = true;
-                            Console.WriteLine();
-                            PrintTree(level + 2, (Dictionary<string, object>)item);
-                        }
-                        else
-                        {
-                            Console.Write("{0}", item);
-
-                            if (index != ((List<object>)kve.Value).Count)
-                            {
-                                Console.Write(", ");
-                            }
-
-                            index++;
-                        }
-                    }
-
-                    if (!isNewLined)
-                    {
-                        Console.WriteLine();
-                    }
-                }
-                else if (kve.Value.GetType() == typeof(Dictionary<string, object>))
-                {
-                    for (int i = 0; i < level; i++)
-                    {
-                        Console.Write(" ");
-                    }
-                    Console.Write("- {0} (EMB): ", kve.Key);
-                    Console.WriteLine();
-                    PrintTree(level + 2, (Dictionary<string, object>)kve.Value);
-                }
-                else
-                {
-                    for (int i = 0; i < level; i++)
-                    {
-                        Console.Write(" ");
-                    }
-                    Console.WriteLine("- {0}: {1}", kve.Key, kve.Value);
-                }
             }
         }
 
@@ -205,10 +59,6 @@ namespace ConsoleTest
                 using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
                 {
                     Console.WriteLine("Session ID: {0}", database.SessionID);
-
-                    /*ORecord record = database.LoadRecord(4, 0, "*:0", false);
-                    ODocument document = record.ToDocument();
-                    Console.WriteLine("Version: {0}, Class name: {1}", document.Version, document.Class);*/
                 }
             }
             catch (OException ex)
@@ -248,10 +98,5 @@ namespace ConsoleTest
         public string NestedString { get; set; }
         public string[] StringArray { get; set; }
         public List<string> StringList { get; set; }
-    }
-
-    class Foo
-    {
-        public string String { get; set; }
     }
 }
