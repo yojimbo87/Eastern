@@ -28,11 +28,13 @@ namespace Tests
         {
             _connection = new OServer(_hostname, _port, _rootName, _rootPassword);
 
-            // create test database
-            if (!_connection.DatabaseExist(_databaseName))
+            // if database exists, delete it
+            if (_connection.DatabaseExist(_databaseName))
             {
-                _connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
+                _connection.DeleteDatabase(_databaseName);
             }
+
+            _connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
 
             // create database pool
             EasternClient.CreateDatabasePool(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password, _poolSize, _poolAlias);
