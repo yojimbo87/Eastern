@@ -17,7 +17,6 @@ namespace Eastern.Protocol
 
             serializedString += SerializeObject(objectToSerialize, objectType.GetProperties(BindingFlags.Public | BindingFlags.Instance));
 
-            //return serializedString;
             return Encoding.UTF8.GetBytes(serializedString);
         }
 
@@ -31,16 +30,13 @@ namespace Eastern.Protocol
                 {
                     PropertyInfo property = properties[i];
 
-                    //if (property.m)
-                    //{
-                        serializedString += property.Name + ":";
-                        serializedString += SerializeValue(property.GetValue(objectToSerialize, null));
+                    serializedString += property.Name + ":";
+                    serializedString += SerializeValue(property.GetValue(objectToSerialize, null));
 
-                        if (i < (properties.Length - 1))
-                        {
-                            serializedString += ",";
-                        }
-                    //}
+                    if (i < (properties.Length - 1))
+                    {
+                        serializedString += ",";
+                    }
                 }
             }
 
