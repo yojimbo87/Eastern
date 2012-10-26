@@ -37,12 +37,12 @@ namespace Tests
         {
             using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
-                Foo foo = new Foo();
+                TestClass foo = new TestClass();
                 foo.String = "test string value";
 
-                ORecord recordCreated = database.CreateRecord("Foo", foo);
+                ORecord recordCreated = database.CreateRecord("TestClass", foo);
 
-                Foo fooRetrieved = database.LoadRecord<Foo>(recordCreated.ORID);
+                TestClass fooRetrieved = database.LoadRecord<TestClass>(recordCreated.ORID);
 
                 Assert.IsTrue(fooRetrieved.String == foo.String);
             }
@@ -58,10 +58,5 @@ namespace Tests
 
             _connection.Close();
         }
-    }
-
-    class Foo
-    {
-        public string String { get; set; }
     }
 }
