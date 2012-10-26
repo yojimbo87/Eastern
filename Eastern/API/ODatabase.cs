@@ -152,11 +152,23 @@ namespace Eastern
         /// </returns>
         public ORecord CreateRecord<T>(string clusterName, T recordObject)
         {
+            // clusters are stored in lower case
+            clusterName = clusterName.ToLower();
+
             OCluster cluster = Clusters.Where(o => o.Name == clusterName).FirstOrDefault();
 
             if (cluster == null)
             {
-                cluster = AddCluster(OClusterType.Physical, clusterName);
+                // cluster cannot be found, so do database reload to see if it wasn't created in the mean time
+                Reload();
+
+                cluster = Clusters.Where(o => o.Name == clusterName).FirstOrDefault();
+
+                if (cluster == null)
+                {
+                    // create new cluster if it isn't present in the DB after reload
+                    cluster = AddCluster(OClusterType.Physical, clusterName);
+                }
             }
 
             return CreateRecord<T>(-1, cluster.ID, recordObject, false);
