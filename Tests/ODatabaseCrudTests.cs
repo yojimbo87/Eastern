@@ -33,18 +33,18 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestPocoCreateRecordLoadRecord()
+        public void TestPocoCreateAndLoadRecord()
         {
             using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
             {
                 Foo foo = new Foo();
                 foo.String = "test string value";
 
-                ORecord record = database.CreateRecord("testcluster", foo);
+                ORecord recordCreated = database.CreateRecord("Foo", foo);
 
-                Foo fooRetrieved = database.LoadRecord<Foo>(record.ORID);
+                Foo fooRetrieved = database.LoadRecord<Foo>(recordCreated.ORID);
 
-                Assert.IsTrue(foo.String == fooRetrieved.String);
+                Assert.IsTrue(fooRetrieved.String == foo.String);
             }
         }
 
