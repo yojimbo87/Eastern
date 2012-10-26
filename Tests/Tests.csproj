@@ -52,6 +52,7 @@
     <Compile Include="ORecordParsingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OServerTests.cs" />
+    <Compile Include="TestingPocos.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Eastern\Eastern.csproj">
