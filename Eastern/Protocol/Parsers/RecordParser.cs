@@ -148,13 +148,13 @@ namespace Eastern.Protocol
         public static ORecord DeserializeRecord(DtoRecord record)
         {
             ORecord deserializedRecord = new ORecord(record);
-            
+
             if (record.Type != ORecordType.Document)
             {
                 return deserializedRecord;
             }
 
-            string recordString = BinaryParser.ToString(record.Content);
+            string recordString = BinaryParser.ToString(record.Content).Trim();
 
             int atIndex = recordString.IndexOf('@');
             int colonIndex = recordString.IndexOf(':');
