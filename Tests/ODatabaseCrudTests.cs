@@ -251,6 +251,30 @@ namespace Tests
             }
         }
 
+        [TestMethod]
+        public void TestPocoCreateAndLoadAndDeleteRecord()
+        {
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
+            {
+                TestClass foo = new TestClass();
+                foo.IsBool = true;
+
+                ORecord recordCreated = database.CreateRecord("TestClass", foo);
+                TestClass fooRetrieved = database.LoadRecord<TestClass>(recordCreated.ORID);
+
+                Assert.IsTrue(fooRetrieved.IsBool == foo.IsBool);
+
+                bool isRecordDeleted = database.DeleteRecord(recordCreated.ORID);
+
+                Assert.IsTrue(isRecordDeleted);
+
+                fooRetrieved = null;
+                fooRetrieved = database.LoadRecord<TestClass>(recordCreated.ORID);
+
+                Assert.IsTrue(fooRetrieved == null);
+            }
+        }
+
         public void Dispose()
         {
             // delete test database
