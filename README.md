@@ -19,16 +19,16 @@ Usage
 - OServer API (server operations) - soon
 - EasternClient API (connection pooling and globals) - soon
 
-Internals
+Under the hood
 ---
 
-- [List of implemented features](/docs/Features.md)
+- [List of implemented features](https://github.com/yojimbo87/Eastern/blob/master/docs/Features.md)
 - How Eastern works - soon
 
 License
 ---
 
-MIT [licensed](/LICENSE.md).
+MIT [licensed](https://github.com/yojimbo87/Eastern/blob/master/LICENSE.md).
 
 Public API
 ===
