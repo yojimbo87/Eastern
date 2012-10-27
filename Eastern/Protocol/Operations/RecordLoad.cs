@@ -41,16 +41,19 @@ namespace Eastern.Protocol.Operations
             PayloadStatus payloadStatus = (PayloadStatus)BinaryParser.ToByte(response.Data.Skip(offset).Take(1).ToArray());
             offset += 1;
 
-            int contentLength = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
-            offset += 4;
-            record.Content = response.Data.Skip(offset).Take(contentLength).ToArray();
-            offset += contentLength;
+            if (payloadStatus != PayloadStatus.NoRemainingRecords)
+            {
+                int contentLength = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
+                offset += 4;
+                record.Content = response.Data.Skip(offset).Take(contentLength).ToArray();
+                offset += contentLength;
 
-            record.Version = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
-            offset += 4;
+                record.Version = BinaryParser.ToInt(response.Data.Skip(offset).Take(4).ToArray());
+                offset += 4;
 
-            record.Type = (ORecordType)BinaryParser.ToByte(response.Data.Skip(offset).Take(1).ToArray());
-            offset += 1;
+                record.Type = (ORecordType)BinaryParser.ToByte(response.Data.Skip(offset).Take(1).ToArray());
+                offset += 1;
+            }
 
             return record;
         }
