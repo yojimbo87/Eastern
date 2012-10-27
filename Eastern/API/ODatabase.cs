@@ -282,6 +282,50 @@ namespace Eastern
         #region Delete record methods
 
         /// <summary>
+        /// Deletes record of document type within current database.
+        /// </summary>
+        /// <returns>
+        /// Boolean indicating if the record was deleted.
+        /// </returns>
+        public bool DeleteRecord(ORID orid)
+        {
+            return DeleteRecord(orid, 0, ORecordType.Document, false);
+        }
+
+        /// <summary>
+        /// Deletes record of document type within current database.
+        /// </summary>
+        /// <returns>
+        /// Boolean indicating if the record was deleted.
+        /// </returns>
+        public bool DeleteRecord(ORID orid, int version)
+        {
+            return DeleteRecord(orid, version, ORecordType.Document, false);
+        }
+
+        /// <summary>
+        /// Deletes record of document type within current database.
+        /// </summary>
+        /// <returns>
+        /// Boolean indicating if the record was deleted (returned only in synchronous mode).
+        /// </returns>
+        public bool DeleteRecord(ORID orid, bool isAsynchronous)
+        {
+            return DeleteRecord(orid, 0, ORecordType.Document, isAsynchronous);
+        }
+
+        /// <summary>
+        /// Deletes record of document type within current database.
+        /// </summary>
+        /// <returns>
+        /// Boolean indicating if the record was deleted (returned only in synchronous mode).
+        /// </returns>
+        public bool DeleteRecord(ORID orid, int version, bool isAsynchronous)
+        {
+            return DeleteRecord(orid, version, ORecordType.Document, isAsynchronous);
+        }
+
+        /// <summary>
         /// Deletes record within current database.
         /// </summary>
         /// <returns>
@@ -304,7 +348,9 @@ namespace Eastern
         /// </returns>
         public T LoadRecord<T>(ORID orid) where T : class, new()
         {
-            return LoadRecord(orid, "*:0", true).ToObject<T>();
+            ORecord record = LoadRecord(orid, "*:0", true);
+
+            return (record == null) ? null : record.ToObject<T>();
         }
 
         /// <summary>
@@ -315,7 +361,9 @@ namespace Eastern
         /// </returns>
         public T LoadRecord<T>(ORID orid, string fetchPlan) where T : class, new()
         {
-            return LoadRecord(orid, fetchPlan, true).ToObject<T>();
+            ORecord record = LoadRecord(orid, fetchPlan, true);
+
+            return (record == null) ? null : record.ToObject<T>();
         }
 
         /// <summary>
@@ -326,7 +374,9 @@ namespace Eastern
         /// </returns>
         public T LoadRecord<T>(ORID orid, string fetchPlan, bool ignoreCache) where T : class, new()
         {
-            return LoadRecord(orid, fetchPlan, ignoreCache).ToObject<T>();
+            ORecord record = LoadRecord(orid, fetchPlan, ignoreCache);
+
+            return (record == null) ? null : record.ToObject<T>();
         }
 
         /// <summary>
