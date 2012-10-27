@@ -176,7 +176,7 @@ namespace Eastern.Connection
 
         #endregion
 
-        #region Create methods
+        #region Create record methods
 
         public ORecord CreateRecord<T>(int segmentID, short clusterID, T recordObject, bool isAsynchronous)
         {
@@ -199,7 +199,7 @@ namespace Eastern.Connection
 
         #endregion
 
-        #region Update methods
+        #region Update record methods
 
         public int UpdateRecord<T>(ORID orid, T recordObject, int version, bool isAsynchronous)
         {
@@ -223,6 +223,8 @@ namespace Eastern.Connection
 
         #endregion
 
+        #region Delete record methods
+
         public bool DeleteRecord(ORID orid, int version, ORecordType type, bool isAsynchronous)
         {
             RecordDelete operation = new RecordDelete();
@@ -234,6 +236,10 @@ namespace Eastern.Connection
             return (bool)WorkerConnection.ExecuteOperation<RecordDelete>(operation);
         }
 
+        #endregion
+
+        #region Load record methods
+
         public ORecord LoadRecord(ORID orid, string fetchPlan, bool ignoreCache)
         {
             RecordLoad operation = new RecordLoad();
@@ -242,8 +248,17 @@ namespace Eastern.Connection
             operation.FetchPlan = fetchPlan;
             operation.IgnoreCache = ignoreCache;
 
-            return ((DtoRecord)WorkerConnection.ExecuteOperation<RecordLoad>(operation)).Deserialize();
+            DtoRecord dtoRecord = (DtoRecord)WorkerConnection.ExecuteOperation<RecordLoad>(operation);
+
+            if (dtoRecord.Content == null)
+            {
+                return null;
+            }
+
+            return dtoRecord.Deserialize();
         }
+
+        #endregion
 
         public void Close()
         {
