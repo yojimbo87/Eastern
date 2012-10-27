@@ -12,12 +12,12 @@ Installation
 
 - Clone a repository and build Eastern project which gives you dll that you can reference
 
-Usage
+Usage and API
 ---
 
-- ODatabase API (database operations) - soon
-- OServer API (server operations) - soon
-- EasternClient API (connection pooling and globals) - soon
+- Database operations - ODatabase API - soon
+- Server operations - OServer API - soon
+- Connection pooling and globals - EasternClient API - soon
 
 Under the hood
 ---
