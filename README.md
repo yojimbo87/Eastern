@@ -3,10 +3,27 @@ Eastern is a C#/.NET driver for [OrientDB](http://code.google.com/p/orient/) whi
 Status
 ---
 
-Mid alpha:
+Alpha 1 (unstable):
 - Basic server and database operations are implemented 
-- CRUD operations and document parsing is implemented (except special use of LINKSET types)
-- Now focusing on data <-> POCO parser
+- CRUD record operations with POCO (de)serialization is implemented (except special use of LINKSET types)
+
+Installation
+---
+
+- Clone a repository and build Eastern project which gives you dll that you can reference
+
+Usage
+---
+
+- ODatabase API (database operations) - soon
+- OServer API (server operations) - soon
+- EasternClient API (connection pooling and globals) - soon
+
+Internals
+---
+
+- [List of implemented features](/docs/Features.md)
+- How Eastern works - soon
 
 Features
 ---
@@ -15,28 +32,6 @@ Features
 - Request/response parsing
 - Request/response error handling
 - Client side [connection pooling](http://msdn.microsoft.com/en-us/library/8xx3tyca.aspx) of specified database based on [this](http://stackoverflow.com/questions/1148467/is-there-a-standard-way-of-implementing-a-proprietary-connection-pool-in-net) and [this](http://www.codeproject.com/Articles/35011/NET-TCP-Connection-Pooling) example
-- Supported operations:
-  - Shutdown (SHUTDOWN)
-  - Connect (CONNECT)
-  - Open database (DB_OPEN)
-  - Create database (DB_CREATE)
-  - Close connection/database (DB_CLOSE)
-  - Database exist check (DB_EXIST)
-  - Reload database (DB_RELOAD)
-  - Delete database (DB_DELETE)
-  - Database size (DB_SIZE)
-  - Database records count (DB_COUNTRECORDS)
-  - Add cluster to database (DATACLUSTER_ADD)
-  - Remove cluster from database (DATACLUSTER_REMOVE)
-  - Count of records in range of clusters (DATACLUSTER_COUNT)
-  - Data range of records in cluster (DATACLUSTER_DATARANGE)
-  - Count of records in cluster (COUNT)
-  - Add data segment (DATASEGMENT_ADD)
-  - Remove data segment (DATASEGMENT_REMOVE)
-  - Create record (RECORD_CREATE)
-  - Update record (RECORD_UPDATE)
-  - Delete record (RECORD_DELETE)
-  - Load record (RECORD_LOAD)
 
 Public API
 ===
@@ -146,8 +141,6 @@ EasternClient class
 TODO
 ---
 
-- Parse raw records to documents and vice versa
 - Support entire set of [operations](http://code.google.com/p/orient/wiki/NetworkBinaryProtocol#Operations)
-- Wiki with API usage
 - Automatic reconnection of pooled connection with retry timer
-- Queuing of operations when there are no free connections within the pool or creating dedicated connection
+- Implement [special use of LINKSET types](http://code.google.com/p/orient/wiki/NetworkBinaryProtocol#Special_use_of_LINKSET_types)
