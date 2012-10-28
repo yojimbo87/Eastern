@@ -8,12 +8,22 @@ namespace Eastern
     {
         private static object SyncRoot { get; set; }
         private static List<DatabasePool> DatabasePools { get; set; }
-
-        internal static string DriverName { get { return "Eastern"; } }
-        internal static string DriverVersion { get { return "0.0.1 pre-alpha"; } }
-        internal static short ProtocolVersion { get { return 12; } }
         internal static string ClientID { get { return "null"; } }
-        internal static string ThreadLocalDatabaseSlotName { get { return "ThreadLocalOrientDatabase"; } }
+
+        /// <summary>
+        /// Represents name of the driver.
+        /// </summary>
+        public static string DriverName { get { return "Eastern"; } }
+
+        /// <summary>
+        /// Represents version of the driver.
+        /// </summary>
+        public static string DriverVersion { get { return "0.0.1 pre-alpha"; } }
+
+        /// <summary>
+        /// Represents protocol version which this driver supports.
+        /// </summary>
+        public static short ProtocolVersion { get { return 12; } }
 
         static EasternClient()
         {
@@ -21,6 +31,9 @@ namespace Eastern
             DatabasePools = new List<DatabasePool>();
         }
 
+        /// <summary>
+        /// Creates pool of pre-initiated database connections to the specified server instance. Alias parameter determines name of the pool.
+        /// </summary>
         public static void CreateDatabasePool(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword, int poolSize, string alias)
         {
             lock (SyncRoot)
