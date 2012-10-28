@@ -51,19 +51,20 @@ namespace Tests
         [TestMethod]
         public void TestGetDatabase()
         {
-            ODatabase database = new ODatabase(_poolAlias);
+            using (ODatabase database = new ODatabase(_poolAlias))
+            {
+                Assert.IsTrue(database.SessionID > 0);
 
-            Assert.IsTrue(database.SessionID > 0);
+                DatabasePool pool = EasternClient.GetDatabasePool(_poolAlias);
 
-            DatabasePool pool = EasternClient.GetDatabasePool(_poolAlias);
+                Assert.IsTrue(pool.CurrentPoolSize == (pool.PoolSize - 1));
+                Assert.IsFalse(pool.ContainsDatabaseSession(database.SessionID));
 
-            Assert.IsTrue(pool.CurrentPoolSize == (pool.PoolSize - 1));
-            Assert.IsFalse(pool.ContainsDatabaseSession(database.SessionID));
+                database.Close();
 
-            database.Close();
-
-            Assert.IsTrue(pool.CurrentPoolSize == pool.PoolSize);
-            Assert.IsTrue(pool.ContainsDatabaseSession(database.SessionID));
+                Assert.IsTrue(pool.CurrentPoolSize == pool.PoolSize);
+                Assert.IsTrue(pool.ContainsDatabaseSession(database.SessionID));
+            }
         }
 
         public void Dispose()
