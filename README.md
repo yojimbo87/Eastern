@@ -15,7 +15,8 @@ Installation
 Usage
 ---
 
-- soon
+- [Connecting to server and database](https://github.com/yojimbo87/Eastern/blob/master/docs/usage/Connection.md)
+- CRUD record operations - soon
 
 API
 ---
