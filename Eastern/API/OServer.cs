@@ -105,7 +105,7 @@ namespace Eastern
         }
 
         /// <summary>
-        /// Closes connection with server instance and resets session ID, user name and user password assigned to this object.
+        /// Closes connection with server instance and resets session ID, user name and user password assigned to this object. This method is also called when ODatabase instance is being disposed.
         /// </summary>
         public void Close()
         {
