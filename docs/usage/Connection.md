@@ -10,13 +10,13 @@ Server connection is used to perform server specific (or maintenance) operations
 
     using (OServer connection = new OServer("127.0.0.1", 2424, "root", "yourRootPwd"))
     {
-        connection.CreateDatabase(_databaseName, ODatabaseType.Document, OStorageType.Local);
+        connection.CreateDatabase("yourDatabaseName", ODatabaseType.Document, OStorageType.Local);
 
-        bool databaseExist = connection.DatabaseExist(_databaseName));
+        bool databaseExist = connection.DatabaseExist("yourDatabaseName"));
 
         if (databaseExist)
         {
-            connection.DeleteDatabase(_databaseName);
+            connection.DeleteDatabase("yourDatabaseName");
         }
     }
     
@@ -42,4 +42,4 @@ Database connection is used to perform specific database and data manipulation o
         OCluster newCluster = database.AddCluster(OClusterType.Physical, "yourNewCluster");
     }
     
-Use of connection pooling can speedup application because connection to database server are pre-initiated and stored within a pool which handles retrieving of ready to use database connections on demand.
+Use of connection pooling can speedup application because connection to database server are pre-initiated and stored within a pool which handles retrieving of ready to use database connections on demand. This is useful for example in web applications where creating dedicated connection with database for every request would be an expensive operation.
