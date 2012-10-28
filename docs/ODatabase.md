@@ -172,3 +172,10 @@ OClusterType enum
 
     Physical = 0
     Memory = 1
+    
+ORecordType enum
+---
+
+    RawBytes = 98
+    FlatData = 102
+    Document = 100
