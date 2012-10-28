@@ -104,7 +104,7 @@ namespace Eastern
         }
 
         /// <summary>
-        /// Adds new cluster to the database.
+        /// Removes specified cluster to the database.
         /// </summary>
         /// <returns>
         /// Boolean indicating if the specified cluster was successfuly removed.
@@ -415,7 +415,7 @@ namespace Eastern
         #endregion
 
         /// <summary>
-        /// Closes connection with server instance and resets session ID assigned to this object.
+        /// Closes connection with server instance and resets session ID assigned to this object. This method is also called when ODatabase instance is being disposed.
         /// </summary>
         public void Close()
         {
@@ -423,7 +423,7 @@ namespace Eastern
         }
 
         /// <summary>
-        /// Closes connection with server instance and disposes this object.
+        /// Closes connection with server instance and disposes ODatabase object.
         /// </summary>
         public void Dispose()
         {
