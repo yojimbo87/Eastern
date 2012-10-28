@@ -12,7 +12,12 @@ Installation
 
 - Clone a repository and build Eastern project which gives you dll that you can reference
 
-Usage and API
+Usage
+---
+
+- soon
+
+API
 ---
 
 - [Database operations API](https://github.com/yojimbo87/Eastern/blob/master/docs/ODatabase.md)
