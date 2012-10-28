@@ -3,7 +3,7 @@ namespace Eastern
 {
     public enum ODatabaseType
     {
-        Document,
-        Graph
+        Document = 0,
+        Graph = 1
     }
 }
