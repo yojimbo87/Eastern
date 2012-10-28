@@ -34,9 +34,10 @@ Database connection is used to perform specific database and data manipulation o
     
 **Pooled connection**
 
-    // created database pool with 20 pre-initiated connection to specified database
+    // created database pool with 20 pre-initiated connections to specified database
     EasternClient.CreateDatabasePool("127.0.0.1", 2424, "yourDatabaseName", ODatabaseType.Document, "admin", "admin", 20, "yourDatabasePool");
     
+    // get database connection from previously specified database pool
     using (ODatabase database = new ODatabase("yourDatabasePool"))
     {
         OCluster newCluster = database.AddCluster(OClusterType.Physical, "yourNewCluster");
