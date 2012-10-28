@@ -22,7 +22,7 @@ API
 
 - [Database operations API](https://github.com/yojimbo87/Eastern/blob/master/docs/ODatabase.md)
 - [Server operations API](https://github.com/yojimbo87/Eastern/blob/master/docs/OServer.md)
-- Connection pooling and globals API - soon
+- [Connection pooling and globals API](https://github.com/yojimbo87/Eastern/blob/master/docs/EasternClient.md)
 
 Under the hood
 ---
@@ -35,15 +35,6 @@ License
 
 MIT [licensed](https://github.com/yojimbo87/Eastern/blob/master/LICENSE.md).
     
-EasternClient class
----
-
-**Methods**
-
-    public static void CreateDatabasePool(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword, int poolSize)
-    
-    public static ODatabase GetDatabase(string hostname, int port, string databaseName, ODatabaseType databaseType, string userName, string userPassword)
-
 TODO
 ---
 
