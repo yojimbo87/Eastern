@@ -18,7 +18,7 @@ namespace Eastern
         /// <summary>
         /// Represents version of the driver.
         /// </summary>
-        public static string DriverVersion { get { return "0.0.1 pre-alpha"; } }
+        public static string DriverVersion { get { return "Alpha 1"; } }
 
         /// <summary>
         /// Represents protocol version which this driver supports.
