@@ -20,14 +20,14 @@ Usage
 API
 ---
 
-- [Database operations API](https://github.com/yojimbo87/Eastern/blob/master/docs/ODatabase.md)
-- [Server operations API](https://github.com/yojimbo87/Eastern/blob/master/docs/OServer.md)
-- [Connection pooling and globals API](https://github.com/yojimbo87/Eastern/blob/master/docs/EasternClient.md)
+- [Database operations API](https://github.com/yojimbo87/Eastern/blob/master/docs/api/ODatabase.md)
+- [Server operations API](https://github.com/yojimbo87/Eastern/blob/master/docs/api/OServer.md)
+- [Connection pooling and globals API](https://github.com/yojimbo87/Eastern/blob/master/docs/api/EasternClient.md)
 
 Under the hood
 ---
 
-- [List of implemented features](https://github.com/yojimbo87/Eastern/blob/master/docs/Features.md)
+- [List of implemented features](https://github.com/yojimbo87/Eastern/blob/master/docs/api/Features.md)
 - How Eastern works - soon
 
 License
