@@ -15,9 +15,9 @@ Installation
 Usage and API
 ---
 
-- [Database operations - ODatabase API](https://github.com/yojimbo87/Eastern/blob/master/docs/ODatabase.md)
-- Server operations - OServer API - soon
-- Connection pooling and globals - EasternClient API - soon
+- [Database operations API](https://github.com/yojimbo87/Eastern/blob/master/docs/ODatabase.md)
+- Server operations API - soon
+- Connection pooling and globals API - soon
 
 Under the hood
 ---
