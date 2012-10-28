@@ -112,12 +112,10 @@ ODatabaseType enum
 ---
 
     Document = 0
-    
     Graph = 1
     
 OClusterType enum
 ---
 
     Physical = 0
-    
     Memory = 1
