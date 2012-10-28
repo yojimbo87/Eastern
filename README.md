@@ -16,7 +16,7 @@ Usage
 ---
 
 - [Connecting to server and database](https://github.com/yojimbo87/Eastern/blob/master/docs/usage/Connection.md)
-- CRUD record operations - soon
+- [CRUD record operations](https://github.com/yojimbo87/Eastern/blob/master/docs/usage/CRUD.md)
 
 API
 ---
