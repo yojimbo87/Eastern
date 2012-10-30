@@ -514,6 +514,29 @@ namespace Tests
         }
 
         [TestMethod]
+        public void TestSingleAndCollectionOridDeserialization()
+        {
+            string raw = "single:#10:12345,collection:[#11:123,#22:1234,#33:1234567]";
+
+            ORecord record = new ORecord(ORecordType.Document, 0, UTF8Encoding.UTF8.GetBytes(raw));
+
+            Assert.IsTrue(record.Fields["single"].GetType() == typeof(ORID));
+            Assert.IsTrue(((ORID)record.Fields["single"]).RID == "#10:12345");
+
+            Assert.IsTrue(record.Fields["collection"].GetType() == typeof(List<object>));
+            List<object> collection = (List<object>)record.Fields["collection"];
+
+            Assert.IsTrue(collection[0].GetType() == typeof(ORID));
+            Assert.IsTrue(((ORID)collection[0]).RID == "#11:123");
+
+            Assert.IsTrue(collection[1].GetType() == typeof(ORID));
+            Assert.IsTrue(((ORID)collection[1]).RID == "#22:1234");
+
+            Assert.IsTrue(collection[2].GetType() == typeof(ORID));
+            Assert.IsTrue(((ORID)collection[2]).RID == "#33:1234567");
+        }
+
+        [TestMethod]
         public void TestWikiExample1Deserialization()
         {
             string raw = "Profile@nick:\"ThePresident\",follows:[],followers:[#10:5,#10:6],name:\"Barack\",surname:\"Obama\",location:#3:2,invitedBy:,salary_cloned:,salary:120.3f";
@@ -530,11 +553,11 @@ namespace Tests
             Assert.IsTrue(record.Fields["followers"].GetType() == typeof(List<object>));
             List<object> followers = (List<object>)record.Fields["followers"];
 
-            Assert.IsTrue(followers[0].GetType() == typeof(string));
-            Assert.IsTrue((string)followers[0] == "#10:5");
+            Assert.IsTrue(followers[0].GetType() == typeof(ORID));
+            Assert.IsTrue(((ORID)followers[0]).RID == "#10:5");
 
-            Assert.IsTrue(followers[1].GetType() == typeof(string));
-            Assert.IsTrue((string)followers[1] == "#10:6");
+            Assert.IsTrue(followers[1].GetType() == typeof(ORID));
+            Assert.IsTrue(((ORID)followers[1]).RID == "#10:6");
 
             Assert.IsTrue(record.Fields["name"].GetType() == typeof(string));
             Assert.IsTrue((string)record.Fields["name"] == "Barack");
@@ -542,8 +565,8 @@ namespace Tests
             Assert.IsTrue(record.Fields["surname"].GetType() == typeof(string));
             Assert.IsTrue((string)record.Fields["surname"] == "Obama");
 
-            Assert.IsTrue(record.Fields["location"].GetType() == typeof(string));
-            Assert.IsTrue((string)record.Fields["location"] == "#3:2");
+            Assert.IsTrue(record.Fields["location"].GetType() == typeof(ORID));
+            Assert.IsTrue(((ORID)record.Fields["location"]).RID == "#3:2");
 
             Assert.IsTrue(record.Fields["invitedBy"] == null);
 
