@@ -129,7 +129,7 @@ namespace Eastern.Protocol
                         // if property is ORID type it needs to be serialized as ORID
                         else if (valueType.IsClass && (valueType.Name == "ORID")) 
                         {
-                            serializedString += "#" + ((ORID)value).RID;
+                            serializedString += ((ORID)value).RID;
                         }
                         else if (valueType.IsClass)
                         {
@@ -317,14 +317,16 @@ namespace Eastern.Protocol
                 i++;
             }
 
+            string orid = recordString.Substring(startIndex, i - startIndex);
+
             //assign field value
             if (document[fieldName] == null)
             {
-                document[fieldName] = recordString.Substring(startIndex, i - startIndex);
+                document[fieldName] = new ORID(orid);
             }
             else
             {
-                ((List<object>)document[fieldName]).Add(recordString.Substring(startIndex, i - startIndex));
+                ((List<object>)document[fieldName]).Add(new ORID(orid));
             }
 
             return i;
