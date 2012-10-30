@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Eastern;
 
 namespace Tests
 {
@@ -22,6 +21,8 @@ namespace Tests
         public List<string> StringList { get; set; }
         public TestNestedClass NestedClass { get; set; }
         public List<TestNestedClass> ObjectList { get; set; }
+        public ORID SingleOrid { get; set; }
+        public List<ORID> OridList { get; set; }
     }
 
     class TestNestedClass

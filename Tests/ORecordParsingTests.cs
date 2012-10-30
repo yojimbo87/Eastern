@@ -19,7 +19,7 @@ namespace Tests
 
             string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
 
-            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:,SingleOrid:,OridList:"));
         }
 
         [TestMethod]
@@ -30,7 +30,7 @@ namespace Tests
 
             string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
 
-            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:true,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:true,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:,SingleOrid:,OridList:"));
         }
 
         [TestMethod]
@@ -41,7 +41,7 @@ namespace Tests
 
             string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
 
-            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:123b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:123b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:,SingleOrid:,OridList:"));
         }
 
         [TestMethod]
@@ -52,7 +52,7 @@ namespace Tests
 
             string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
 
-            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:12345s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:12345s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:,SingleOrid:,OridList:"));
         }
 
         [TestMethod]
@@ -63,7 +63,7 @@ namespace Tests
 
             string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
 
-            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:1234567,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:1234567,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:,SingleOrid:,OridList:"));
         }
 
         [TestMethod]
@@ -74,7 +74,7 @@ namespace Tests
 
             string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
 
-            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:1234567890123l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:1234567890123l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:,SingleOrid:,OridList:"));
         }
 
         [TestMethod]
@@ -85,7 +85,7 @@ namespace Tests
 
             string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
 
-            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:3.14f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:3.14f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:,SingleOrid:,OridList:"));
         }
 
         [TestMethod]
@@ -96,7 +96,7 @@ namespace Tests
 
             string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
 
-            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:12343.23442d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:12343.23442d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:,SingleOrid:,OridList:"));
         }
 
         [TestMethod]
@@ -107,7 +107,7 @@ namespace Tests
 
             string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
 
-            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:1234567.8901c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:1234567.8901c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:,SingleOrid:,OridList:"));
         }
 
         [TestMethod]
@@ -124,7 +124,7 @@ namespace Tests
 
             string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
 
-            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:" + timeString + "t,String:,StringArray:,StringList:,NestedClass:,ObjectList:"));
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:" + timeString + "t,String:,StringArray:,StringList:,NestedClass:,ObjectList:,SingleOrid:,OridList:"));
         }
 
         [TestMethod]
@@ -135,7 +135,7 @@ namespace Tests
 
             string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
 
-            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:\"Bra\\" + "\"vo \\\\ asdf\",StringArray:,StringList:,NestedClass:,ObjectList:"));
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:\"Bra\\" + "\"vo \\\\ asdf\",StringArray:,StringList:,NestedClass:,ObjectList:,SingleOrid:,OridList:"));
         }
 
         [TestMethod]
@@ -149,7 +149,7 @@ namespace Tests
 
             string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
 
-            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:[\"s1\",\"s2\",\"s3\"],StringList:,NestedClass:,ObjectList:"));
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:[\"s1\",\"s2\",\"s3\"],StringList:,NestedClass:,ObjectList:,SingleOrid:,OridList:"));
         }
 
         [TestMethod]
@@ -163,7 +163,7 @@ namespace Tests
 
             string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
 
-            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:[\"s4\",\"s5\",\"s6\"],NestedClass:,ObjectList:"));
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:[\"s4\",\"s5\",\"s6\"],NestedClass:,ObjectList:,SingleOrid:,OridList:"));
         }
 
         [TestMethod]
@@ -175,7 +175,7 @@ namespace Tests
 
             string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
 
-            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:(NestedString:\"test string\",StringArray:,StringList:),ObjectList:"));
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:(NestedString:\"test string\",StringArray:,StringList:),ObjectList:,SingleOrid:,OridList:"));
         }
 
         [TestMethod]
@@ -188,7 +188,32 @@ namespace Tests
 
             string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
 
-            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:[(NestedString:,StringArray:,StringList:),(NestedString:,StringArray:,StringList:)]"));
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:[(NestedString:,StringArray:,StringList:),(NestedString:,StringArray:,StringList:)],SingleOrid:,OridList:"));
+        }
+
+        [TestMethod]
+        public void TestSingleOridSerialization()
+        {
+            TestClass obj = new TestClass();
+            obj.SingleOrid = new ORID(10, 5672);
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:,SingleOrid:#10:5672,OridList:"));
+        }
+
+        [TestMethod]
+        public void TestOridCollectionSerialization()
+        {
+            TestClass obj = new TestClass();
+            obj.OridList = new List<ORID>();
+            obj.OridList.Add(new ORID(11, 123));
+            obj.OridList.Add(new ORID(22, 1234));
+            obj.OridList.Add(new ORID(33, 1234567));
+
+            string s = Encoding.UTF8.GetString(ORecord.Serialize(obj));
+
+            Assert.IsTrue(s.Equals("TestClass@Null:,IsBool:false,ByteNumber:0b,ShortNumber:0s,IntNumber:0,LongNumber:0l,FloatNumber:0f,DoubleNumber:0d,DecimalNumber:0c,DateTime:-62135596800000t,String:,StringArray:,StringList:,NestedClass:,ObjectList:,SingleOrid:,OridList:[#11:123,#22:1234,#33:1234567]"));
         }
 
         #endregion
