@@ -77,6 +77,13 @@ namespace Tests
                     StringList = new List<string>() { "str list elem 11", "str list elem 12", "str list elem 13" }
                 });
 
+                // single and collection of ORIDs
+                foo.SingleOrid = new ORID("#10:1334");
+                foo.OridList = new List<ORID>();
+                foo.OridList.Add(new ORID("#11:123"));
+                foo.OridList.Add(new ORID("#22:12345"));
+                foo.OridList.Add(new ORID("#33:1234567"));
+
                 ORecord recordCreated = database.CreateRecord("TestClass", foo);
 
                 TestClass fooRetrieved = database.LoadRecord<TestClass>(recordCreated.ORID);
@@ -135,6 +142,13 @@ namespace Tests
                 Assert.IsTrue(fooRetrieved.ObjectList[1].StringList[0] == foo.ObjectList[1].StringList[0]);
                 Assert.IsTrue(fooRetrieved.ObjectList[1].StringList[1] == foo.ObjectList[1].StringList[1]);
                 Assert.IsTrue(fooRetrieved.ObjectList[1].StringList[2] == foo.ObjectList[1].StringList[2]);
+
+                // single and collection of ORIDs
+                Assert.IsTrue(fooRetrieved.SingleOrid.RID == foo.SingleOrid.RID);
+                Assert.IsTrue(fooRetrieved.OridList.Count == foo.OridList.Count);
+                Assert.IsTrue(fooRetrieved.OridList[0].RID == foo.OridList[0].RID);
+                Assert.IsTrue(fooRetrieved.OridList[1].RID == foo.OridList[1].RID);
+                Assert.IsTrue(fooRetrieved.OridList[2].RID == foo.OridList[2].RID);
             }
         }
 
@@ -181,6 +195,13 @@ namespace Tests
                     StringArray = new string[] { "str elem 11", "str elem 12", "str elem 13" },
                     StringList = new List<string>() { "str list elem 11", "str list elem 12", "str list elem 13" }
                 });
+
+                // single and collection of ORIDs
+                foo.SingleOrid = new ORID("#10:1334");
+                foo.OridList = new List<ORID>();
+                foo.OridList.Add(new ORID("#11:123"));
+                foo.OridList.Add(new ORID("#22:12345"));
+                foo.OridList.Add(new ORID("#33:1234567"));
 
                 ORecord recordCreated = database.CreateRecord("TestClass", foo);
                 TestClass fooRetrieved = database.LoadRecord<TestClass>(recordCreated.ORID);
@@ -248,6 +269,11 @@ namespace Tests
                 Assert.IsTrue(fooRetrieved.ObjectList[1].StringList[0] == foo.ObjectList[1].StringList[0]);
                 Assert.IsTrue(fooRetrieved.ObjectList[1].StringList[1] == foo.ObjectList[1].StringList[1]);
                 Assert.IsTrue(fooRetrieved.ObjectList[1].StringList[2] == foo.ObjectList[1].StringList[2]);
+                Assert.IsTrue(fooRetrieved.SingleOrid.RID == foo.SingleOrid.RID);
+                Assert.IsTrue(fooRetrieved.OridList.Count == foo.OridList.Count);
+                Assert.IsTrue(fooRetrieved.OridList[0].RID == foo.OridList[0].RID);
+                Assert.IsTrue(fooRetrieved.OridList[1].RID == foo.OridList[1].RID);
+                Assert.IsTrue(fooRetrieved.OridList[2].RID == foo.OridList[2].RID);
             }
         }
 
