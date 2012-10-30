@@ -126,6 +126,11 @@ namespace Eastern.Protocol
 
                             serializedString += "]";
                         }
+                        // if property is ORID type it needs to be serialized as ORID
+                        else if (valueType.IsClass && (valueType.Name == "ORID")) 
+                        {
+                            serializedString += "#" + ((ORID)value).RID;
+                        }
                         else if (valueType.IsClass)
                         {
                             serializedString += "(";
