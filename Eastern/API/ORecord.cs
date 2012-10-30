@@ -106,11 +106,12 @@ namespace Eastern
                                     {
                                         Type elementType = collection[i].GetType();
 
-                                        // generic collection consists of basic types
+                                        // generic collection consists of basic types or ORIDs
                                         if (elementType.IsPrimitive ||
                                             (elementType == typeof(string)) ||
                                             (elementType == typeof(DateTime)) ||
-                                            (elementType == typeof(decimal)))
+                                            (elementType == typeof(decimal)) ||
+                                            (elementType == typeof(ORID)))
                                         {
                                             ((IList)collectionInstance).Add(collection[i]);
                                         }
@@ -134,8 +135,10 @@ namespace Eastern
                                 property.SetValue(genericObject, collectionInstance, null);
                             }
                         }
-                        // property is class except string type
-                        else if (property.PropertyType.IsClass && (property.PropertyType.Name != "String"))
+                        // property is class except the string or ORID type since string and ORID values are parsed differently
+                        else if (property.PropertyType.IsClass && 
+                            (property.PropertyType.Name != "String") && 
+                            (property.PropertyType.Name != "ORID"))
                         {
                             // create object instance of embedded class
                             object instance = Activator.CreateInstance(property.PropertyType);
