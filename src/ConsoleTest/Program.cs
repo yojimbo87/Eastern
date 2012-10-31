@@ -13,7 +13,7 @@ namespace ConsoleTest
         private const string _hostname = "127.0.0.1";
         private const int _port = 2424;
         private const string _rootName = "root";
-        private const string _rootPassword = "84079F1F2D9C6DB52DFE94A5F4B0D9F33C2390E70931E16AF77E191B929C857C";
+        private const string _rootPassword = "E651342F2D9C417D56DA4A57BD9D38E7FA991648787837133553B3DE8332457E";
         private const string _databaseName = "test1";
         private const string _username = "admin";
         private const string _password = "admin";
