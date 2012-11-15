@@ -45,7 +45,15 @@ namespace Eastern.Connection
             Hostname = hostname;
             HostPort = port;
 
-            Socket = new TcpClient(Hostname, HostPort);
+            try
+            {
+                Socket = new TcpClient(Hostname, HostPort);
+            }
+            catch (SocketException ex)
+            {
+                throw new OException(OExceptionType.Socket, ex.Message, ex.InnerException);
+            }
+
             Stream = Socket.GetStream();
 
             int bytesRead = Stream.Read(ReadBuffer, 0, 2);
