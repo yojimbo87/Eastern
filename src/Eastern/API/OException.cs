@@ -5,12 +5,19 @@ namespace Eastern
     public class OException : Exception
     {
         public OExceptionType Type { get; set; }
-        public string Description { get; set; }
 
-        public OException(OExceptionType exceptionType, string exceptionString)
+        public OException()
+        {
+        }
+
+        public OException(OExceptionType exceptionType, string message) : base(message)
         {
             Type = exceptionType;
-            Description = exceptionString;
+        }
+
+        public OException(OExceptionType exceptionType, string message, Exception inner) : base(message, inner)
+        {
+            Type = exceptionType;
         }
     }
 }

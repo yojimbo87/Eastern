@@ -63,7 +63,7 @@ namespace ConsoleTest
             }
             catch (OException ex)
             {
-                Console.WriteLine("{0}: {1}", ex.Type, ex.Description);
+                //Console.WriteLine("{0}: {1}", ex.Type, ex.Description);
             }
             finally
             {
