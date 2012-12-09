@@ -260,6 +260,28 @@ namespace Eastern.Connection
 
         #endregion
 
+        #region Query methods
+
+        public List<string> Query(OperationMode operationMode, CommandClassType commandClassType, CommandPayload commandPayload)
+        {
+            Command operation = new Command();
+            operation.OperationMode = operationMode;
+            operation.ClassType = commandClassType;
+            operation.CommandPayload = commandPayload;
+
+            List<DtoRecord> result = (List<DtoRecord>)WorkerConnection.ExecuteOperation<Command>(operation); ;
+            List<string> r = new List<string>();
+
+            foreach (DtoRecord record in result)
+            {
+                r.Add(System.Text.Encoding.UTF8.GetString(record.Content));
+            }
+
+            return r;
+        }
+
+        #endregion
+
         public void Close()
         {
             if (ReturnToPool)

@@ -414,6 +414,18 @@ namespace Eastern
 
         #endregion
 
+        public List<string> Query(string sqlQuery)
+        {
+            CommandPayload payload = new CommandPayload();
+            payload.Type = CommandPayloadType.Sql;
+            payload.Text = sqlQuery;
+            payload.NonTextLimit = -1;
+            payload.FetchPlan = "*:0";
+            payload.SerializedParams = new byte[] { 0 };
+
+            return _database.Query(OperationMode.Synchronous, CommandClassType.Idempotent, payload);
+        }
+
         /// <summary>
         /// Closes connection with server instance and resets session ID assigned to this object. This method is also called when ODatabase instance is being disposed.
         /// </summary>

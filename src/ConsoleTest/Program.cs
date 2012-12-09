@@ -21,7 +21,7 @@ namespace ConsoleTest
         static void Main(string[] args)
         {
             //TestCreateRecord();
-            TestLoadRecord();
+            TestQuery();
 
             Console.ReadLine();
         }
@@ -41,6 +41,19 @@ namespace ConsoleTest
                 TestClass obj = database.LoadRecord<TestClass>(new ORID(6, 0));
 
                 Console.WriteLine(obj);
+            }
+        }
+
+        static void TestQuery()
+        {
+            using (ODatabase database = new ODatabase(_hostname, _port, _databaseName, ODatabaseType.Document, _username, _password))
+            {
+                TestClass obj = database.LoadRecord<TestClass>(new ORID(6, 0));
+
+                foreach (string s in database.Query("select from cluster:ouser"))
+                {
+                    Console.WriteLine(s);
+                }
             }
         }
 

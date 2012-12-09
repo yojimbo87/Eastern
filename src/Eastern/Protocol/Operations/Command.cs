@@ -21,7 +21,7 @@ namespace Eastern.Protocol.Operations
             request.DataItems.Add(new DataItem() { Type = "byte", Data = BinaryParser.ToArray((byte)OperationMode) });
 
             // class name field
-            string className = "default";
+            string className = "x";
             switch (ClassType)
             {
                 // idempotent command (e.g. select)
@@ -37,7 +37,6 @@ namespace Eastern.Protocol.Operations
                     className = "s";
                     break;
                 default:
-                    className = "default";
                     break;
             }
             request.DataItems.Add(new DataItem() { Type = "string", Data = BinaryParser.ToArray(className) });
