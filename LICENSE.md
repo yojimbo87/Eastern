@@ -1,4 +1,4 @@
-The MIT X11 License covers libraries in the Eastern project. 
+The MIT X11 License covers libraries in the Eastern project. Some third party libraries come from different projects, and are licensed under their own terms.
 
 Copyright (c) [2012 - present] Tomas Bosak, [http://yojimbo87.github.com/](http://yojimbo87.github.com/)
  
